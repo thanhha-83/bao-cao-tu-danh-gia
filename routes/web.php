@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TieuChuanController;
 use App\Http\Controllers\TieuChiController;
+use App\Http\Controllers\NganhController;
+use App\Http\Controllers\DonViController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +46,49 @@ Route::prefix('tieuchi')->group(function () {
     Route::post('/restore-all', [TieuChiController::class, 'restoreAll'])->name('tieuchi.restore-all');
     Route::post('/force-destroy', [TieuChiController::class, 'forceDestroy'])->name('tieuchi.force-destroy');
     Route::post('/force-destroy-all', [TieuChiController::class, 'forceDestroyAll'])->name('tieuchi.force-destroy-all');
+});
+
+Route::prefix('nganh')->group(function () {
+    Route::get('/', [NganhController::class, 'index'])->name('nganh.index');
+    Route::get('/create', [NganhController::class, 'create'])->name('nganh.create');
+    Route::post('/store', [NganhController::class, 'store'])->name('nganh.store');
+    Route::get('/edit/{id}', [NganhController::class, 'edit'])->name('nganh.edit');
+    Route::post('/update/{id}', [NganhController::class, 'update'])->name('nganh.update');
+    Route::post('/destroy', [NganhController::class, 'destroy'])->name('nganh.destroy');
+    Route::get('/trash', [NganhController::class, 'trash'])->name('nganh.trash');
+    Route::post('/restore', [NganhController::class, 'restore'])->name('nganh.restore');
+    Route::post('/restore-all', [NganhController::class, 'restoreAll'])->name('nganh.restore-all');
+    Route::post('/force-destroy', [NganhController::class, 'forceDestroy'])->name('nganh.force-destroy');
+    Route::post('/force-destroy-all', [NganhController::class, 'forceDestroyAll'])->name('nganh.force-destroy-all');
+});
+
+Route::prefix('donvi')->group(function () {
+    Route::get('/', [DonViController::class, 'index'])->name('donvi.index');
+    Route::get('/create', [DonViController::class, 'create'])->name('donvi.create');
+    Route::post('/store', [DonViController::class, 'store'])->name('donvi.store');
+    Route::get('/edit/{id}', [DonViController::class, 'edit'])->name('donvi.edit');
+    Route::post('/update/{id}', [DonViController::class, 'update'])->name('donvi.update');
+    Route::post('/destroy', [DonViController::class, 'destroy'])->name('donvi.destroy');
+    Route::get('/trash', [DonViController::class, 'trash'])->name('donvi.trash');
+    Route::post('/restore', [DonViController::class, 'restore'])->name('donvi.restore');
+    Route::post('/restore-all', [DonViController::class, 'restoreAll'])->name('donvi.restore-all');
+    Route::post('/force-destroy', [DonViController::class, 'forceDestroy'])->name('donvi.force-destroy');
+    Route::post('/force-destroy-all', [DonViController::class, 'forceDestroyAll'])->name('donvi.force-destroy-all');
+});
+
+Route::prefix('nguoidung')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('nguoidung.index');
+    Route::get('/create', [UserController::class, 'create'])->name('nguoidung.create');
+    Route::post('/store', [UserController::class, 'store'])->name('nguoidung.store');
+    Route::get('/show/{id}', [UserController::class, 'show'])->name('nguoidung.show');
+    Route::get('/edit/{id}', [UserController::class, 'edit'])->name('nguoidung.edit');
+    Route::post('/update/{id}', [UserController::class, 'update'])->name('nguoidung.update');
+    Route::post('/destroy', [UserController::class, 'destroy'])->name('nguoidung.destroy');
+    Route::get('/trash', [UserController::class, 'trash'])->name('nguoidung.trash');
+    Route::post('/restore', [UserController::class, 'restore'])->name('nguoidung.restore');
+    Route::post('/restore-all', [UserController::class, 'restoreAll'])->name('nguoidung.restore-all');
+    Route::post('/force-destroy', [UserController::class, 'forceDestroy'])->name('nguoidung.force-destroy');
+    Route::post('/force-destroy-all', [UserController::class, 'forceDestroyAll'])->name('nguoidung.force-destroy-all');
 });
 
 Auth::routes();
