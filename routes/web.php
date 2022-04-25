@@ -6,6 +6,7 @@ use App\Http\Controllers\TieuChiController;
 use App\Http\Controllers\NganhController;
 use App\Http\Controllers\DonViController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\NhomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +90,21 @@ Route::prefix('nguoidung')->group(function () {
     Route::post('/restore-all', [UserController::class, 'restoreAll'])->name('nguoidung.restore-all');
     Route::post('/force-destroy', [UserController::class, 'forceDestroy'])->name('nguoidung.force-destroy');
     Route::post('/force-destroy-all', [UserController::class, 'forceDestroyAll'])->name('nguoidung.force-destroy-all');
+});
+
+Route::prefix('nhom')->group(function () {
+    Route::get('/', [NhomController::class, 'index'])->name('nhom.index');
+    Route::get('/create', [NhomController::class, 'create'])->name('nhom.create');
+    Route::post('/store', [NhomController::class, 'store'])->name('nhom.store');
+    Route::get('/show/{id}', [NhomController::class, 'show'])->name('nhom.show');
+    Route::get('/edit/{id}', [NhomController::class, 'edit'])->name('nhom.edit');
+    Route::post('/update/{id}', [NhomController::class, 'update'])->name('nhom.update');
+    Route::post('/destroy', [NhomController::class, 'destroy'])->name('nhom.destroy');
+    Route::get('/trash', [NhomController::class, 'trash'])->name('nhom.trash');
+    Route::post('/restore', [NhomController::class, 'restore'])->name('nhom.restore');
+    Route::post('/restore-all', [NhomController::class, 'restoreAll'])->name('nhom.restore-all');
+    Route::post('/force-destroy', [NhomController::class, 'forceDestroy'])->name('nhom.force-destroy');
+    Route::post('/force-destroy-all', [NhomController::class, 'forceDestroyAll'])->name('nhom.force-destroy-all');
 });
 
 Auth::routes();

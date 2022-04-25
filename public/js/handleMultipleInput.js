@@ -24,17 +24,16 @@ $(document).ready(() => {
                 </div>`
             )
             $input.val('');
-            updateBtnRemove();
+            eventBtnRemove();
         }
     }
-    function updateBtnRemove() {
+    function eventBtnRemove() {
         $('.btn-remove').on('click', (e) => {
-            console.log('vô nè');
             const $input = $(e.target).closest('.input-group-prepend').parent();
             $input.hide("slow", function() {
                 $(this).remove();
             });
         });
     }
-    updateBtnRemove();
+    eventBtnRemove();
 });

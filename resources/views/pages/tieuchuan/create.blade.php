@@ -21,7 +21,7 @@ $action = (object) [
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-body">
-            <form action="{{ route('tieuchi.store') }}" method="POST">
+            <form action="{{ route('tieuchuan.store') }}" method="POST">
                 @csrf
                 <div class="form-row">
                     <div class="form-group col-md-2">
