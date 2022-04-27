@@ -40,7 +40,7 @@ class HandleUpdateHasMany {
                 }
             }
         }
-        return 0;
+        return;
     }
 
     public static function handleUpdateMocChuan($mocChuans, $tieuChiId, $request, $mocChuanModel)
@@ -79,6 +79,6 @@ class HandleUpdateHasMany {
                 }
             }
         }
-        return 0;
+        return;
     }
 }

@@ -10,6 +10,7 @@ use App\Models\TieuChuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Services\HandleUpdate3Many;
 
 class NhomController extends Controller
 {
@@ -113,11 +114,20 @@ class NhomController extends Controller
                 'nganh_id' => $request->nganh_id
             ]);
 
+            $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhom->id)->get();
             if (!empty($request->quyenNhom_id) && !empty($request->tieuChuan_id)) {
+                $quyenTieuChuans = [];
                 foreach ($request->quyenNhom_id as $key => $item) {
-                    $nhom->nhomQuyen()->sync($item, [
-                        'tieuChuan_id' => $request->tieuChuan_id[$key]
-                    ]);
+                    $obj = (object) [
+                        'quyenNhom_id' => $item,
+                        'tieuChuan_id' => $request->tieuChuan_id[$key],
+                    ];
+                    array_push($quyenTieuChuans, $obj);
+                }
+                HandleUpdate3Many::handleUpdateNhomQuyen($nhomQuyens, $quyenTieuChuans, $this->nhomQuyenModel, $nhom->id);
+            } else {
+                foreach ($nhomQuyens as $nhomQuyen) {
+                    $nhomQuyen->forceDelete();
                 }
             }
             DB::commit();
@@ -185,11 +195,8 @@ class NhomController extends Controller
     public function forceDestroy(Request $request)
     {
         try {
-            $nhom = $this->nhomModel->onlyTrashed()->find($request->id);
-            $nhom->yeuCau()->forceDelete();
-            $nhom->mocChuan()->forceDelete();
-            $nhom->tuKhoa()->detach();
-            $nhom->forceDelete();
+            $this->nhomQuyenModel->where('nhom_id', $request->id)->forceDelete();
+            $this->nhomModel->onlyTrashed()->find($request->id)->forceDelete();
             return response()->json([
                 'code' => 200,
                 'message' => 'success',
@@ -207,9 +214,7 @@ class NhomController extends Controller
         try {
             $nhoms = $this->nhomModel->onlyTrashed()->get();
             foreach ($nhoms as $nhom) {
-                $nhom->yeuCau()->forceDelete();
-                $nhom->mocChuan()->forceDelete();
-                $nhom->tuKhoa()->detach();
+                $this->nhomQuyenModel->where('nhom_id', $nhom->id)->forceDelete();
             }
             $this->nhomModel->onlyTrashed()->forceDelete();
             return response()->json([

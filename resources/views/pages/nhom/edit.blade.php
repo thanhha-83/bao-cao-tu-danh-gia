@@ -16,6 +16,7 @@ $action = (object) [
         .btn-remove {
             padding: 0.6rem .75rem;
         }
+
     </style>
 @endsection
 
@@ -38,7 +39,8 @@ $action = (object) [
                         id="nganh_id" name="nganh_id" aria-label="Chọn ngành">
                         <option {{ old('nganh_id', $nhom->nganh_id) == '' ? 'selected' : '' }}>Chọn ngành</option>
                         @foreach ($nganhs as $item)
-                            <option value="{{ $item->id }}" {{ old('nganh_id', $nhom->nganh_id) == $item->id ? 'selected' : '' }}>
+                            <option value="{{ $item->id }}"
+                                {{ old('nganh_id', $nhom->nganh_id) == $item->id ? 'selected' : '' }}>
                                 {{ $item->ten }}</option>
                         @endforeach
                     </select>
@@ -90,34 +92,38 @@ $action = (object) [
                         $quyenNhom_id = old('quyenNhom_id', $current_quyenNhoms) != '' ? old('quyenNhom_id', $current_quyenNhoms) : [];
                         $tieuChuan_id = old('tieuChuan_id', $current_tieuChuans) != '' ? old('tieuChuan_id', $current_tieuChuans) : [];
                     @endphp
-                    @foreach ($quyenNhom_id as $key => $item)
-                        @foreach ($quyenNhoms as $quyenNhom)
-                            @if ($quyenNhom->id == $item)
-                                @php $text1 = $quyenNhom->ten @endphp
-                            @endif
-                        @endforeach
-                        @foreach ($tieuChuans as $tieuChuan)
-                            @if ($tieuChuan->id == $tieuChuan_id[$key])
-                                @php $text2 = 'Tiêu chuẩn số ' . $tieuChuan->stt @endphp
-                            @endif
-                        @endforeach
-                        <div class="form-row pl-1 w-100 wrap-selected">
-                            <div class="form-group col-md-5">
-                                <input type="text" class="form-control" value="{{ $text1 }}" readonly>
-                                <input type="hidden" class="value-1" name="quyenNhom_id[]" value="{{ $item }}">
-                            </div>
-                            <div class="ml-3 form-group col-md-5">
-                                <input type="text" class="form-control" value="{{ $text2 }}" readonly>
-                                <input type="hidden" class="value-2" name="tieuChuan_id[]" value="{{ $tieuChuan_id[$key] }}">
-                            </div>
-                            <div class="ml-3 mb-0 form-group col-md-1">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text btn-primary btn-remove" role="button"><i
-                                            class="fa fa-minus"></i></span>
+                    @if (!empty($quyenNhom_id) && !empty($tieuChuan_id))
+                        @foreach ($quyenNhom_id as $key => $item)
+                            @foreach ($quyenNhoms as $quyenNhom)
+                                @if ($quyenNhom->id == $item)
+                                    @php $text1 = $quyenNhom->ten @endphp
+                                @endif
+                            @endforeach
+                            @foreach ($tieuChuans as $tieuChuan)
+                                @if ($tieuChuan->id == $tieuChuan_id[$key])
+                                    @php $text2 = 'Tiêu chuẩn số ' . $tieuChuan->stt @endphp
+                                @endif
+                            @endforeach
+                            <div class="form-row pl-1 w-100 wrap-selected">
+                                <div class="form-group col-md-5">
+                                    <input type="text" class="form-control" value="{{ $text1 }}" readonly>
+                                    <input type="hidden" class="value-1" name="quyenNhom_id[]"
+                                        value="{{ $item }}">
+                                </div>
+                                <div class="ml-3 form-group col-md-5">
+                                    <input type="text" class="form-control" value="{{ $text2 }}" readonly>
+                                    <input type="hidden" class="value-2" name="tieuChuan_id[]"
+                                        value="{{ $tieuChuan_id[$key] }}">
+                                </div>
+                                <div class="ml-3 mb-0 form-group col-md-1">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text btn-primary btn-remove" role="button"><i
+                                                class="fa fa-minus"></i></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    @endif
                 </div>
                 <button type="submit" class="btn btn-primary">Xác nhận</button>
             </form>
