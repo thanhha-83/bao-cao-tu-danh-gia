@@ -9,5 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class DonVi extends Model
 {
     use HasFactory, SoftDeletes;
+    protected $dates = ['deleted_at'];
     protected $fillable = ['ten'];
 }

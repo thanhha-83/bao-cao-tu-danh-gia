@@ -8,7 +8,7 @@ use App\Http\Controllers\DonViController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NhomController;
 use App\Http\Controllers\DotDanhGiaController;
-use App\Http\Controllers\GiaiDoanController;
+use App\Http\Controllers\BaoCaoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -122,6 +122,29 @@ Route::prefix('dotdanhgia')->group(function () {
     Route::post('/restore-all', [DotDanhGiaController::class, 'restoreAll'])->name('dotdanhgia.restore-all');
     Route::post('/force-destroy', [DotDanhGiaController::class, 'forceDestroy'])->name('dotdanhgia.force-destroy');
     Route::post('/force-destroy-all', [DotDanhGiaController::class, 'forceDestroyAll'])->name('dotdanhgia.force-destroy-all');
+});
+
+Route::prefix('baocao')->group(function () {
+    Route::get('/', [BaoCaoController::class, 'index'])->name('baocao.index');
+    Route::get('/create', [BaoCaoController::class, 'create'])->name('baocao.create');
+    Route::post('/store', [BaoCaoController::class, 'store'])->name('baocao.store');
+    Route::get('/show/{id}', [BaoCaoController::class, 'show'])->name('baocao.show');
+    Route::get('/edit/{id}', [BaoCaoController::class, 'edit'])->name('baocao.edit');
+    Route::post('/update/{id}', [BaoCaoController::class, 'update'])->name('baocao.update');
+    Route::post('/destroy', [BaoCaoController::class, 'destroy'])->name('baocao.destroy');
+    Route::get('/trash', [BaoCaoController::class, 'trash'])->name('baocao.trash');
+    Route::post('/restore', [BaoCaoController::class, 'restore'])->name('baocao.restore');
+    Route::post('/restore-all', [BaoCaoController::class, 'restoreAll'])->name('baocao.restore-all');
+    Route::post('/force-destroy', [BaoCaoController::class, 'forceDestroy'])->name('baocao.force-destroy');
+    Route::post('/force-destroy-all', [BaoCaoController::class, 'forceDestroyAll'])->name('baocao.force-destroy-all');
+});
+
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+});
+
+Route::get('/tinymce', function() {
+    return view('tinymce');
 });
 
 Auth::routes();
