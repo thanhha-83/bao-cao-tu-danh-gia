@@ -124,10 +124,10 @@ class TieuChiController extends Controller
                 'ten' => $request->ten,
                 'tieuChuan_id' => $request->tieuChuan_id,
             ]);
-            $yeuCaus = $this->yeuCauModel->all();
+            $yeuCaus = $this->yeuCauModel->where('tieuChi_id', $id)->get();
             HandleUpdateHasMany::handleUpdateYeuCau($yeuCaus, $id, $request, $this->yeuCauModel);
 
-            $mocChuans = $this->mocChuanModel->all();
+            $mocChuans = $this->mocChuanModel->where('tieuChi_id', $id)->get();
             HandleUpdateHasMany::handleUpdateMocChuan($mocChuans, $id, $request, $this->mocChuanModel);
             $tuKhoaIds = [];
             if (!empty($request->tuKhoa)) {

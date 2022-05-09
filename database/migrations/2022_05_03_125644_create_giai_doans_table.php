@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNganhDotDanhGiasTable extends Migration
+class CreateGiaiDoansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateNganhDotDanhGiasTable extends Migration
      */
     public function up()
     {
-        Schema::create('nganh_dot_danh_gias', function (Blueprint $table) {
+        Schema::create('giai_doans', function (Blueprint $table) {
             $table->id();
-            $table->integer('nganh_id');
+            $table->dateTime('ngayBD');
+            $table->dateTime('ngayKT');
+            $table->integer('hoatDong_id');
             $table->integer('dotDanhGia_id');
             $table->timestamps();
         });
@@ -28,6 +30,6 @@ class CreateNganhDotDanhGiasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('nganh_dot_danh_gias');
+        Schema::dropIfExists('giai_doans');
     }
 }

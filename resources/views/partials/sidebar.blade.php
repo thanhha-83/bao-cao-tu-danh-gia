@@ -26,6 +26,12 @@
     </div>
 
     <li class="nav-item">
+        <a class="nav-link" href="{{ route('dotdanhgia.index') }}">
+            <i class="fas fa-server"></i>
+            <span>Đợt đánh giá</span></a>
+    </li>
+
+    <li class="nav-item">
         <a class="nav-link" href="{{ route('tieuchuan.index') }}">
             <i class="fas fa-server"></i>
             <span>Tiêu chuẩn</span></a>

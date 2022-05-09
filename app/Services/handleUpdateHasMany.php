@@ -81,4 +81,49 @@ class HandleUpdateHasMany {
         }
         return;
     }
+
+    public static function handleUpdateGiaiDoan($giaiDoans, $dotDanhGiaId, $request, $giaiDoanModel)
+    {
+        if (empty($request->hoatDong_id)) {
+            foreach ($giaiDoans as $giaiDoan) {
+                $giaiDoan->forceDelete();
+            }
+            return;
+        }
+        if (count($giaiDoans) >= count($request->hoatDong_id)) {
+            foreach ($request->hoatDong_id as $key => $item) {
+                $giaiDoanModel->find($giaiDoans[$key]->id)->update([
+                    'ngayBD' => $request->ngayBD[$key],
+                    'ngayKT' => $request->ngayKT[$key],
+                    'hoatDong_id' => $item,
+                    'dotDanhGia_id' => $dotDanhGiaId
+                ]);
+            }
+            foreach ($giaiDoans as $key => $giaiDoan) {
+                if ($key >= count($request->hoatDong_id)) {
+                    $giaiDoan->forceDelete();
+                }
+            }
+        } else {
+            foreach ($giaiDoans as $key => $giaiDoan) {
+                $giaiDoanModel->find($giaiDoan->id)->update([
+                    'ngayBD' => $request->ngayBD[$key],
+                    'ngayKT' => $request->ngayKT[$key],
+                    'hoatDong_id' => $request->hoatDong_id[$key],
+                    'dotDanhGia_id' => $dotDanhGiaId
+                ]);
+            }
+            foreach ($request->hoatDong_id as $key => $item) {
+                if ($key >= count($giaiDoans)) {
+                    $giaiDoanModel->create([
+                        'ngayBD' => $request->ngayBD[$key],
+                        'ngayKT' => $request->ngayKT[$key],
+                        'hoatDong_id' => $item,
+                        'dotDanhGia_id' => $dotDanhGiaId
+                    ]);
+                }
+            }
+        }
+        return;
+    }
 }

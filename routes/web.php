@@ -7,6 +7,8 @@ use App\Http\Controllers\NganhController;
 use App\Http\Controllers\DonViController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NhomController;
+use App\Http\Controllers\DotDanhGiaController;
+use App\Http\Controllers\GiaiDoanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,6 +107,21 @@ Route::prefix('nhom')->group(function () {
     Route::post('/restore-all', [NhomController::class, 'restoreAll'])->name('nhom.restore-all');
     Route::post('/force-destroy', [NhomController::class, 'forceDestroy'])->name('nhom.force-destroy');
     Route::post('/force-destroy-all', [NhomController::class, 'forceDestroyAll'])->name('nhom.force-destroy-all');
+});
+
+Route::prefix('dotdanhgia')->group(function () {
+    Route::get('/', [DotDanhGiaController::class, 'index'])->name('dotdanhgia.index');
+    Route::get('/create', [DotDanhGiaController::class, 'create'])->name('dotdanhgia.create');
+    Route::post('/store', [DotDanhGiaController::class, 'store'])->name('dotdanhgia.store');
+    Route::get('/show/{id}', [DotDanhGiaController::class, 'show'])->name('dotdanhgia.show');
+    Route::get('/edit/{id}', [DotDanhGiaController::class, 'edit'])->name('dotdanhgia.edit');
+    Route::post('/update/{id}', [DotDanhGiaController::class, 'update'])->name('dotdanhgia.update');
+    Route::post('/destroy', [DotDanhGiaController::class, 'destroy'])->name('dotdanhgia.destroy');
+    Route::get('/trash', [DotDanhGiaController::class, 'trash'])->name('dotdanhgia.trash');
+    Route::post('/restore', [DotDanhGiaController::class, 'restore'])->name('dotdanhgia.restore');
+    Route::post('/restore-all', [DotDanhGiaController::class, 'restoreAll'])->name('dotdanhgia.restore-all');
+    Route::post('/force-destroy', [DotDanhGiaController::class, 'forceDestroy'])->name('dotdanhgia.force-destroy');
+    Route::post('/force-destroy-all', [DotDanhGiaController::class, 'forceDestroyAll'])->name('dotdanhgia.force-destroy-all');
 });
 
 Auth::routes();
