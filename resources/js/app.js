@@ -5,6 +5,7 @@
  */
 
 require('./bootstrap');
+import Echo from 'laravel-echo'
 
 window.Vue = require('vue').default;
 
