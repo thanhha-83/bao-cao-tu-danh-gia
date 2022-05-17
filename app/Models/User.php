@@ -27,7 +27,8 @@ class User extends Authenticatable
         'chucVu',
         'email',
         'password',
-        'donVi_id'
+        'donVi_id',
+        'hinhAnh'
     ];
 
     /**
@@ -48,4 +49,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function donVi()
+    {
+        return $this->belongsTo(DonVi::class, 'donVi_id');
+    }
 }

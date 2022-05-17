@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBaoCaosTable extends Migration
+class CreateBaoCaoSaoLuusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,16 @@ class CreateBaoCaosTable extends Migration
      */
     public function up()
     {
-        Schema::create('bao_caos', function (Blueprint $table) {
+        Schema::create('bao_cao_sao_luus', function (Blueprint $table) {
             $table->id();
             $table->text('moTa')->nullable();
             $table->text('diemManh')->nullable();
             $table->text('diemTonTai')->nullable();
             $table->text('keHoachHanhDong')->nullable();
             $table->integer('diemTDG')->nullable();
-            $table->integer('trangThai')->nullable();
             $table->integer('nganh_id');
             $table->integer('tieuChi_id');
-            $table->softDeletes();
+            $table->integer('baoCao_id');
             $table->timestamps();
         });
     }
@@ -35,6 +34,6 @@ class CreateBaoCaosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bao_caos');
+        Schema::dropIfExists('bao_cao_sao_luus');
     }
 }

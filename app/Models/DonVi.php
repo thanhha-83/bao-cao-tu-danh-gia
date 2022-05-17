@@ -11,4 +11,9 @@ class DonVi extends Model
     use HasFactory, SoftDeletes;
     protected $dates = ['deleted_at'];
     protected $fillable = ['ten'];
+
+    public function nguoiDung()
+    {
+        return $this->hasMany(User::class, 'donVi_id');
+    }
 }
