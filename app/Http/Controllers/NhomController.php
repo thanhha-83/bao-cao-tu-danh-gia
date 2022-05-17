@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Nganh;
+use App\Models\NguoiDungQuyen;
 use App\Models\Nhom;
+use App\Models\NhomNguoiDung;
 use App\Models\NhomQuyen;
 use App\Models\QuyenNhom;
 use App\Models\TieuChuan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -19,13 +22,19 @@ class NhomController extends Controller
     private $quyenNhomModel;
     private $tieuChuanModel;
     private $nhomQuyenModel;
-    public function __construct(Nhom $nhomModel, Nganh $nganhModel, QuyenNhom $quyenNhomModel, TieuChuan $tieuChuanModel, NhomQuyen $nhomQuyenModel)
+    private $userModel;
+    private $nhomNguoiDungModel;
+    private $nguoiDungQuyenModel;
+    public function __construct(Nhom $nhomModel, Nganh $nganhModel, QuyenNhom $quyenNhomModel, TieuChuan $tieuChuanModel, NhomQuyen $nhomQuyenModel, User $userModel, NhomNguoiDung $nhomNguoiDungModel, NguoiDungQuyen $nguoiDungQuyenModel)
     {
         $this->nhomModel = $nhomModel;
         $this->nganhModel = $nganhModel;
         $this->quyenNhomModel = $quyenNhomModel;
         $this->tieuChuanModel = $tieuChuanModel;
         $this->nhomQuyenModel = $nhomQuyenModel;
+        $this->userModel = $userModel;
+        $this->nhomNguoiDungModel = $nhomNguoiDungModel;
+        $this->nguoiDungQuyenModel = $nguoiDungQuyenModel;
     }
 
     protected function callValidate(Request $request, $id = null)
@@ -52,7 +61,8 @@ class NhomController extends Controller
         $quyenNhoms = $this->quyenNhomModel->all();
         $nganhs = $this->nganhModel->all();
         $tieuChuans = $this->tieuChuanModel->all();
-        return view('pages.nhom.create', compact('quyenNhoms', 'nganhs', 'tieuChuans'));
+        $thanhViens = $this->userModel->all();
+        return view('pages.nhom.create', compact('quyenNhoms', 'nganhs', 'tieuChuans', 'thanhViens'));
     }
 
     public function store(Request $request)
@@ -69,6 +79,14 @@ class NhomController extends Controller
                 foreach ($request->quyenNhom_id as $key => $item) {
                     $nhom->nhomQuyen()->attach($item, [
                         'tieuChuan_id' => $request->tieuChuan_id[$key]
+                    ]);
+                }
+            }
+            if (!empty($request->thanhVien)) {
+                foreach ($request->thanhVien as $item) {
+                    $this->nhomNguoiDungModel->create([
+                        'nhom_id' => $nhom->id,
+                        'nguoiDung_id' => $item
                     ]);
                 }
             }
@@ -100,7 +118,13 @@ class NhomController extends Controller
             array_push($current_quyenNhoms, $item->quyenNhom_id);
             array_push($current_tieuChuans, $item->tieuChuan_id);
         }
-        return view('pages.nhom.edit', compact('nhom', 'quyenNhoms', 'nganhs', 'tieuChuans', 'current_quyenNhoms', 'current_tieuChuans'));
+        $thanhViens = $this->userModel->all();
+        $thanhVienNhoms = $this->nhomNguoiDungModel->where('nhom_id', $id)->get();
+        $current_thanhViens = [];
+        foreach ($thanhVienNhoms as $item) {
+            array_push($current_thanhViens, $item->nguoiDung_id);
+        }
+        return view('pages.nhom.edit', compact('nhom', 'quyenNhoms', 'nganhs', 'tieuChuans', 'current_quyenNhoms', 'current_tieuChuans', 'thanhViens', 'current_thanhViens'));
     }
 
     public function update(Request $request, $id)
@@ -128,6 +152,26 @@ class NhomController extends Controller
             } else {
                 foreach ($nhomQuyens as $nhomQuyen) {
                     $nhomQuyen->forceDelete();
+                }
+            }
+            if (!empty($request->thanhVien)) {
+                $thanhVienNhomsStayed = $this->nhomNguoiDungModel->whereIn('nguoiDung_id', $request->thanhVien)->where('nhom_id', $id)->get();
+                $thanhVienNhomsStayedLeft = $this->nhomNguoiDungModel->whereNotIn('nguoiDung_id', $request->thanhVien)->where('nhom_id', $id)->get();
+                foreach ($thanhVienNhomsStayedLeft as $item) {
+                    $this->nguoiDungQuyenModel->where('nhomNguoiDung_id', $item->id)->forceDelete();
+                }
+                $this->nhomNguoiDungModel->whereNotIn('nguoiDung_id', $request->thanhVien)->where('nhom_id', $id)->forceDelete();
+                $stayedIds = [];
+                foreach ($thanhVienNhomsStayed as $item) {
+                    array_push($stayedIds, $item->nguoiDung_id);
+                }
+                foreach ($request->thanhVien as $item) {
+                    if (!in_array($item, $stayedIds)) {
+                        $this->nhomNguoiDungModel->create([
+                            'nhom_id' => $id,
+                            'nguoiDung_id' => $item
+                        ]);
+                    }
                 }
             }
             DB::commit();

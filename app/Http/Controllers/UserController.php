@@ -6,6 +6,7 @@ use App\Models\DonVi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Services\HandleUploadImage;
 
 class UserController extends Controller
 {
@@ -17,7 +18,7 @@ class UserController extends Controller
         $this->donViModel = $donViModel;
     }
 
-    protected function callValidate(Request $request, $id = null)
+    protected function callValidate(Request $request)
     {
         $request->validate([
             'hoTen' => 'required',
@@ -48,6 +49,27 @@ class UserController extends Controller
         ]);
     }
 
+    protected function callValidateEdit(Request $request, $id = null)
+    {
+        $request->validate([
+            'hoTen' => 'required',
+            'ngaySinh' => 'required',
+            'chucVu' => 'required',
+            'sdt' => 'required|min:10|numeric|unique:users' . ',sdt,' . $id,
+            'donVi_id' => 'numeric|min:1',
+        ], [
+            'hoTen.required' => 'Bạn chưa nhập họ tên',
+            'ngaySinh.required' => 'Bạn chưa nhập ngày sinh',
+            'chucVu.required' => 'Bạn chưa nhập chức vụ',
+            'sdt.required' => 'Bạn chưa nhập số điện thoại',
+            'sdt.min' => 'Bạn chưa nhập đúng định dạng số điện thoại',
+            'sdt.numeric' => 'Bạn chưa nhập đúng định dạng số điện thoại',
+            'sdt.unique' => 'Số điện thoại đã tồn tại',
+            'donVi_id.numeric' => 'Bạn chưa chọn đơn vị',
+            'donVi_id.min' => 'Bạn chưa chọn đơn vị',
+        ]);
+    }
+
     public function index()
     {
         $users = $this->userModel->all();
@@ -64,6 +86,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->callValidate($request);
+        $fileUploaded = HandleUploadImage::upload($request, 'hinhAnh', 'photos');
         $this->userModel->create([
             'hoTen' => $request->hoTen,
             'gioiTinh' => $request->gioiTinh,
@@ -73,6 +96,7 @@ class UserController extends Controller
             'sdt' => $request->sdt,
             'password' => Hash::make($request->password),
             'donVi_id' => $request->donVi_id,
+            'hinhAnh'  => $fileUploaded
         ]);
         return redirect()->route('nguoidung.index')->with('message', 'Thêm thành công!');
     }
@@ -92,7 +116,7 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->callValidate($request, $id);
+        $this->callValidateEdit($request, $id);
         $this->userModel->find($id)->update([
             'hoTen' => $request->hoTen,
             'gioiTinh' => $request->gioiTinh,

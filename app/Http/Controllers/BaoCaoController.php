@@ -3,14 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\BaoCao;
+use App\Models\BaoCaoSaoLuu;
+use App\Models\Nganh;
+use App\Models\TieuChi;
 use Illuminate\Http\Request;
 
 class BaoCaoController extends Controller
 {
     private $baoCaoModel;
-    public function __construct(BaoCao $baoCaoModel)
+    private $nganhModel;
+    private $tieuChiModel;
+    private $baoCaoSLModel;
+    public function __construct(BaoCao $baoCaoModel, Nganh $nganhModel, TieuChi $tieuChiModel, BaoCaoSaoLuu $baoCaoSLModel)
     {
         $this->baoCaoModel = $baoCaoModel;
+        $this->nganhModel = $nganhModel;
+        $this->tieuChiModel = $tieuChiModel;
+        $this->baoCaoSLModel = $baoCaoSLModel;
     }
 
     public function index()
@@ -22,7 +31,9 @@ class BaoCaoController extends Controller
 
     public function create()
     {
-        return view('pages.baocao.create');
+        $nganhs = $this->nganhModel->all();
+        $tieuChis = $this->tieuChiModel->all();
+        return view('pages.baocao.create', compact('nganhs', 'tieuChis'));
     }
 
     public function store(Request $request)
@@ -32,8 +43,10 @@ class BaoCaoController extends Controller
             'diemManh' => $request->diemManh,
             'diemTonTai' => $request->diemTonTai,
             'keHoachHanhDong' => $request->keHoachHanhDong,
-            'diem' => $request->diem,
-            'trangThai' => $request->trangThai
+            'diemTDG' => $request->diemTDG,
+            'trangThai' => $request->trangThai,
+            'nganh_id' => $request->nganh_id,
+            'tieuChi_id' => $request->tieuChi_id,
         ]);
         return redirect()->route('tieuchuan.index')->with('message', 'Thêm thành công!');
     }
@@ -47,7 +60,9 @@ class BaoCaoController extends Controller
     public function edit($id)
     {
         $baoCao = $this->baoCaoModel->find($id);
-        return view('pages.baocao.edit', compact('baoCao'));
+        $nganhs = $this->nganhModel->all();
+        $tieuChis = $this->tieuChiModel->all();
+        return view('pages.baocao.edit', compact('baoCao', 'nganhs', 'tieuChis'));
     }
 
     public function update(Request $request, $id)
@@ -137,6 +152,38 @@ class BaoCaoController extends Controller
     {
         try {
             $this->baoCaoModel->onlyTrashed()->forceDelete();
+            return response()->json([
+                'code' => 200,
+                'message' => 'success',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'message' => 'fail',
+            ], 500);
+        }
+    }
+
+    public function word($id)
+    {
+        $baoCao = $this->baoCaoModel->find($id);
+        return view('pages.baocao.word', compact('baoCao'));
+    }
+
+    public function backup(Request $request)
+    {
+        try {
+            $baoCao = $this->baoCaoModel->find($request->id);
+            $this->baoCaoSLModel->create([
+                'moTa' => $baoCao->moTa,
+                'diemManh' => $baoCao->diemManh,
+                'diemTonTai' => $baoCao->diemTonTai,
+                'keHoachHanhDong' => $baoCao->keHoachHanhDong,
+                'diemTDG' => $baoCao->diemTDG,
+                'nganh_id' => $baoCao->nganh_id,
+                'tieuChi_id' => $baoCao->tieuChi_id,
+                'baoCao_id' => $baoCao->id,
+            ]);
             return response()->json([
                 'code' => 200,
                 'message' => 'success',

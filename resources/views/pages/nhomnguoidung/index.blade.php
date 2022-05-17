@@ -71,8 +71,6 @@ $action = (object) [
                                             class="btn btn-secondary">Sửa</a>
                                         <a href="#" class="btn btn-danger btn-delete"
                                             data-url="{{ route('nhom.destroy') }}" data-id="{{ $item->id }}">Xóa</a>
-                                        <a href="{{ route('nhomnguoidung.show', ['id' => $item->id]) }}"
-                                            class="btn btn-secondary">Quản lý TV</a>
                                     </td>
                                 </tr>
                             @endforeach

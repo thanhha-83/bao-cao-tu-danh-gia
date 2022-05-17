@@ -52,7 +52,7 @@ $action = (object) [
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Tên báo cáo</th>
+                            <th>Thời gian cập nhật</th>
                             <th>Chức năng</th>
                         </tr>
                     </thead>
@@ -60,13 +60,15 @@ $action = (object) [
                         @if (count($baoCaos) > 0)
                             @foreach ($baoCaos as $item)
                                 <tr>
-                                    <td>báo cáo số {{ $item->stt }}</td>
-                                    <td>{{ $item->ten }}</td>
+                                    <td>Báo cáo số {{ $item->tieuChi->tieuChuan->stt }}.{{ $item->tieuChi->stt }}</td>
+                                    <td>{{ date("d-m-Y H:i", strtotime($item->updated_at)) }}</td>
                                     <td>
                                         <a href="{{ route('baocao.show', ['id' => $item->id]) }}"
                                             class="btn btn-primary">Xem chi tiết</a>
                                         <a href="{{ route('baocao.edit', ['id' => $item->id]) }}"
                                             class="btn btn-secondary">Sửa</a>
+                                        <a href="#" class="btn btn-success btn-backup"
+                                            data-url="{{ route('baocao.backup') }}" data-id="{{ $item->id }}">Sao lưu</a>
                                         <a href="#" class="btn btn-danger btn-delete"
                                             data-url="{{ route('baocao.destroy') }}" data-id="{{ $item->id }}">Xóa</a>
                                     </td>
@@ -82,9 +84,11 @@ $action = (object) [
             </div>
         </div>
     </div>
+    @include('partials.backup-modal')
 @endsection
 
 @section('scripts')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/handleDelete.js"></script>
+    <script src="js/handleBackup.js"></script>
 @endsection

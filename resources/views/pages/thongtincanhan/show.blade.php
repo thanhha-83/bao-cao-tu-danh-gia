@@ -1,13 +1,14 @@
-@extends('layouts.index', ['title' => 'Chi tiết người dùng'])
+@extends('layouts.index', ['title' => 'Thông tin cá nhân'])
 
 @php
 $controller = (object) [
-    'name' => 'Người dùng',
-    'href' => '/user',
+    'name' => 'Thông tin cá nhân',
+    'href' => '/thongtincanhan',
 ];
 $action = (object) [
     'name' => 'Chi tiết',
 ];
+$user = optional(auth()->user());
 @endphp
 
 @section('head')
@@ -69,10 +70,10 @@ $action = (object) [
                         <tr>
                             <th>Chức năng:</th>
                             <td>
-                                <a href="{{ route('nguoidung.edit', ['id' => $user->id]) }}"
+                                <a href="{{ route('thongtincanhan.edit') }}"
                                     class="btn btn-secondary">Sửa</a>
-                                <a href="#" class="btn btn-danger btn-delete" data-url="{{ route('nguoidung.destroy') }}"
-                                    data-id="{{ $user->id }}" data-redirect="{{ route('nguoidung.index') }}">Xóa</a>
+                                <a href="{{ route('thongtincanhan.changepassword') }}"
+                                    class="btn btn-primary">Đổi mật khảu</a>
                             </td>
                         </tr>
                     </tbody>

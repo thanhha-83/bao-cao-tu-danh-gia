@@ -1,12 +1,12 @@
-@extends('layouts.index', ['title' => 'Danh sách nhóm'])
+@extends('layouts.index', ['title' => 'Thùng rác - Nhóm'])
 
 @php
 $controller = (object) [
     'name' => 'Nhóm',
-    'href' => '/nhóm',
+    'href' => '/nhom',
 ];
 $action = (object) [
-    'name' => 'Danh sách',
+    'name' => 'Thùng rác',
 ];
 @endphp
 
@@ -30,22 +30,26 @@ $action = (object) [
 
 @section('content')
     <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <a href="{{ route('nhom.create') }}" class="btn btn-primary btn-icon-split">
-                <span class="icon text-white-50">
-                    <i class="fas fa-plus"></i>
-                </span>
-                <span class="text">Thêm mới</span>
-            </a>
-            <a href="{{ route('nhom.trash') }}" class="btn btn-dark btn-icon-split">
-                <span class="icon text-white-50">
-                    <i class="fas fa-trash"></i>
-                </span>
-                <span class="text">Thùng rác
-                    <span class="trash-count">{{ $trashCount > 0 ? '(' . $trashCount . ')' : '' }}</span>
-                </span>
-            </a>
-        </div>
+        @if (count($nhoms) > 0)
+            <div class="trash-action card-header py-3 d-flex flex-row align-items-center">
+                <a href="#" class="btn btn-primary btn-icon-split btn-restore-all mr-3"
+                    data-url="{{ route('nhom.restore-all') }}"
+                    data-redirect="{{ route('nhom.index') }}">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-undo"></i>
+                    </span>
+                    <span class="text">Phục hồi tất cả</span>
+                </a>
+                <a href="#" class="btn btn-danger btn-icon-split btn-force-delete-all"
+                    data-url="{{ route('nhom.force-destroy-all') }}"
+                    data-redirect="{{ route('nhom.index') }}">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-times"></i>
+                    </span>
+                    <span class="text">Xóa tất cả</span>
+                </a>
+            </div>
+        @endif
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%" cellspacing="0">
@@ -65,24 +69,23 @@ $action = (object) [
                                     <td>{{ $item->ten }}</td>
                                     <td>{{ $item->nganh->ten }}</td>
                                     <td>
-                                        <a href="{{ route('nhom.show', ['id' => $item->id]) }}"
-                                            class="btn btn-primary">Xem chi tiết</a>
-                                        <a href="{{ route('nhom.edit', ['id' => $item->id]) }}"
-                                            class="btn btn-secondary">Sửa</a>
-                                        <a href="#" class="btn btn-danger btn-delete"
-                                            data-url="{{ route('nhom.destroy') }}" data-id="{{ $item->id }}">Xóa</a>
-                                        <a href="{{ route('nhomnguoidung.show', ['id' => $item->id]) }}"
-                                            class="btn btn-secondary">Quản lý TV</a>
+                                        <a href="#" class="btn btn-primary btn-restore"
+                                            data-url="{{ route('nhom.restore') }}" data-id="{{ $item->id }}">Phục
+                                            hồi</a>
+                                        <a href="#" class="btn btn-danger btn-force-delete"
+                                            data-url="{{ route('nhom.force-destroy') }}"
+                                            data-id="{{ $item->id }}">Xóa vĩnh viễn</a>
                                     </td>
                                 </tr>
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="999" class="text-center">Chưa có bản ghi nào!</td>
+                                <td colspan="999" class="text-center">Thùng rác trống!</td>
                             </tr>
                         @endif
                     </tbody>
                 </table>
+                {{ $nhoms->render('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
@@ -91,4 +94,5 @@ $action = (object) [
 @section('scripts')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/handleDelete.js"></script>
+    <script src="js/handleRestore.js"></script>
 @endsection

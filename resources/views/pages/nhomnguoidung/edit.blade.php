@@ -1,9 +1,9 @@
-@extends('layouts.index', ['title' => 'Chỉnh sửa nhóm'])
+@extends('layouts.index', ['title' => 'Chỉnh sửa nhóm người dùng'])
 
 @php
 $controller = (object) [
-    'name' => 'Nhóm',
-    'href' => '/nhom',
+    'name' => 'Nhóm người dùng',
+    'href' => '/nhomnguoidung',
 ];
 $action = (object) [
     'name' => 'Chỉnh sửa',
@@ -32,34 +32,25 @@ $action = (object) [
 @section('content')
     <div class="card shadow mb-4 w-75">
         <div class="card-body">
-            <form action="{{ route('nhom.update', ['id' => $nhom->id]) }}" method="POST">
+            <form action="{{ route('nhomnguoidung.update', ['id' => $nhomNguoiDung->id]) }}" method="POST">
                 @csrf
-                <div class="form-group">
-                    <label for="nganh_id">Ngành</label>
-                    <select class="form-select form-control {{ $errors->has('nganh_id') ? 'is-invalid' : '' }}"
-                        id="nganh_id" name="nganh_id" aria-label="Chọn ngành">
-                        <option {{ old('nganh_id', $nhom->nganh_id) == '' ? 'selected' : '' }}>Chọn ngành</option>
-                        @foreach ($nganhs as $item)
-                            <option value="{{ $item->id }}"
-                                {{ old('nganh_id', $nhom->nganh_id) == $item->id ? 'selected' : '' }}>
-                                {{ $item->ten }}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('nganh_id'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('nganh_id') }}
-                        </div>
-                    @endif
-                </div>
-                <div class="form-group">
-                    <label for="ten">Tên nhóm</label>
-                    <input type="text" class="form-control {{ $errors->has('ten') ? 'is-invalid' : '' }}" id="ten"
-                        name="ten" value="{{ old('ten', $nhom->ten) }}">
-                    @if ($errors->has('ten'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('ten') }}
-                        </div>
-                    @endif
+                <div class="form-row pl-1">
+                    <div class="form-group col-md-5">
+                        <label for="vaiTro_id">Vai trò</label>
+                        <select class="form-select form-control {{ $errors->has('vaiTro_id') ? 'is-invalid' : '' }}"
+                            id="vaiTro_id" name="vaiTro_id" aria-label="Chọn Vai trò">
+                            @foreach ($vaiTros as $item)
+                                <option value="{{ $item->id }}"
+                                    {{ old('vaiTro_id', $nhomNguoiDung->vaiTro_id) == $item->id ? 'selected' : '' }}>
+                                    {{ $item->ten }}</option>
+                            @endforeach
+                        </select>
+                        @if ($errors->has('vaiTro_id'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('nganh_id') }}
+                            </div>
+                        @endif
+                    </div>
                 </div>
                 <div class="form-row pl-1 wrap-select">
                     <div class="form-row pl-1 w-100">
@@ -67,17 +58,17 @@ $action = (object) [
                             <label>Quyền</label>
                             <select class="form-select form-control" id="select-1" aria-label="Chọn quyền">
                                 <option value="" selected>Chọn quyền</option>
-                                @foreach ($quyenNhoms as $item)
+                                @foreach ($quyenNguoiDungs as $item)
                                     <option value="{{ $item->id }}">{{ $item->ten }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="ml-3 form-group col-md-5">
-                            <label>Tiêu chuẩn</label>
+                            <label>Báo cáo</label>
                             <select class="form-select form-control" id="select-2" aria-label="Chọn quyền">
-                                <option value="" selected>Chọn tiêu chuẩn</option>
-                                @foreach ($tieuChuans as $item)
-                                    <option value="{{ $item->id }}">Tiêu chuẩn số {{ $item->stt }}</option>
+                                <option value="" selected>Chọn báo cáo</option>
+                                @foreach ($baoCaos as $item)
+                                    <option value="{{ $item->id }}">Báo cáo số {{$item->tieuChi->tieuChuan->stt}}.{{$item->tieuChi->stt}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -89,7 +80,7 @@ $action = (object) [
                             </div>
                         </div>
                     </div>
-                    @php
+                    {{-- @php
                         $quyenNhom_id = old('quyenNhom_id', $current_quyenNhoms) != '' ? old('quyenNhom_id', $current_quyenNhoms) : [];
                         $tieuChuan_id = old('tieuChuan_id', $current_tieuChuans) != '' ? old('tieuChuan_id', $current_tieuChuans) : [];
                     @endphp
@@ -124,19 +115,7 @@ $action = (object) [
                                 </div>
                             </div>
                         @endforeach
-                    @endif
-                </div>
-                <div class="form-group">
-                    <label for="thanhVien">Thành viên</label>
-                    <select class="form-control tags-select-only" multiple="multiple" name="thanhVien[]">
-                        @php
-                            $thanhVienIds = old('thanhVien', $current_thanhViens) != '' ? old('thanhVien', $current_thanhViens) : [];
-                        @endphp
-                        @foreach ($thanhViens as $item)
-                            <option value="{{ $item->id }}" {{ in_array($item->id, $thanhVienIds) ? 'selected' : '' }}>
-                                {{ $item->hoTen }}</option>
-                        @endforeach
-                    </select>
+                    @endif --}}
                 </div>
                 <button type="submit" class="btn btn-primary">Xác nhận</button>
             </form>

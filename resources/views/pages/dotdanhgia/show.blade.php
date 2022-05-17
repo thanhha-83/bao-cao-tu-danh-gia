@@ -62,8 +62,8 @@ $action = (object) [
                             <tr>
                                 <td></td>
                                 <td>{{ $item->hoatDong->ten }}</td>
-                                <td>{{ date("d-m-Y H:m", strtotime($item->ngayBD)) }}</td>
-                                <td>{{ date("d-m-Y H:m", strtotime($item->ngayKT)) }}</td>
+                                <td>{{ date("d-m-Y H:i", strtotime($item->ngayBD)) }}</td>
+                                <td>{{ date("d-m-Y H:i", strtotime($item->ngayKT)) }}</td>
                             </tr>
                         @endforeach
                         <tr>

@@ -11,11 +11,11 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-    <li class="nav-item active">
-        <a class="nav-link" href="{{ route('home.index') }}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Trang chủ</span></a>
-    </li>
+    @include('partials.sidebar-menu-item', [
+        'route' => 'home.index',
+        'icon' => 'fas fa-fw fa-tachometer-alt',
+        'title' => 'Trang chủ'
+    ])
 
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -25,47 +25,53 @@
         Danh mục
     </div>
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('dotdanhgia.index') }}">
-            <i class="fas fa-server"></i>
-            <span>Đợt đánh giá</span></a>
-    </li>
+    @include('partials.sidebar-menu-item', [
+        'route' => 'dotdanhgia.index',
+        'icon' => 'fas fa-server',
+        'title' => 'Đợt đánh giá'
+    ])
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('tieuchuan.index') }}">
-            <i class="fas fa-server"></i>
-            <span>Tiêu chuẩn</span></a>
-    </li>
+    @include('partials.sidebar-menu-item', [
+        'route' => 'tieuchuan.index',
+        'icon' => 'fas fa-server',
+        'title' => 'Tiêu chuẩn'
+    ])
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('tieuchi.index') }}">
-            <i class="fas fa-server"></i>
-            <span>Tiêu chí</span></a>
-    </li>
+    @include('partials.sidebar-menu-item', [
+        'route' => 'tieuchi.index',
+        'icon' => 'fas fa-server',
+        'title' => 'Tiêu chí'
+    ])
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('nguoidung.index') }}">
-            <i class="fas fa fa-user"></i>
-            <span>Người dùng</span></a>
-    </li>
+    @include('partials.sidebar-menu-item', [
+        'route' => 'nguoidung.index',
+        'icon' => 'fas fa fa-user',
+        'title' => 'Người dùng'
+    ])
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('donvi.index') }}">
-            <i class="fas fa-building"></i>
-            <span>Đơn vị</span></a>
-    </li>
+    @include('partials.sidebar-menu-item', [
+        'route' => 'donvi.index',
+        'icon' => 'fas fa-building',
+        'title' => 'Đơn vị'
+    ])
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('nganh.index') }}">
-            <i class="fas fa-briefcase"></i>
-            <span>Ngành</span></a>
-    </li>
+    @include('partials.sidebar-menu-item', [
+        'route' => 'nganh.index',
+        'icon' => 'fas fa-briefcase',
+        'title' => 'Ngành'
+    ])
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('nhom.index') }}">
-            <i class="fas fa fa-users"></i>
-            <span>Nhóm</span></a>
-    </li>
+    @include('partials.sidebar-menu-item', [
+        'route' => 'nhom.index',
+        'icon' => 'fas fa fa-users',
+        'title' => 'Nhóm'
+    ])
+
+    @include('partials.sidebar-menu-item', [
+        'route' => 'baocao.index',
+        'icon' => 'fas fa fa-users',
+        'title' => 'Báo cáo'
+    ])
 
     <!-- Divider -->
     <hr class="sidebar-divider">
