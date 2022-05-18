@@ -16,4 +16,8 @@ class DonVi extends Model
     {
         return $this->hasMany(User::class, 'donVi_id');
     }
+    public function minhChung()
+    {
+        return $this->hasMany(MinhChung::class, 'donVi_id');
+    }
 }

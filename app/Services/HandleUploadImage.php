@@ -10,9 +10,9 @@ class HandleUploadImage {
 
     public static function upload($request, $fieldName, $dir) {
         if($request->hasFile($fieldName)) {
+            $date = new \DateTime('now');
             $file = $request->file($fieldName);
-            $fileName = $file->getClientOriginalName();
-            $fileNameHash = Str::random(20) . '.' . $file->getClientOriginalExtension();
+            $fileNameHash = $date->format('d-M-Y-h-i') . '-' . $file->getClientOriginalName();
             $filePath = $request->file($fieldName)->storeAs('public/'.$dir.'/'.Auth::id(), $fileNameHash);
             return Storage::url($filePath);
         }

@@ -90,5 +90,6 @@ $action = (object) [
 
 @section('scripts')
     <script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
+    <script src="js/customTinyMCE.js"></script>
     <script src="js/callTinyMCE.js"></script>
 @endsection

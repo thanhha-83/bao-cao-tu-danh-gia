@@ -100,7 +100,7 @@ $action = (object) [
                                         <div class="media-body">
                                             <div class="row">
                                                 <div class="col-8 d-flex">
-                                                    <h6><strong>@{{ message.nguoi_dung.hoTen }}</strong><small> (@{{ message.nguoi_dung.chucVu }})</small></h6>
+                                                    <h6><strong>@{{ message.nguoi_dung.hoTen }}</strong><small> (@{{ message.nguoi_dung.chucVu }})</small><small> (@{{ message.time }})</small></h6>
                                                 </div>
                                                 <div class="col-4">
                                                     <div class="pull-right reply text-right">
@@ -129,7 +129,7 @@ $action = (object) [
                                                         <div class="media-body">
                                                             <div class="row">
                                                                 <div class="col-12 d-flex">
-                                                                    <h6><strong>@{{ childMessage.nguoi_dung.hoTen }}</strong><small> (@{{ childMessage.nguoi_dung.chucVu }})</small></h6>
+                                                                    <h6><strong>@{{ childMessage.nguoi_dung.hoTen }}</strong><small> (@{{ childMessage.nguoi_dung.chucVu }})</small><small> (@{{ childMessage.time }})</small></h6>
                                                                 </div>
                                                             </div>
                                                             <span>
@@ -164,6 +164,8 @@ $action = (object) [
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.11.0/echo.common.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/locale/vi.min.js" integrity="sha512-LvYVj/X6QpABcaqJBqgfOkSjuXv81bLz+rpz0BQoEbamtLkUF2xhPNwtI/xrokAuaNEQAMMA1/YhbeykYzNKWg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="js/handleDelete.js"></script>
     <script>
         $(document).ready(function() {
@@ -194,6 +196,17 @@ $action = (object) [
                         remote = data;
                     },
                 });
+                remote.forEach((item) => {
+                    console.log(item);
+                    const dates = new Date(item.created_at);
+                    const year = (dates.getYear() + 1900).toString();
+                    const month = '0' + (dates.getMonth() + 1).toString();
+                    const date = dates.getDate().toString();
+                    const hours = dates.getHours().toString();
+                    const dateString = year + month + date + hours;
+                    console.log(dateString);
+                    item.time = moment(dateString, "YYYYMMDDH").fromNow();
+                })
                 return remote;
             }
             new Vue({

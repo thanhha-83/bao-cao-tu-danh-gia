@@ -73,6 +73,12 @@
         'title' => 'Báo cáo'
     ])
 
+    @include('partials.sidebar-menu-item', [
+        'route' => 'minhchung.index',
+        'icon' => 'fas fa fa-users',
+        'title' => 'Minh chứng'
+    ])
+
     <!-- Divider -->
     <hr class="sidebar-divider">
 

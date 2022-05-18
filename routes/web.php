@@ -13,6 +13,7 @@ use App\Http\Controllers\DotDanhGiaController;
 use App\Http\Controllers\BaoCaoController;
 use App\Http\Controllers\NhomNguoiDungController;
 use App\Http\Controllers\BinhLuanController;
+use App\Http\Controllers\MinhChungController;
 use Illuminate\Http\Request;
 
 /*
@@ -183,7 +184,27 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/storeReply', [BinhLuanController::class, 'storeReply'])->name('binhluan.store-reply');
     });
 
+    Route::prefix('minhchung')->group(function () {
+        Route::get('/index', [MinhChungController::class, 'index'])->name('minhchung.index');
+        Route::get('/create', [MinhChungController::class, 'create'])->name('minhchung.create');
+        Route::post('/store', [MinhChungController::class, 'store'])->name('minhchung.store');
+        Route::get('/show/{id}', [MinhChungController::class, 'show'])->name('minhchung.show');
+        Route::get('/edit/{id}', [MinhChungController::class, 'edit'])->name('minhchung.edit');
+        Route::post('/update/{id}', [MinhChungController::class, 'update'])->name('minhchung.update');
+        Route::post('/destroy', [MinhChungController::class, 'destroy'])->name('minhchung.destroy');
+        Route::get('/trash', [MinhChungController::class, 'trash'])->name('minhchung.trash');
+        Route::post('/restore', [MinhChungController::class, 'restore'])->name('minhchung.restore');
+        Route::post('/restore-all', [MinhChungController::class, 'restoreAll'])->name('minhchung.restore-all');
+        Route::post('/force-destroy', [MinhChungController::class, 'forceDestroy'])->name('minhchung.force-destroy');
+        Route::post('/force-destroy-all', [MinhChungController::class, 'forceDestroyAll'])->name('minhchung.force-destroy-all');
+        Route::post('/getall', [MinhChungController::class, 'getAll'])->name('minhchung.get-all');
+    });
+
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
+});
+
+Route::get('/iframe', function() {
+    return view('minhchung');
 });
 
 

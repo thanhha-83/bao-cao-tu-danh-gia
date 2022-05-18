@@ -18,7 +18,7 @@ class UserController extends Controller
         $this->donViModel = $donViModel;
     }
 
-    protected function callValidate(Request $request)
+    protected function callValidate(Request $request, $id = null)
     {
         $request->validate([
             'hoTen' => 'required',
