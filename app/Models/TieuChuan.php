@@ -10,7 +10,7 @@ class TieuChuan extends Model
 {
     use HasFactory, SoftDeletes;
     protected $dates = ['deleted_at'];
-    protected $fillable = ['stt', 'ten', 'noiDung'];
+    protected $fillable = ['stt', 'ten'];
 
     public function tieuChi()
     {

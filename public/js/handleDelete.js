@@ -102,6 +102,37 @@ $(document).ready(() => {
         });
     });
 
+    $(".btn-delete-backup").on("click", (e) => {
+        const id = $(e.target).data('id');
+        const url = $(e.target).data('url');
+        const _token = $('meta[name="csrf-token"]').attr('content');
+        e.preventDefault();
+        Swal.fire({
+            title: "Bạn chắc chắn chứ?",
+            text: "Bạn không thể hoàn tác lại bản ghi này.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Xác nhận",
+            cancelButtonText: "Hủy",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url,
+                    data: { id, _token},
+                    success: (data) => {
+                        Swal.fire("Thành công!", "Bản ghi đã được xóa hoàn toàn!", "success");
+                        if ($(e.target).data('redirect')) {
+                            eventRedirect($(e.target).data('redirect'));
+                        }
+                    },
+                })
+            }
+        });
+    });
+
     function eventRedirect(href) {
         $('.swal2-confirm').on('click', () => {
             window.location.href = href;

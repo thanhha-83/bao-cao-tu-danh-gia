@@ -18,13 +18,11 @@ class TieuChuanController extends Controller
         $request->validate([
             'stt' => 'required|unique:tieu_chuans' . ',stt,' . $id,
             'ten' => 'required|unique:tieu_chuans' . ',ten,' . $id,
-            'noiDung' => 'required',
         ], [
             'stt.required' => 'Bạn chưa nhập số thứ tự tiêu chuẩn',
             'stt.unique' => 'Số thứ tự tiêu chuẩn đã tồn tại',
             'ten.required' => 'Bạn chưa nhập tên tiêu chuẩn',
             'ten.unique' => 'Tên tiêu chuẩn đã tồn tại',
-            'noiDung.required' => 'Bạn chưa nhập nội dung tiêu chuẩn',
         ]);
     }
 
@@ -46,16 +44,15 @@ class TieuChuanController extends Controller
         $this->tieuChuanModel->create([
             'stt' => $request->stt,
             'ten' => $request->ten,
-            'noiDung' => $request->noiDung
         ]);
         return redirect()->route('tieuchuan.index')->with('message', 'Thêm thành công!');
     }
 
-    public function show($id)
-    {
-        $tieuChuan = $this->tieuChuanModel->find($id);
-        return view('pages.tieuchuan.show', compact('tieuChuan'));
-    }
+    // public function show($id)
+    // {
+    //     $tieuChuan = $this->tieuChuanModel->find($id);
+    //     return view('pages.tieuchuan.show', compact('tieuChuan'));
+    // }
 
     public function edit($id)
     {
@@ -69,7 +66,6 @@ class TieuChuanController extends Controller
         $this->tieuChuanModel->find($id)->update([
             'stt' => $request->stt,
             'ten' => $request->ten,
-            'noiDung' => $request->noiDung
         ]);
         return redirect()->route('tieuchuan.show', ['id' => $id])->with('message', 'Sửa thành công!');
     }

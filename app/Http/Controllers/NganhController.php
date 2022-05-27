@@ -2,24 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DonVi;
 use App\Models\Nganh;
 use Illuminate\Http\Request;
 
 class NganhController extends Controller
 {
     private $nganhModel;
-    public function __construct(Nganh $nganhModel)
+    private $donViModel;
+    public function __construct(Nganh $nganhModel, DonVi $donViModel)
     {
         $this->nganhModel = $nganhModel;
+        $this->donViModel = $donViModel;
     }
 
     protected function callValidate(Request $request, $id = null)
     {
         $request->validate([
             'ten' => 'required|unique:nganhs' . ',ten,' . $id,
+            'donVi_id' => 'numeric|min:1'
         ], [
             'ten.required' => 'Bạn chưa nhập tên ngành',
             'ten.unique' => 'Tên ngành đã tồn tại',
+            'donVi_id.min' => 'Bạn chưa chọn đơn vị',
+            'donVi_id.numeric' => 'Bạn chưa chọn đơn vị',
         ]);
     }
 
@@ -32,7 +38,8 @@ class NganhController extends Controller
 
     public function create()
     {
-        return view('pages.nganh.create');
+        $donVis = $this->donViModel->all();
+        return view('pages.nganh.create', compact('donVis'));
     }
 
     public function store(Request $request)
@@ -40,6 +47,7 @@ class NganhController extends Controller
         $this->callValidate($request);
         $this->nganhModel->create([
             'ten' => $request->ten,
+            'donVi_id' => $request->donVi_id,
         ]);
         return redirect()->route('nganh.index')->with('message', 'Thêm thành công!');
     }
@@ -47,7 +55,8 @@ class NganhController extends Controller
     public function edit($id)
     {
         $nganh = $this->nganhModel->find($id);
-        return view('pages.nganh.edit', compact('nganh'));
+        $donVis = $this->donViModel->all();
+        return view('pages.nganh.edit', compact('nganh', 'donVis'));
     }
 
     public function update(Request $request, $id)
@@ -55,6 +64,7 @@ class NganhController extends Controller
         $this->callValidate($request, $id);
         $this->nganhModel->find($id)->update([
             'ten' => $request->ten,
+            'donVi_id' => $request->donVi_id,
         ]);
         return redirect()->route('nganh.index')->with('message', 'Sửa thành công!');
     }

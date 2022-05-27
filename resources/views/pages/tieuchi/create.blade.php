@@ -55,7 +55,7 @@ $action = (object) [
                         id="tieuChuan_id" name="tieuChuan_id" aria-label="Chọn tiêu chuẩn">
                         <option {{ old('tieuChuan_id', '') == '' ? 'selected' : '' }}>Chọn tiêu chuẩn</option>
                         @foreach ($tieuChuans as $item)
-                            <option value="{{ $item->id }}" {{ old('tieuChuan_id', '') == $item->id ? 'selected' : '' }}>Tiêu chuẩn số {{ $item->stt }}</option>
+                            <option value="{{ $item->id }}" {{ old('tieuChuan_id', '') == $item->id ? 'selected' : '' }}>Tiêu chuẩn số {{ $item->stt }}: {{$item->ten}}</option>
                         @endforeach
                     </select>
                     @if ($errors->has('tieuChuan_id'))

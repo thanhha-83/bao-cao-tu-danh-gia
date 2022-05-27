@@ -31,12 +31,15 @@ $action = (object) [
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            @can('tieuchi-them')
             <a href="{{ route('tieuchi.create') }}" class="btn btn-primary btn-icon-split">
                 <span class="icon text-white-50">
                     <i class="fas fa-plus"></i>
                 </span>
                 <span class="text">Thêm mới</span>
             </a>
+            @endcan
+            @can('tieuchi-xoa')
             <a href="{{ route('tieuchi.trash') }}" class="btn btn-dark btn-icon-split">
                 <span class="icon text-white-50">
                     <i class="fas fa-trash"></i>
@@ -45,13 +48,14 @@ $action = (object) [
                     <span class="trash-count">{{ $trashCount > 0 ? '(' . $trashCount . ')' : '' }}</span>
                 </span>
             </a>
+            @endcan
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
-                        <tr>
-                            <th>STT</th>
+                        <tr align="center">
+                            <th>Tiêu chí</th>
                             <th>Tên tiêu chí</th>
                             <th>Chức năng</th>
                         </tr>
@@ -60,15 +64,21 @@ $action = (object) [
                         @if (count($tieuChis) > 0)
                             @foreach ($tieuChis as $item)
                                 <tr>
-                                    <td>Tiêu chí số {{ $item->stt }}</td>
+                                    <td width="120" align="center">{{ $item->tieuchuan->stt }}.{{ $item->stt }}</td>
                                     <td>{{ $item->ten }}</td>
-                                    <td>
+                                    <td width="300">
+                                        @can('tieuchi-chitiet')
                                         <a href="{{ route('tieuchi.show', ['id' => $item->id]) }}"
                                             class="btn btn-primary">Xem chi tiết</a>
+                                        @endcan
+                                        @can('tieuchi-sua')
                                         <a href="{{ route('tieuchi.edit', ['id' => $item->id]) }}"
                                             class="btn btn-secondary">Sửa</a>
+                                        @endcan
+                                        @can('tieuchi-xoa')
                                         <a href="#" class="btn btn-danger btn-delete"
                                             data-url="{{ route('tieuchi.destroy') }}" data-id="{{ $item->id }}">Xóa</a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
@@ -79,6 +89,7 @@ $action = (object) [
                         @endif
                     </tbody>
                 </table>
+                {{ $tieuChis->render('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>

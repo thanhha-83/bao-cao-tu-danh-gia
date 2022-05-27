@@ -32,12 +32,11 @@ class TieuChiController extends Controller
     protected function callValidate(Request $request, $id = null)
     {
         $request->validate([
-            'stt' => 'required|unique:tieu_chis' . ',stt,' . $id,
+            'stt' => 'required',
             'ten' => 'required|unique:tieu_chis' . ',ten,' . $id,
             'tieuChuan_id' => 'numeric|min:1'
         ], [
             'stt.required' => 'Bạn chưa nhập số thứ tự tiêu chí',
-            'stt.unique' => 'Số thứ tự tiêu chí đã tồn tại',
             'ten.required' => 'Bạn chưa nhập tên tiêu chí',
             'ten.unique' => 'Tên tiêu chí đã tồn tại',
             'tieuChuan_id.min' => 'Bạn chưa chọn tiêu chuẩn',
@@ -47,7 +46,7 @@ class TieuChiController extends Controller
 
     public function index()
     {
-        $tieuChis = $this->tieuChiModel->all();
+        $tieuChis = $this->tieuChiModel->paginate(10);
         $trashCount = count($this->tieuChiModel->onlyTrashed()->get());
         return view('pages.tieuchi.index', compact('tieuChis', 'trashCount'));
     }

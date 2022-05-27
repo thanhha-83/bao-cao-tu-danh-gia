@@ -3,7 +3,7 @@
 @php
 $controller = (object) [
     'name' => 'Người dùng',
-    'href' => '/user',
+    'href' => '/nguoidung',
 ];
 $action = (object) [
     'name' => 'Chi tiết',
@@ -65,6 +65,16 @@ $action = (object) [
                         <tr>
                             <th>Đơn vị:</th>
                             <td>{{ $user->donVi->ten }}</td>
+                        </tr>
+                        <tr>
+                            <th>Vai trò hệ thống:</th>
+                            <td>
+                                <ul class="pl-3">
+                                    @foreach ($user->vaiTroHT as $item)
+                                        <li>{{ $item->ten }}</li>
+                                    @endforeach
+                                </ul>
+                            </td>
                         </tr>
                         <tr>
                             <th>Chức năng:</th>

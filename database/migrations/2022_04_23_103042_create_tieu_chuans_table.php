@@ -17,7 +17,6 @@ class CreateTieuChuansTable extends Migration
             $table->id();
             $table->integer('stt');
             $table->string('ten');
-            $table->text('noiDung');
             $table->timestamps();
             $table->softDeletes();
         });

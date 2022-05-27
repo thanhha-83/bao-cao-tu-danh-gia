@@ -10,6 +10,10 @@ $action = (object) [
 ];
 @endphp
 
+@section('styles')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endsection
+
 @section('breadcrumb')
     @include('partials.breadcrumb', compact('controller', 'action'))
 @endsection
@@ -100,8 +104,30 @@ $action = (object) [
                         </div>
                     @endif
                 </div>
+                <div class="form-group">
+                    <label for="vaiTroHT">Vai trò hệ thống</label>
+                    <select class="form-control tags-select"
+                        multiple="multiple" name="vaiTroHT[]">
+                        @php
+                            $vaiTroHTIds = [];
+                            foreach ($user->vaiTroHT as $item) {
+                                $vaiTroHTIds[] = $item->id;
+                            }
+                            $vaiTroHT = old('vaiTroHT', $vaiTroHTIds) != '' ? old('vaiTroHT', $vaiTroHTIds) : [];
+                        @endphp
+                        @foreach ($vaiTroHTs as $item)
+                        <option value="{{ $item->id }}" {{ in_array($item->id, $vaiTroHTIds) ? 'selected' : '' }}>
+                            {{ $item->ten }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-primary">Xác nhận</button>
             </form>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="js/handleMultipleSelect.js"></script>
 @endsection

@@ -1,9 +1,9 @@
-@extends('layouts.index', ['title' => 'Thùng rác - Đơn vị'])
+@extends('layouts.index', ['title' => 'Thùng rác - Minh chứng'])
 
 @php
 $controller = (object) [
-    'name' => 'Đơn vị',
-    'href' => '/donvi',
+    'name' => 'Minh chứng',
+    'href' => '/minhchung',
 ];
 $action = (object) [
     'name' => 'Thùng rác',
@@ -30,19 +30,19 @@ $action = (object) [
 
 @section('content')
     <div class="card shadow mb-4">
-        @if (count($donVis) > 0)
+        @if (count($minhChungs) > 0)
             <div class="trash-action card-header py-3 d-flex flex-row align-items-center">
                 <a href="#" class="btn btn-primary btn-icon-split btn-restore-all mr-3"
-                    data-url="{{ route('donvi.restore-all') }}"
-                    data-redirect="{{ route('donvi.index') }}">
+                    data-url="{{ route('minhchung.restore-all') }}"
+                    data-redirect="{{ route('minhchung.index') }}">
                     <span class="icon text-white-50">
                         <i class="fas fa-undo"></i>
                     </span>
                     <span class="text">Phục hồi tất cả</span>
                 </a>
                 <a href="#" class="btn btn-danger btn-icon-split btn-force-delete-all"
-                    data-url="{{ route('donvi.force-destroy-all') }}"
-                    data-redirect="{{ route('donvi.index') }}">
+                    data-url="{{ route('minhchung.force-destroy-all') }}"
+                    data-redirect="{{ route('minhchung.index') }}">
                     <span class="icon text-white-50">
                         <i class="fas fa-times"></i>
                     </span>
@@ -56,22 +56,22 @@ $action = (object) [
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Tên Đơn vị</th>
+                            <th>Tên Minh chứng</th>
                             <th>Chức năng</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if (count($donVis) > 0)
-                            @foreach ($donVis as $key => $item)
+                        @if (count($minhChungs) > 0)
+                            @foreach ($minhChungs as $key => $item)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $item->ten }}</td>
                                     <td>
                                         <a href="#" class="btn btn-primary btn-restore"
-                                            data-url="{{ route('donvi.restore') }}" data-id="{{ $item->id }}">Phục
+                                            data-url="{{ route('minhchung.restore') }}" data-id="{{ $item->id }}">Phục
                                             hồi</a>
                                         <a href="#" class="btn btn-danger btn-force-delete"
-                                            data-url="{{ route('donvi.force-destroy') }}"
+                                            data-url="{{ route('minhchung.force-destroy') }}"
                                             data-id="{{ $item->id }}">Xóa vĩnh viễn</a>
                                     </td>
                                 </tr>
@@ -83,7 +83,7 @@ $action = (object) [
                         @endif
                     </tbody>
                 </table>
-                {{ $donVis->render('pagination::bootstrap-4') }}
+                {{ $minhChungs->render('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>

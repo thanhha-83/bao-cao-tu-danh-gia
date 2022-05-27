@@ -57,6 +57,37 @@ class NhomNguoiDungController extends Controller
         $vaiTros = $this->vaiTroModel->all();
         $quyenNguoiDungs = $this->quyenNguoiDungModel->all();
         $baoCaos = $this->baoCaoModel->all();
-        return view('pages.nhomnguoidung.edit', compact('nhomNguoiDung', 'vaiTros', 'quyenNguoiDungs', 'baoCaos'));
+        $current_quyenNguoiDungs = [];
+        $current_baoCaos = [];
+        $nguoiDungQuyens = $this->nguoiDungQuyenModel->where('nhomNguoiDung_id', $id)->get();
+        foreach ($nguoiDungQuyens as $item) {
+            array_push($current_quyenNguoiDungs, $item->quyenNguoiDung_id);
+            array_push($current_baoCaos, $item->baoCao_id);
+        }
+        return view('pages.nhomnguoidung.edit', compact('nhomNguoiDung', 'vaiTros', 'quyenNguoiDungs', 'baoCaos', 'current_quyenNguoiDungs', 'current_baoCaos'));
+    }
+    public function update(Request $request, $id)
+    {
+        $nhomNguoiDung = $this->nhomNguoiDungModel->find($id);
+        $nhomNguoiDung->update([
+            'vaiTro_id' => $request->vaiTro_id
+        ]);
+        $nguoiDungQuyens = $this->nguoiDungQuyenModel->where('nhomNguoiDung_id', $id)->get();
+        if (!empty($request->quyenNguoiDung_id) && !empty($request->baoCao_id)) {
+            $quyenBaoCaos = [];
+            foreach ($request->quyenNguoiDung_id as $key => $item) {
+                $obj = (object) [
+                    'quyenNguoiDung_id' => $item,
+                    'baoCao_id' => $request->baoCao_id[$key],
+                ];
+                array_push($quyenBaoCaos, $obj);
+            }
+            HandleUpdate3Many::handleUpdateNhomNguoiDung($nguoiDungQuyens, $quyenBaoCaos, $this->nguoiDungQuyenModel, $id);
+        } else {
+            foreach ($nguoiDungQuyens as $nguoiDungQuyen) {
+                $nguoiDungQuyen->forceDelete();
+            }
+        }
+        return redirect()->route('nhomnguoidung.edit', ['id' => $id])->with('message', 'Sửa thành công!');
     }
 }

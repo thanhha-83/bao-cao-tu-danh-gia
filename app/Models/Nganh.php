@@ -9,5 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Nganh extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['ten'];
+    protected $fillable = ['ten', 'donVi_id'];
+
+    public function donVi()
+    {
+        return $this->belongsTo(DonVi::class, 'donVi_id');
+    }
 }

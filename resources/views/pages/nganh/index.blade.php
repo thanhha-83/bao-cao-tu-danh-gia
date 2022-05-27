@@ -53,6 +53,7 @@ $action = (object) [
                         <tr>
                             <th>STT</th>
                             <th>Tên ngành</th>
+                            <th>Đơn vị</th>
                             <th>Chức năng</th>
                         </tr>
                     </thead>
@@ -62,6 +63,7 @@ $action = (object) [
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $item->ten }}</td>
+                                    <td>{{ $item->donVi->ten }}</td>
                                     <td>
                                         <a href="{{ route('nganh.edit', ['id' => $item->id]) }}"
                                             class="btn btn-secondary">Sửa</a>

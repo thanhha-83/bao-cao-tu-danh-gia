@@ -4,18 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\DonVi;
 use App\Models\User;
+use App\Models\VaiTroHT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Services\HandleUploadImage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
     private $userModel;
     private $donViModel;
-    public function __construct(User $userModel, DonVi $donViModel)
+    private $vaiTroHTModel;
+    public function __construct(User $userModel, DonVi $donViModel, VaiTroHT $vaiTroHTModel)
     {
         $this->userModel = $userModel;
         $this->donViModel = $donViModel;
+        $this->vaiTroHTModel = $vaiTroHTModel;
     }
 
     protected function callValidate(Request $request, $id = null)
@@ -80,25 +85,34 @@ class UserController extends Controller
     public function create()
     {
         $donVis = $this->donViModel->all();
-        return view('pages.user.create', compact('donVis'));
+        $vaiTroHTs = $this->vaiTroHTModel->all();
+        return view('pages.user.create', compact('donVis', 'vaiTroHTs'));
     }
 
     public function store(Request $request)
     {
         $this->callValidate($request);
-        $fileUploaded = HandleUploadImage::upload($request, 'hinhAnh', 'photos');
-        $this->userModel->create([
-            'hoTen' => $request->hoTen,
-            'gioiTinh' => $request->gioiTinh,
-            'ngaySinh' => $request->ngaySinh,
-            'chucVu' => $request->chucVu,
-            'email' => $request->email,
-            'sdt' => $request->sdt,
-            'password' => Hash::make($request->password),
-            'donVi_id' => $request->donVi_id,
-            'hinhAnh'  => $fileUploaded
-        ]);
-        return redirect()->route('nguoidung.index')->with('message', 'Thêm thành công!');
+        try {
+            DB::beginTransaction();
+            $fileUploaded = HandleUploadImage::upload($request, 'hinhAnh', 'photos');
+            $user = $this->userModel->create([
+                'hoTen' => $request->hoTen,
+                'gioiTinh' => $request->gioiTinh,
+                'ngaySinh' => $request->ngaySinh,
+                'chucVu' => $request->chucVu,
+                'email' => $request->email,
+                'sdt' => $request->sdt,
+                'password' => Hash::make($request->password),
+                'donVi_id' => $request->donVi_id,
+                'hinhAnh'  => $fileUploaded
+            ]);
+            $user->vaiTroHT()->attach($request->vaiTroHT);
+            DB::commit();
+            return redirect()->route('nguoidung.index')->with('message', 'Thêm thành công!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Message: ' . $e->getMessage() . ' --- Line : ' . $e->getLine());
+        }
     }
 
     public function show($id)
@@ -111,21 +125,31 @@ class UserController extends Controller
     {
         $user = $this->userModel->find($id);
         $donVis = $this->donViModel->all();
-        return view('pages.user.edit', compact('user', 'donVis'));
+        $vaiTroHTs = $this->vaiTroHTModel->all();
+        return view('pages.user.edit', compact('user', 'donVis', 'vaiTroHTs'));
     }
 
     public function update(Request $request, $id)
     {
         $this->callValidateEdit($request, $id);
-        $this->userModel->find($id)->update([
-            'hoTen' => $request->hoTen,
-            'gioiTinh' => $request->gioiTinh,
-            'ngaySinh' => $request->ngaySinh,
-            'chucVu' => $request->chucVu,
-            'sdt' => $request->sdt,
-            'donVi_id' => $request->donVi_id,
-        ]);
-        return redirect()->route('nguoidung.show', ['id' => $id])->with('message', 'Sửa thành công!');
+        try {
+            DB::beginTransaction();
+            $user = $this->userModel->find($id);
+            $user->update([
+                'hoTen' => $request->hoTen,
+                'gioiTinh' => $request->gioiTinh,
+                'ngaySinh' => $request->ngaySinh,
+                'chucVu' => $request->chucVu,
+                'sdt' => $request->sdt,
+                'donVi_id' => $request->donVi_id,
+            ]);
+            $user->vaiTroHT()->sync($request->vaiTroHT);
+            DB::commit();
+            return redirect()->route('nguoidung.show', ['id' => $id])->with('message', 'Sửa thành công!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Message: ' . $e->getMessage() . ' --- Line : ' . $e->getLine());
+        }
     }
 
     public function destroy(Request $request)

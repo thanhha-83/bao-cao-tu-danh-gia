@@ -79,6 +79,12 @@
         'title' => 'Minh chứng'
     ])
 
+    @include('partials.sidebar-menu-item', [
+        'route' => 'vaitrohethong.index',
+        'icon' => 'fas fa fa-users',
+        'title' => 'Vai trò hệ thống'
+    ])
+
     <!-- Divider -->
     <hr class="sidebar-divider">
 

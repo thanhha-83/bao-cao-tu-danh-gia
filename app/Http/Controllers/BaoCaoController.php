@@ -48,7 +48,7 @@ class BaoCaoController extends Controller
             'nganh_id' => $request->nganh_id,
             'tieuChi_id' => $request->tieuChi_id,
         ]);
-        return redirect()->route('tieuchuan.index')->with('message', 'Thêm thành công!');
+        return redirect()->route('baocao.index')->with('message', 'Thêm thành công!');
     }
 
     public function show($id)
@@ -72,10 +72,10 @@ class BaoCaoController extends Controller
             'diemManh' => $request->diemManh,
             'diemTonTai' => $request->diemTonTai,
             'keHoachHanhDong' => $request->keHoachHanhDong,
-            'diem' => $request->diem,
+            'diemTDG' => $request->diemTDG,
             'trangThai' => $request->trangThai
         ]);
-        return redirect()->route('tieuchuan.show', ['id' => $id])->with('message', 'Sửa thành công!');
+        return redirect()->route('baocao.show', ['id' => $id])->with('message', 'Sửa thành công!');
     }
 
     public function destroy(Request $request)

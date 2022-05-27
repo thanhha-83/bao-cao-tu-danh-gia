@@ -81,7 +81,7 @@ $(document).ready(function () {
             });
         });
     }
-    eventBtnAdd("quyenNhom_id[]", "tieuChuan_id[]");
+    eventBtnAdd($select1.data('name'), $select2.data('name'));
     eventBtnRemove();
     removeClassIsValid($select1);
     removeClassIsValid($select2);

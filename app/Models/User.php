@@ -54,4 +54,26 @@ class User extends Authenticatable
     {
         return $this->belongsTo(DonVi::class, 'donVi_id');
     }
+
+    public function vaiTroHT()
+    {
+        return $this
+            ->belongsToMany(VaiTroHT::class, 'nguoi_dung_vai_tro_h_t_s', 'nguoiDung_id', 'vaiTroHT_id')
+            ->withTimestamps();
+    }
+
+    public function checkPermissionAccess($quyenCheck)
+    {
+        // use login co quyen add, sua danh muc va xem menu
+        // B1 lay duoc tat ca cac quyen cua user dang login he thong
+        // B2 So sanh gia tri dua vao cua router hien tai xem co ton tai trong cac quyen ma minh lay dc hay khong
+        $vaiTroHTs = auth()->user()->vaiTroHT;
+        foreach ($vaiTroHTs as $vaiTroHT) {
+            $quyenHTs = $vaiTroHT->quyenHT;
+            if ($quyenHTs->contains('slug', $quyenCheck)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

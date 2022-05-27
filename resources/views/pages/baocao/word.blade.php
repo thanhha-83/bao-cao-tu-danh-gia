@@ -1,12 +1,12 @@
-{{-- @php
+@php
 header('Content-Type: application/vnd.msword');
 header('Content-Disposition: attachment; filename="test.doc"');
 header('Cache-Control: private, max-age=0, must-revalidate');
-@endphp --}}
+@endphp
 
 <head>
     <title>Export HTML to WORD</title>
-    <link rel="stylesheet" href="http://localhost:8000/css/tiny-editor.css">
+    <link rel="stylesheet" href="/css/tiny-editor.css">
     <style>
         @page {
             size: A4 landscape;

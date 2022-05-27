@@ -77,10 +77,14 @@ $action = (object) [
                         <tr>
                             <th>Chức năng:</th>
                             <td>
+                                @can('tieuchi-sua')
                                 <a href="{{ route('tieuchi.edit', ['id' => $tieuChi->id]) }}"
                                     class="btn btn-secondary">Sửa</a>
+                                @endcan
+                                @can('tieuchi-xoa')
                                 <a href="#" class="btn btn-danger btn-delete" data-url="{{ route('tieuchi.destroy') }}"
                                     data-id="{{ $tieuChi->id }}" data-redirect="{{ route('tieuchi.index') }}">Xóa</a>
+                                @endcan
                             </td>
                         </tr>
                     </tbody>

@@ -1,19 +1,19 @@
 $(document).ready(function () {
     var dialogConfig = {
-        title: "Dialog Demo",
+        title: "Chèn minh chứng",
         url: "iframe",
         buttons: [
             {
                 type: "custom",
-                name: "insert-and-close",
-                text: "Insert and Close",
+                name: "insert",
+                text: "Chèn",
                 primary: true,
                 align: "end",
             },
             {
                 type: "cancel",
                 name: "cancel",
-                text: "Close Dialog",
+                text: "Hủy",
             },
         ],
         width: 600,
@@ -33,23 +33,6 @@ $(document).ready(function () {
         toolbar:
             "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image minhchung",
         link_default_target: "_blank",
-        link_list: [
-            { title: "Tiny Home Page", value: "https://www.tiny.cloud" },
-            { title: "Tiny Blog", value: "https://www.tiny.cloud/blog" },
-            {
-                title: "TinyMCE Documentation",
-                value: "https://www.tiny.cloud/docs/",
-            },
-            {
-                title: "TinyMCE on Stack Overflow",
-                value: "https://stackoverflow.com/questions/tagged/tinymce",
-            },
-            { title: "TinyMCE GitHub", value: "https://github.com/tinymce/" },
-        ],
-        link_class_list: [
-            { title: "Là minh chứng", value: "is-minhchung" },
-            { title: "Link bình thường", value: "" },
-        ],
         file_picker_callback: function (callback, value, meta) {
             let x =
                 window.innerWidth ||
@@ -81,7 +64,7 @@ $(document).ready(function () {
 
             editor.addCommand("iframeCommand", function (ui, value) {
                 editor.insertContent(
-                    `<a href="${value.href}" class="is-minhchung">${value.title}</a>`
+                    `<a target="_blank" rel="nofollow noopener" href="${value.href}" class="is-minhchung">[${value.title}]</a>`
                 );
             });
         },

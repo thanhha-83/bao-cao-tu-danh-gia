@@ -37,4 +37,38 @@ class HandleUpdate3Many {
         }
         return;
     }
+
+    public static function handleUpdateNhomNguoiDung($nguoiDungQuyens, $quyenBaoCaos, $nguoiDungQuyenModel, $id)
+    {
+        if (count($nguoiDungQuyens) > count($quyenBaoCaos)) {
+            foreach ($quyenBaoCaos as $key => $item) {
+                $nguoiDungQuyens[$key]->update([
+                    'quyenNguoiDung_id' => $item->quyenNguoiDung_id,
+                    'baoCao_id' => $item->baoCao_id,
+                ]);
+            }
+            foreach ($nguoiDungQuyens as $key => $nguoiDungQuyen) {
+                if ($key >= count($quyenBaoCaos)) {
+                    $nguoiDungQuyen->forceDelete();
+                }
+            }
+        } else {
+            foreach ($nguoiDungQuyens as $key => $nguoiDungQuyen) {
+                $nguoiDungQuyen->update([
+                    'quyenNguoiDung_id' => $quyenBaoCaos[$key]->quyenNguoiDung_id,
+                    'baoCao_id' => $quyenBaoCaos[$key]->baoCao_id,
+                ]);
+            }
+            foreach ($quyenBaoCaos as $key => $item) {
+                if ($key >= count($nguoiDungQuyens)) {
+                    $nguoiDungQuyenModel->create([
+                        'nhomNguoiDung_id' => $id,
+                        'quyenNguoiDung_id' => $item->quyenNguoiDung_id,
+                        'baoCao_id' => $item->baoCao_id,
+                    ]);
+                }
+            }
+        }
+        return;
+    }
 }

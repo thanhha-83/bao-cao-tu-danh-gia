@@ -63,7 +63,7 @@ $action = (object) [
                     <div class="form-row pl-1 w-100">
                         <div class="form-group col-md-5">
                             <label>Quyền</label>
-                            <select class="form-select form-control" id="select-1" aria-label="Chọn quyền">
+                            <select class="form-select form-control" id="select-1" data-name="quyenNhom_id[]" aria-label="Chọn quyền">
                                 <option value="" selected>Chọn quyền</option>
                                 @foreach ($quyenNhoms as $item)
                                     <option value="{{ $item->id }}">{{ $item->ten }}</option>
@@ -72,7 +72,7 @@ $action = (object) [
                         </div>
                         <div class="ml-3 form-group col-md-5">
                             <label>Tiêu chuẩn</label>
-                            <select class="form-select form-control" id="select-2" aria-label="Chọn quyền">
+                            <select class="form-select form-control" id="select-2" data-name="tieuChuan_id[]" aria-label="Chọn quyền">
                                 <option value="" selected>Chọn tiêu chuẩn</option>
                                 @foreach ($tieuChuans as $item)
                                     <option value="{{ $item->id }}">Tiêu chuẩn số {{ $item->stt }}</option>

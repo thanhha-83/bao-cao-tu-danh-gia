@@ -45,7 +45,7 @@ $action = (object) [
                         @endif
                     </div>
                 </div>
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="noiDung">Nội dung tiêu chuẩn</label>
                     <textarea class="form-control {{ $errors->has('noiDung') ? 'is-invalid' : '' }}" id="noiDung"
                         name="noiDung" rows="8">{{ old('noiDung', '') }}</textarea>
@@ -54,7 +54,7 @@ $action = (object) [
                             {{ $errors->first('noiDung') }}
                         </div>
                     @endif
-                </div>
+                </div> --}}
                 <button type="submit" class="btn btn-primary">Xác nhận</button>
             </form>
         </div>

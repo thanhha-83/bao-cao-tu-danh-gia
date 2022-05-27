@@ -14,6 +14,8 @@ use App\Http\Controllers\BaoCaoController;
 use App\Http\Controllers\NhomNguoiDungController;
 use App\Http\Controllers\BinhLuanController;
 use App\Http\Controllers\MinhChungController;
+use App\Http\Controllers\BaoCaoSaoLuuController;
+use App\Http\Controllers\VaiTroHeThongController;
 use Illuminate\Http\Request;
 
 /*
@@ -29,33 +31,32 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => ['auth']], function () {
     Route::prefix('tieuchuan')->group(function () {
-        Route::get('/', [TieuChuanController::class, 'index'])->name('tieuchuan.index');
-        Route::get('/create', [TieuChuanController::class, 'create'])->name('tieuchuan.create');
-        Route::post('/store', [TieuChuanController::class, 'store'])->name('tieuchuan.store');
-        Route::get('/show/{id}', [TieuChuanController::class, 'show'])->name('tieuchuan.show');
-        Route::get('/edit/{id}', [TieuChuanController::class, 'edit'])->name('tieuchuan.edit');
-        Route::post('/update/{id}', [TieuChuanController::class, 'update'])->name('tieuchuan.update');
-        Route::post('/destroy', [TieuChuanController::class, 'destroy'])->name('tieuchuan.destroy');
-        Route::get('/trash', [TieuChuanController::class, 'trash'])->name('tieuchuan.trash');
-        Route::post('/restore', [TieuChuanController::class, 'restore'])->name('tieuchuan.restore');
-        Route::post('/restore-all', [TieuChuanController::class, 'restoreAll'])->name('tieuchuan.restore-all');
-        Route::post('/force-destroy', [TieuChuanController::class, 'forceDestroy'])->name('tieuchuan.force-destroy');
-        Route::post('/force-destroy-all', [TieuChuanController::class, 'forceDestroyAll'])->name('tieuchuan.force-destroy-all');
+        Route::get('/', [TieuChuanController::class, 'index'])->name('tieuchuan.index')->middleware('can:tieuchuan-danhsach');
+        Route::get('/create', [TieuChuanController::class, 'create'])->name('tieuchuan.create')->middleware('can:tieuchuan-them');
+        Route::post('/store', [TieuChuanController::class, 'store'])->name('tieuchuan.store')->middleware('can:tieuchuan-them');
+        Route::get('/edit/{id}', [TieuChuanController::class, 'edit'])->name('tieuchuan.edit')->middleware('can:tieuchuan-sua');
+        Route::post('/update/{id}', [TieuChuanController::class, 'update'])->name('tieuchuan.update')->middleware('can:tieuchuan-sua');
+        Route::post('/destroy', [TieuChuanController::class, 'destroy'])->name('tieuchuan.destroy')->middleware('can:tieuchuan-xoa');
+        Route::get('/trash', [TieuChuanController::class, 'trash'])->name('tieuchuan.trash')->middleware('can:tieuchuan-xoa');
+        Route::post('/restore', [TieuChuanController::class, 'restore'])->name('tieuchuan.restore')->middleware('can:tieuchuan-xoa');
+        Route::post('/restore-all', [TieuChuanController::class, 'restoreAll'])->name('tieuchuan.restore-all')->middleware('can:tieuchuan-xoa');
+        Route::post('/force-destroy', [TieuChuanController::class, 'forceDestroy'])->name('tieuchuan.force-destroy')->middleware('can:tieuchuan-xoa');
+        Route::post('/force-destroy-all', [TieuChuanController::class, 'forceDestroyAll'])->name('tieuchuan.force-destroy-all')->middleware('can:tieuchuan-xoa');
     });
 
     Route::prefix('tieuchi')->group(function () {
-        Route::get('/', [TieuChiController::class, 'index'])->name('tieuchi.index');
-        Route::get('/create', [TieuChiController::class, 'create'])->name('tieuchi.create');
-        Route::post('/store', [TieuChiController::class, 'store'])->name('tieuchi.store');
-        Route::get('/show/{id}', [TieuChiController::class, 'show'])->name('tieuchi.show');
-        Route::get('/edit/{id}', [TieuChiController::class, 'edit'])->name('tieuchi.edit');
-        Route::post('/update/{id}', [TieuChiController::class, 'update'])->name('tieuchi.update');
-        Route::post('/destroy', [TieuChiController::class, 'destroy'])->name('tieuchi.destroy');
-        Route::get('/trash', [TieuChiController::class, 'trash'])->name('tieuchi.trash');
-        Route::post('/restore', [TieuChiController::class, 'restore'])->name('tieuchi.restore');
-        Route::post('/restore-all', [TieuChiController::class, 'restoreAll'])->name('tieuchi.restore-all');
-        Route::post('/force-destroy', [TieuChiController::class, 'forceDestroy'])->name('tieuchi.force-destroy');
-        Route::post('/force-destroy-all', [TieuChiController::class, 'forceDestroyAll'])->name('tieuchi.force-destroy-all');
+        Route::get('/', [TieuChiController::class, 'index'])->name('tieuchi.index')->middleware('can:tieuchi-danhsach');
+        Route::get('/create', [TieuChiController::class, 'create'])->name('tieuchi.create')->middleware('can:tieuchi-them');
+        Route::post('/store', [TieuChiController::class, 'store'])->name('tieuchi.store')->middleware('can:tieuchi-them');
+        Route::get('/show/{id}', [TieuChiController::class, 'show'])->name('tieuchi.show')->middleware('can:tieuchi-chitiet');
+        Route::get('/edit/{id}', [TieuChiController::class, 'edit'])->name('tieuchi.edit')->middleware('can:tieuchi-sua');
+        Route::post('/update/{id}', [TieuChiController::class, 'update'])->name('tieuchi.update')->middleware('can:tieuchi-sua');
+        Route::post('/destroy', [TieuChiController::class, 'destroy'])->name('tieuchi.destroy')->middleware('can:tieuchi-xoa');
+        Route::get('/trash', [TieuChiController::class, 'trash'])->name('tieuchi.trash')->middleware('can:tieuchi-xoa');
+        Route::post('/restore', [TieuChiController::class, 'restore'])->name('tieuchi.restore')->middleware('can:tieuchi-xoa');
+        Route::post('/restore-all', [TieuChiController::class, 'restoreAll'])->name('tieuchi.restore-all')->middleware('can:tieuchi-xoa');
+        Route::post('/force-destroy', [TieuChiController::class, 'forceDestroy'])->name('tieuchi.force-destroy')->middleware('can:tieuchi-xoa');
+        Route::post('/force-destroy-all', [TieuChiController::class, 'forceDestroyAll'])->name('tieuchi.force-destroy-all')->middleware('can:tieuchi-xoa');
     });
 
     Route::prefix('nganh')->group(function () {
@@ -198,6 +199,27 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/force-destroy', [MinhChungController::class, 'forceDestroy'])->name('minhchung.force-destroy');
         Route::post('/force-destroy-all', [MinhChungController::class, 'forceDestroyAll'])->name('minhchung.force-destroy-all');
         Route::post('/getall', [MinhChungController::class, 'getAll'])->name('minhchung.get-all');
+    });
+
+    Route::prefix('baocaosaoluu')->group(function () {
+        Route::get('/show/{id}', [BaoCaoSaoLuuController::class, 'show'])->name('baocaosaoluu.show');
+        Route::get('/compare/{id}', [BaoCaoSaoLuuController::class, 'compare'])->name('baocaosaoluu.compare');
+        Route::post('/destroy', [BaoCaoSaoLuuController::class, 'destroy'])->name('baocaosaoluu.destroy');
+        Route::post('/restore', [BaoCaoSaoLuuController::class, 'restore'])->name('baocaosaoluu.restore');
+    });
+
+    Route::prefix('vaitrohethong')->group(function () {
+        Route::get('/', [VaiTroHeThongController::class, 'index'])->name('vaitrohethong.index');
+        Route::get('/create', [VaiTroHeThongController::class, 'create'])->name('vaitrohethong.create');
+        Route::post('/store', [VaiTroHeThongController::class, 'store'])->name('vaitrohethong.store');
+        Route::get('/edit/{id}', [VaiTroHeThongController::class, 'edit'])->name('vaitrohethong.edit');
+        Route::post('/update/{id}', [VaiTroHeThongController::class, 'update'])->name('vaitrohethong.update');
+        Route::post('/destroy', [VaiTroHeThongController::class, 'destroy'])->name('vaitrohethong.destroy');
+        Route::get('/trash', [VaiTroHeThongController::class, 'trash'])->name('vaitrohethong.trash');
+        Route::post('/restore', [VaiTroHeThongController::class, 'restore'])->name('vaitrohethong.restore');
+        Route::post('/restore-all', [VaiTroHeThongController::class, 'restoreAll'])->name('vaitrohethong.restore-all');
+        Route::post('/force-destroy', [VaiTroHeThongController::class, 'forceDestroy'])->name('vaitrohethong.force-destroy');
+        Route::post('/force-destroy-all', [VaiTroHeThongController::class, 'forceDestroyAll'])->name('vaitrohethong.force-destroy-all');
     });
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');

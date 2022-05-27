@@ -29,6 +29,12 @@ $action = (object) [
     @include('partials.page-heading', compact('controller', 'action'))
 @endsection
 
+@section('message')
+    @include('partials.message', [
+        'message' => Session::has('message') ? Session::get('message') : null,
+    ])
+@endsection
+
 @section('content')
     <div class="card shadow mb-4 w-75">
         <div class="card-body">
@@ -56,7 +62,7 @@ $action = (object) [
                     <div class="form-row pl-1 w-100">
                         <div class="form-group col-md-5">
                             <label>Quyền</label>
-                            <select class="form-select form-control" id="select-1" aria-label="Chọn quyền">
+                            <select class="form-select form-control" id="select-1" data-name="quyenNguoiDung_id[]" aria-label="Chọn quyền">
                                 <option value="" selected>Chọn quyền</option>
                                 @foreach ($quyenNguoiDungs as $item)
                                     <option value="{{ $item->id }}">{{ $item->ten }}</option>
@@ -65,7 +71,7 @@ $action = (object) [
                         </div>
                         <div class="ml-3 form-group col-md-5">
                             <label>Báo cáo</label>
-                            <select class="form-select form-control" id="select-2" aria-label="Chọn quyền">
+                            <select class="form-select form-control" id="select-2" data-name="baoCao_id[]" aria-label="Chọn quyền">
                                 <option value="" selected>Chọn báo cáo</option>
                                 @foreach ($baoCaos as $item)
                                     <option value="{{ $item->id }}">Báo cáo số {{$item->tieuChi->tieuChuan->stt}}.{{$item->tieuChi->stt}}</option>
@@ -80,32 +86,32 @@ $action = (object) [
                             </div>
                         </div>
                     </div>
-                    {{-- @php
-                        $quyenNhom_id = old('quyenNhom_id', $current_quyenNhoms) != '' ? old('quyenNhom_id', $current_quyenNhoms) : [];
-                        $tieuChuan_id = old('tieuChuan_id', $current_tieuChuans) != '' ? old('tieuChuan_id', $current_tieuChuans) : [];
+                    @php
+                        $quyenNguoiDung_id = old('quyenNguoiDung_id', $current_quyenNguoiDungs) != '' ? old('quyenNguoiDung_id', $current_quyenNguoiDungs) : [];
+                        $baoCao_id = old('baoCao_id', $current_baoCaos) != '' ? old('baoCao_id', $current_baoCaos) : [];
                     @endphp
-                    @if (!empty($quyenNhom_id) && !empty($tieuChuan_id))
-                        @foreach ($quyenNhom_id as $key => $item)
-                            @foreach ($quyenNhoms as $quyenNhom)
-                                @if ($quyenNhom->id == $item)
-                                    @php $text1 = $quyenNhom->ten @endphp
+                    @if (!empty($quyenNguoiDung_id) && !empty($baoCao_id))
+                        @foreach ($quyenNguoiDung_id as $key => $item)
+                            @foreach ($quyenNguoiDungs as $quyenNguoiDung)
+                                @if ($quyenNguoiDung->id == $item)
+                                    @php $text1 = $quyenNguoiDung->ten @endphp
                                 @endif
                             @endforeach
-                            @foreach ($tieuChuans as $tieuChuan)
-                                @if ($tieuChuan->id == $tieuChuan_id[$key])
-                                    @php $text2 = 'Tiêu chuẩn số ' . $tieuChuan->stt @endphp
+                            @foreach ($baoCaos as $baoCao)
+                                @if ($baoCao->id == $baoCao_id[$key])
+                                    @php $text2 = 'Báo cáo số ' . $baoCao->tieuChi->tieuChuan->stt . '.' . $baoCao->tieuChi->stt @endphp
                                 @endif
                             @endforeach
                             <div class="form-row pl-1 w-100 wrap-selected">
                                 <div class="form-group col-md-5">
                                     <input type="text" class="form-control" value="{{ $text1 }}" readonly>
-                                    <input type="hidden" class="value-1" name="quyenNhom_id[]"
+                                    <input type="hidden" class="value-1" name="quyenNguoiDung_id[]"
                                         value="{{ $item }}">
                                 </div>
                                 <div class="ml-3 form-group col-md-5">
                                     <input type="text" class="form-control" value="{{ $text2 }}" readonly>
-                                    <input type="hidden" class="value-2" name="tieuChuan_id[]"
-                                        value="{{ $tieuChuan_id[$key] }}">
+                                    <input type="hidden" class="value-2" name="baoCao_id[]"
+                                        value="{{ $baoCao_id[$key] }}">
                                 </div>
                                 <div class="ml-3 mb-0 form-group col-md-1">
                                     <div class="input-group-prepend">
@@ -115,7 +121,7 @@ $action = (object) [
                                 </div>
                             </div>
                         @endforeach
-                    @endif --}}
+                    @endif
                 </div>
                 <button type="submit" class="btn btn-primary">Xác nhận</button>
             </form>
