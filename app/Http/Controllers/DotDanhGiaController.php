@@ -100,10 +100,10 @@ class DotDanhGiaController extends Controller
         $current_hoatDongs = [];
         $current_ngayBD = [];
         $current_ngayKT = [];
-        foreach ($dotDanhGia->giaiDoan as $item) {
-            array_push($current_hoatDongs, $item->hoatDong_id);
-            array_push($current_ngayBD, $item->ngayBD);
-            array_push($current_ngayKT, $item->ngayKT);
+        foreach ($dotDanhGia->hoatDong as $item) {
+            array_push($current_hoatDongs, $item->id);
+            array_push($current_ngayBD, $item->pivot->ngayBD);
+            array_push($current_ngayKT, $item->pivot->ngayKT);
         }
         return view('pages.dotdanhgia.edit', compact('dotDanhGia', 'nganhs', 'namHocs', 'hoatDongs', 'current_hoatDongs', 'current_ngayBD', 'current_ngayKT'));
     }

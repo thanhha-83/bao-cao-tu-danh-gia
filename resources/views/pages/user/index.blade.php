@@ -31,12 +31,15 @@ $action = (object) [
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            @can('nguoidung-them')
             <a href="{{ route('nguoidung.create') }}" class="btn btn-primary btn-icon-split">
                 <span class="icon text-white-50">
                     <i class="fas fa-plus"></i>
                 </span>
                 <span class="text">Thêm mới</span>
             </a>
+            @endcan
+            @can('nguoidung-xoa')
             <a href="{{ route('nguoidung.trash') }}" class="btn btn-dark btn-icon-split">
                 <span class="icon text-white-50">
                     <i class="fas fa-trash"></i>
@@ -45,6 +48,7 @@ $action = (object) [
                     <span class="trash-count">{{ $trashCount > 0 ? '(' . $trashCount . ')' : '' }}</span>
                 </span>
             </a>
+            @endcan
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -69,12 +73,18 @@ $action = (object) [
                                     <td>{{ date("d-m-Y", strtotime($item->ngaySinh)) }}</td>
                                     <td>{{ $item->chucVu }}</td>
                                     <td>
+                                        @can('nguoidung-chitiet')
                                         <a href="{{ route('nguoidung.show', ['id' => $item->id]) }}"
                                             class="btn btn-primary">Xem chi tiết</a>
+                                        @endcan
+                                        @can('nguoidung-sua')
                                         <a href="{{ route('nguoidung.edit', ['id' => $item->id]) }}"
                                             class="btn btn-secondary">Sửa</a>
+                                        @endcan
+                                        @can('nguoidung-xoa')
                                         <a href="#" class="btn btn-danger btn-delete"
                                             data-url="{{ route('nguoidung.destroy') }}" data-id="{{ $item->id }}">Xóa</a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach

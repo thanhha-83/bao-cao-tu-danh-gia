@@ -21,9 +21,9 @@ class MinhChungThanhPhanController extends Controller
             'ten' => 'required|unique:minh_chungs' . ',ten,' . $id,
             'fileMinhChung' => 'required',
         ], [
-            'ten.required' => 'Bạn chưa nhập tên minh chứng',
-            'ten.unique' => 'Tên minh chứng đã tồn tại',
-            'fileMinhChung.required' => 'Bạn chưa chèn tệp minh chứng',
+            'ten.required' => 'Bạn chưa nhập tên minh chứng thành phần',
+            'ten.unique' => 'Tên minh chứng thành phần đã tồn tại',
+            'fileMinhChung.required' => 'Bạn chưa chèn tệp minh chứng thành phần',
         ]);
     }
 

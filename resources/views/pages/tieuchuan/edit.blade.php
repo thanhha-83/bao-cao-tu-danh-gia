@@ -45,16 +45,6 @@ $action = (object) [
                         @endif
                     </div>
                 </div>
-                {{-- <div class="form-group">
-                    <label for="noiDung">Nội dung tiêu chuẩn</label>
-                    <textarea class="form-control {{ $errors->has('noiDung') ? 'is-invalid' : '' }}" id="noiDung"
-                        name="noiDung" rows="8">{{ old('noiDung', $tieuChuan->noiDung) }}</textarea>
-                    @if ($errors->has('noiDung'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('noiDung') }}
-                        </div>
-                    @endif
-                </div> --}}
                 <button type="submit" class="btn btn-primary">Lưu</button>
             </form>
         </div>

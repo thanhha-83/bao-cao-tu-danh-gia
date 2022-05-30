@@ -61,46 +61,46 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('nganh')->group(function () {
-        Route::get('/', [NganhController::class, 'index'])->name('nganh.index');
-        Route::get('/create', [NganhController::class, 'create'])->name('nganh.create');
-        Route::post('/store', [NganhController::class, 'store'])->name('nganh.store');
-        Route::get('/edit/{id}', [NganhController::class, 'edit'])->name('nganh.edit');
-        Route::post('/update/{id}', [NganhController::class, 'update'])->name('nganh.update');
-        Route::post('/destroy', [NganhController::class, 'destroy'])->name('nganh.destroy');
-        Route::get('/trash', [NganhController::class, 'trash'])->name('nganh.trash');
-        Route::post('/restore', [NganhController::class, 'restore'])->name('nganh.restore');
-        Route::post('/restore-all', [NganhController::class, 'restoreAll'])->name('nganh.restore-all');
-        Route::post('/force-destroy', [NganhController::class, 'forceDestroy'])->name('nganh.force-destroy');
-        Route::post('/force-destroy-all', [NganhController::class, 'forceDestroyAll'])->name('nganh.force-destroy-all');
+        Route::get('/', [NganhController::class, 'index'])->name('nganh.index')->middleware('can:nganh-danhsach');
+        Route::get('/create', [NganhController::class, 'create'])->name('nganh.create')->middleware('can:nganh-them');
+        Route::post('/store', [NganhController::class, 'store'])->name('nganh.store')->middleware('can:nganh-them');
+        Route::get('/edit/{id}', [NganhController::class, 'edit'])->name('nganh.edit')->middleware('can:nganh-sua');
+        Route::post('/update/{id}', [NganhController::class, 'update'])->name('nganh.update')->middleware('can:nganh-sua');
+        Route::post('/destroy', [NganhController::class, 'destroy'])->name('nganh.destroy')->middleware('can:nganh-xoa');
+        Route::get('/trash', [NganhController::class, 'trash'])->name('nganh.trash')->middleware('can:nganh-xoa');
+        Route::post('/restore', [NganhController::class, 'restore'])->name('nganh.restore')->middleware('can:nganh-xoa');
+        Route::post('/restore-all', [NganhController::class, 'restoreAll'])->name('nganh.restore-all')->middleware('can:nganh-xoa');
+        Route::post('/force-destroy', [NganhController::class, 'forceDestroy'])->name('nganh.force-destroy')->middleware('can:nganh-xoa');
+        Route::post('/force-destroy-all', [NganhController::class, 'forceDestroyAll'])->name('nganh.force-destroy-all')->middleware('can:nganh-xoa');
     });
 
     Route::prefix('donvi')->group(function () {
-        Route::get('/', [DonViController::class, 'index'])->name('donvi.index');
-        Route::get('/create', [DonViController::class, 'create'])->name('donvi.create');
-        Route::post('/store', [DonViController::class, 'store'])->name('donvi.store');
-        Route::get('/edit/{id}', [DonViController::class, 'edit'])->name('donvi.edit');
-        Route::post('/update/{id}', [DonViController::class, 'update'])->name('donvi.update');
-        Route::post('/destroy', [DonViController::class, 'destroy'])->name('donvi.destroy');
-        Route::get('/trash', [DonViController::class, 'trash'])->name('donvi.trash');
-        Route::post('/restore', [DonViController::class, 'restore'])->name('donvi.restore');
-        Route::post('/restore-all', [DonViController::class, 'restoreAll'])->name('donvi.restore-all');
-        Route::post('/force-destroy', [DonViController::class, 'forceDestroy'])->name('donvi.force-destroy');
-        Route::post('/force-destroy-all', [DonViController::class, 'forceDestroyAll'])->name('donvi.force-destroy-all');
+        Route::get('/', [DonViController::class, 'index'])->name('donvi.index')->middleware('can:donvi-danhsach');
+        Route::get('/create', [DonViController::class, 'create'])->name('donvi.create')->middleware('can:donvi-them');
+        Route::post('/store', [DonViController::class, 'store'])->name('donvi.store')->middleware('can:donvi-them');
+        Route::get('/edit/{id}', [DonViController::class, 'edit'])->name('donvi.edit')->middleware('can:donvi-sua');
+        Route::post('/update/{id}', [DonViController::class, 'update'])->name('donvi.update')->middleware('can:donvi-sua');
+        Route::post('/destroy', [DonViController::class, 'destroy'])->name('donvi.destroy')->middleware('can:donvi-xoa');
+        Route::get('/trash', [DonViController::class, 'trash'])->name('donvi.trash')->middleware('can:donvi-xoa');
+        Route::post('/restore', [DonViController::class, 'restore'])->name('donvi.restore')->middleware('can:donvi-xoa');
+        Route::post('/restore-all', [DonViController::class, 'restoreAll'])->name('donvi.restore-all')->middleware('can:donvi-xoa');
+        Route::post('/force-destroy', [DonViController::class, 'forceDestroy'])->name('donvi.force-destroy')->middleware('can:donvi-xoa');
+        Route::post('/force-destroy-all', [DonViController::class, 'forceDestroyAll'])->name('donvi.force-destroy-all')->middleware('can:donvi-xoa');
     });
 
     Route::prefix('nguoidung')->group(function () {
-        Route::get('/', [UserController::class, 'index'])->name('nguoidung.index');
-        Route::get('/create', [UserController::class, 'create'])->name('nguoidung.create');
-        Route::post('/store', [UserController::class, 'store'])->name('nguoidung.store');
-        Route::get('/show/{id}', [UserController::class, 'show'])->name('nguoidung.show');
-        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('nguoidung.edit');
-        Route::post('/update/{id}', [UserController::class, 'update'])->name('nguoidung.update');
-        Route::post('/destroy', [UserController::class, 'destroy'])->name('nguoidung.destroy');
-        Route::get('/trash', [UserController::class, 'trash'])->name('nguoidung.trash');
-        Route::post('/restore', [UserController::class, 'restore'])->name('nguoidung.restore');
-        Route::post('/restore-all', [UserController::class, 'restoreAll'])->name('nguoidung.restore-all');
-        Route::post('/force-destroy', [UserController::class, 'forceDestroy'])->name('nguoidung.force-destroy');
-        Route::post('/force-destroy-all', [UserController::class, 'forceDestroyAll'])->name('nguoidung.force-destroy-all');
+        Route::get('/', [UserController::class, 'index'])->name('nguoidung.index')->middleware('can:nguoidung-danhsach');
+        Route::get('/create', [UserController::class, 'create'])->name('nguoidung.create')->middleware('can:nguoidung-them');
+        Route::post('/store', [UserController::class, 'store'])->name('nguoidung.store')->middleware('can:nguoidung-them');
+        Route::get('/show/{id}', [UserController::class, 'show'])->name('nguoidung.show')->middleware('can:nguoidung-chitiet');
+        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('nguoidung.edit')->middleware('can:nguoidung-sua');
+        Route::post('/update/{id}', [UserController::class, 'update'])->name('nguoidung.update')->middleware('can:nguoidung-sua');
+        Route::post('/destroy', [UserController::class, 'destroy'])->name('nguoidung.destroy')->middleware('can:nguoidung-xoa');
+        Route::get('/trash', [UserController::class, 'trash'])->name('nguoidung.trash')->middleware('can:nguoidung-xoa');
+        Route::post('/restore', [UserController::class, 'restore'])->name('nguoidung.restore')->middleware('can:nguoidung-xoa');
+        Route::post('/restore-all', [UserController::class, 'restoreAll'])->name('nguoidung.restore-all')->middleware('can:nguoidung-xoa');
+        Route::post('/force-destroy', [UserController::class, 'forceDestroy'])->name('nguoidung.force-destroy')->middleware('can:nguoidung-xoa');
+        Route::post('/force-destroy-all', [UserController::class, 'forceDestroyAll'])->name('nguoidung.force-destroy-all')->middleware('can:nguoidung-xoa');
     });
 
     Route::prefix('thongtincanhan')->group(function () {
@@ -112,43 +112,43 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('nhom')->group(function () {
-        Route::get('/', [NhomController::class, 'index'])->name('nhom.index');
-        Route::get('/create', [NhomController::class, 'create'])->name('nhom.create');
-        Route::post('/store', [NhomController::class, 'store'])->name('nhom.store');
-        Route::get('/show/{id}', [NhomController::class, 'show'])->name('nhom.show');
-        Route::get('/edit/{id}', [NhomController::class, 'edit'])->name('nhom.edit');
-        Route::post('/update/{id}', [NhomController::class, 'update'])->name('nhom.update');
-        Route::post('/destroy', [NhomController::class, 'destroy'])->name('nhom.destroy');
-        Route::get('/trash', [NhomController::class, 'trash'])->name('nhom.trash');
-        Route::post('/restore', [NhomController::class, 'restore'])->name('nhom.restore');
-        Route::post('/restore-all', [NhomController::class, 'restoreAll'])->name('nhom.restore-all');
-        Route::post('/force-destroy', [NhomController::class, 'forceDestroy'])->name('nhom.force-destroy');
-        Route::post('/force-destroy-all', [NhomController::class, 'forceDestroyAll'])->name('nhom.force-destroy-all');
+        Route::get('/', [NhomController::class, 'index'])->name('nhom.index')->middleware('can:nhom-danhsach');
+        Route::get('/create', [NhomController::class, 'create'])->name('nhom.create')->middleware('can:nhom-them');
+        Route::post('/store', [NhomController::class, 'store'])->name('nhom.store')->middleware('can:nhom-them');
+        Route::get('/show/{id}', [NhomController::class, 'show'])->name('nhom.show')->middleware('can:nhom-chitiet');
+        Route::get('/edit/{id}', [NhomController::class, 'edit'])->name('nhom.edit')->middleware('can:nhom-sua');
+        Route::post('/update/{id}', [NhomController::class, 'update'])->name('nhom.update')->middleware('can:nhom-sua');
+        Route::post('/destroy', [NhomController::class, 'destroy'])->name('nhom.destroy')->middleware('can:nhom-xoa');
+        Route::get('/trash', [NhomController::class, 'trash'])->name('nhom.trash')->middleware('can:nhom-xoa');
+        Route::post('/restore', [NhomController::class, 'restore'])->name('nhom.restore')->middleware('can:nhom-xoa');
+        Route::post('/restore-all', [NhomController::class, 'restoreAll'])->name('nhom.restore-all')->middleware('can:nhom-xoa');
+        Route::post('/force-destroy', [NhomController::class, 'forceDestroy'])->name('nhom.force-destroy')->middleware('can:nhom-xoa');
+        Route::post('/force-destroy-all', [NhomController::class, 'forceDestroyAll'])->name('nhom.force-destroy-all')->middleware('can:nhom-xoa');
         Route::post('/handle-select', [NhomController::class, 'handleSelect'])->name('nhom.handle-select');
     });
 
     Route::prefix('dotdanhgia')->group(function () {
-        Route::get('/', [DotDanhGiaController::class, 'index'])->name('dotdanhgia.index');
-        Route::get('/create', [DotDanhGiaController::class, 'create'])->name('dotdanhgia.create');
-        Route::post('/store', [DotDanhGiaController::class, 'store'])->name('dotdanhgia.store');
-        Route::get('/show/{id}', [DotDanhGiaController::class, 'show'])->name('dotdanhgia.show');
-        Route::get('/edit/{id}', [DotDanhGiaController::class, 'edit'])->name('dotdanhgia.edit');
-        Route::post('/update/{id}', [DotDanhGiaController::class, 'update'])->name('dotdanhgia.update');
-        Route::post('/destroy', [DotDanhGiaController::class, 'destroy'])->name('dotdanhgia.destroy');
-        Route::get('/trash', [DotDanhGiaController::class, 'trash'])->name('dotdanhgia.trash');
-        Route::post('/restore', [DotDanhGiaController::class, 'restore'])->name('dotdanhgia.restore');
-        Route::post('/restore-all', [DotDanhGiaController::class, 'restoreAll'])->name('dotdanhgia.restore-all');
-        Route::post('/force-destroy', [DotDanhGiaController::class, 'forceDestroy'])->name('dotdanhgia.force-destroy');
-        Route::post('/force-destroy-all', [DotDanhGiaController::class, 'forceDestroyAll'])->name('dotdanhgia.force-destroy-all');
+        Route::get('/', [DotDanhGiaController::class, 'index'])->name('dotdanhgia.index')->middleware('can:dotdanhgia-danhsach');
+        Route::get('/create', [DotDanhGiaController::class, 'create'])->name('dotdanhgia.create')->middleware('can:dotdanhgia-them');
+        Route::post('/store', [DotDanhGiaController::class, 'store'])->name('dotdanhgia.store')->middleware('can:dotdanhgia-them');
+        Route::get('/show/{id}', [DotDanhGiaController::class, 'show'])->name('dotdanhgia.show')->middleware('can:dotdanhgia-chitiet');
+        Route::get('/edit/{id}', [DotDanhGiaController::class, 'edit'])->name('dotdanhgia.edit')->middleware('can:dotdanhgia-sua');
+        Route::post('/update/{id}', [DotDanhGiaController::class, 'update'])->name('dotdanhgia.update')->middleware('can:dotdanhgia-sua');
+        Route::post('/destroy', [DotDanhGiaController::class, 'destroy'])->name('dotdanhgia.destroy')->middleware('can:dotdanhgia-xoa');
+        Route::get('/trash', [DotDanhGiaController::class, 'trash'])->name('dotdanhgia.trash')->middleware('can:dotdanhgia-xoa');
+        Route::post('/restore', [DotDanhGiaController::class, 'restore'])->name('dotdanhgia.restore')->middleware('can:dotdanhgia-xoa');
+        Route::post('/restore-all', [DotDanhGiaController::class, 'restoreAll'])->name('dotdanhgia.restore-all')->middleware('can:dotdanhgia-xoa');
+        Route::post('/force-destroy', [DotDanhGiaController::class, 'forceDestroy'])->name('dotdanhgia.force-destroy')->middleware('can:dotdanhgia-xoa');
+        Route::post('/force-destroy-all', [DotDanhGiaController::class, 'forceDestroyAll'])->name('dotdanhgia.force-destroy-all')->middleware('can:dotdanhgia-xoa');
     });
 
     Route::prefix('baocao')->group(function () {
         Route::get('/', [BaoCaoController::class, 'index'])->name('baocao.index');
         Route::get('/create', [BaoCaoController::class, 'create'])->name('baocao.create');
         Route::post('/store', [BaoCaoController::class, 'store'])->name('baocao.store');
-        Route::get('/show/{id}', [BaoCaoController::class, 'show'])->name('baocao.show');
-        Route::get('/edit/{id}', [BaoCaoController::class, 'edit'])->name('baocao.edit');
-        Route::post('/update/{id}', [BaoCaoController::class, 'update'])->name('baocao.update');
+        Route::get('/show/{id}', [BaoCaoController::class, 'show'])->name('baocao.show')->middleware('can:time-nhan-xet-bao-cao,id','can:time-phan-bien-bao-cao,id');
+        Route::get('/edit/{id}', [BaoCaoController::class, 'edit'])->name('baocao.edit')->middleware('can:time-viet-bao-cao,id');
+        Route::post('/update/{id}', [BaoCaoController::class, 'update'])->name('baocao.update')->middleware('can:time-viet-bao-cao,id');
         Route::post('/destroy', [BaoCaoController::class, 'destroy'])->name('baocao.destroy');
         Route::get('/trash', [BaoCaoController::class, 'trash'])->name('baocao.trash');
         Route::post('/restore', [BaoCaoController::class, 'restore'])->name('baocao.restore');
@@ -162,17 +162,17 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('nhomnguoidung')->group(function () {
-        Route::get('/create', [NhomNguoiDungController::class, 'create'])->name('nhomnguoidung.create');
-        Route::post('/store', [NhomNguoiDungController::class, 'store'])->name('nhomnguoidung.store');
-        Route::get('/show/{id}', [NhomNguoiDungController::class, 'show'])->name('nhomnguoidung.show');
-        Route::get('/edit/{id}', [NhomNguoiDungController::class, 'edit'])->name('nhomnguoidung.edit');
-        Route::post('/update/{id}', [NhomNguoiDungController::class, 'update'])->name('nhomnguoidung.update');
-        Route::post('/destroy', [NhomNguoiDungController::class, 'destroy'])->name('nhomnguoidung.destroy');
-        Route::get('/trash', [NhomNguoiDungController::class, 'trash'])->name('nhomnguoidung.trash');
-        Route::post('/restore', [NhomNguoiDungController::class, 'restore'])->name('nhomnguoidung.restore');
-        Route::post('/restore-all', [NhomNguoiDungController::class, 'restoreAll'])->name('nhomnguoidung.restore-all');
-        Route::post('/force-destroy', [NhomNguoiDungController::class, 'forceDestroy'])->name('nhomnguoidung.force-destroy');
-        Route::post('/force-destroy-all', [NhomNguoiDungController::class, 'forceDestroyAll'])->name('nhomnguoidung.force-destroy-all');
+        Route::get('/create', [NhomNguoiDungController::class, 'create'])->name('nhomnguoidung.create')->middleware('can:nhom-them');
+        Route::post('/store', [NhomNguoiDungController::class, 'store'])->name('nhomnguoidung.store')->middleware('can:nhom-them');
+        Route::get('/show/{id}', [NhomNguoiDungController::class, 'show'])->name('nhomnguoidung.show')->middleware('can:nhom-thanhvien');
+        Route::get('/edit/{id}', [NhomNguoiDungController::class, 'edit'])->name('nhomnguoidung.edit')->middleware('can:nhom-thanhvien');
+        Route::post('/update/{id}', [NhomNguoiDungController::class, 'update'])->name('nhomnguoidung.update')->middleware('can:nhom-thanhvien');
+        Route::post('/destroy', [NhomNguoiDungController::class, 'destroy'])->name('nhomnguoidung.destroy')->middleware('can:nhom-them');
+        Route::get('/trash', [NhomNguoiDungController::class, 'trash'])->name('nhomnguoidung.trash')->middleware('can:nhom-them');
+        Route::post('/restore', [NhomNguoiDungController::class, 'restore'])->name('nhomnguoidung.restore')->middleware('can:nhom-them');
+        Route::post('/restore-all', [NhomNguoiDungController::class, 'restoreAll'])->name('nhomnguoidung.restore-all')->middleware('can:nhom-them');
+        Route::post('/force-destroy', [NhomNguoiDungController::class, 'forceDestroy'])->name('nhomnguoidung.force-destroy')->middleware('can:nhom-them');
+        Route::post('/force-destroy-all', [NhomNguoiDungController::class, 'forceDestroyAll'])->name('nhomnguoidung.force-destroy-all')->middleware('can:nhom-them');
     });
 
     Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
@@ -190,25 +190,25 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('minhchung')->group(function () {
-        Route::get('/', [MinhChungController::class, 'index'])->name('minhchung.index');
-        Route::get('/create', [MinhChungController::class, 'create'])->name('minhchung.create');
-        Route::post('/store', [MinhChungController::class, 'store'])->name('minhchung.store');
-        Route::get('/show/{id}', [MinhChungController::class, 'show'])->name('minhchung.show');
-        Route::get('/edit/{id}', [MinhChungController::class, 'edit'])->name('minhchung.edit');
-        Route::post('/update/{id}', [MinhChungController::class, 'update'])->name('minhchung.update');
-        Route::post('/destroy', [MinhChungController::class, 'destroy'])->name('minhchung.destroy');
-        Route::get('/trash', [MinhChungController::class, 'trash'])->name('minhchung.trash');
-        Route::post('/restore', [MinhChungController::class, 'restore'])->name('minhchung.restore');
-        Route::post('/restore-all', [MinhChungController::class, 'restoreAll'])->name('minhchung.restore-all');
-        Route::post('/force-destroy', [MinhChungController::class, 'forceDestroy'])->name('minhchung.force-destroy');
-        Route::post('/force-destroy-all', [MinhChungController::class, 'forceDestroyAll'])->name('minhchung.force-destroy-all');
-        Route::post('/getall', [MinhChungController::class, 'getAll'])->name('minhchung.get-all');
-        Route::get('/add-detail/{id}', [MinhChungController::class, 'addDetail'])->name('minhchung.add-detail');
+        Route::get('/', [MinhChungController::class, 'index'])->name('minhchung.index')->middleware('can:minhchung-danhsach');
+        Route::get('/create', [MinhChungController::class, 'create'])->name('minhchung.create')->middleware('can:minhchung-them');
+        Route::post('/store', [MinhChungController::class, 'store'])->name('minhchung.store')->middleware('can:minhchung-them');
+        Route::get('/show/{id}', [MinhChungController::class, 'show'])->name('minhchung.show')->middleware('can:minhchung-chitiet');
+        Route::get('/edit/{id}', [MinhChungController::class, 'edit'])->name('minhchung.edit')->middleware('can:minhchung-sua');
+        Route::post('/update/{id}', [MinhChungController::class, 'update'])->name('minhchung.update')->middleware('can:minhchung-sua');
+        Route::post('/destroy', [MinhChungController::class, 'destroy'])->name('minhchung.destroy')->middleware('can:minhchung-xoa');
+        Route::get('/trash', [MinhChungController::class, 'trash'])->name('minhchung.trash')->middleware('can:minhchung-xoa');
+        Route::post('/restore', [MinhChungController::class, 'restore'])->name('minhchung.restore')->middleware('can:minhchung-xoa');
+        Route::post('/restore-all', [MinhChungController::class, 'restoreAll'])->name('minhchung.restore-all')->middleware('can:minhchung-xoa');
+        Route::post('/force-destroy', [MinhChungController::class, 'forceDestroy'])->name('minhchung.force-destroy')->middleware('can:minhchung-xoa');
+        Route::post('/force-destroy-all', [MinhChungController::class, 'forceDestroyAll'])->name('minhchung.force-destroy-all')->middleware('can:minhchung-xoa');
+        Route::post('/getall', [MinhChungController::class, 'getAll'])->name('minhchung.get-all')->middleware('can:minhchung-xoa');
+        Route::get('/add-detail/{id}', [MinhChungController::class, 'addDetail'])->name('minhchung.add-detail')->middleware('can:minhchung-sua');
     });
 
     Route::prefix('minhchungthanhphan')->group(function () {
-        Route::post('/store', [MinhChungThanhPhanController::class, 'store'])->name('minhchungthanhphan.store');
-        Route::post('/destroy', [MinhChungThanhPhanController::class, 'destroy'])->name('minhchungthanhphan.destroy');
+        Route::post('/store', [MinhChungThanhPhanController::class, 'store'])->name('minhchungthanhphan.store')->middleware('can:minhchung-sua');
+        Route::post('/destroy', [MinhChungThanhPhanController::class, 'destroy'])->name('minhchungthanhphan.destroy')->middleware('can:minhchung-sua');
     });
 
     Route::prefix('baocaosaoluu')->group(function () {
@@ -219,27 +219,25 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('vaitrohethong')->group(function () {
-        Route::get('/', [VaiTroHeThongController::class, 'index'])->name('vaitrohethong.index');
-        Route::get('/create', [VaiTroHeThongController::class, 'create'])->name('vaitrohethong.create');
-        Route::post('/store', [VaiTroHeThongController::class, 'store'])->name('vaitrohethong.store');
-        Route::get('/edit/{id}', [VaiTroHeThongController::class, 'edit'])->name('vaitrohethong.edit');
-        Route::post('/update/{id}', [VaiTroHeThongController::class, 'update'])->name('vaitrohethong.update');
-        Route::post('/destroy', [VaiTroHeThongController::class, 'destroy'])->name('vaitrohethong.destroy');
-        Route::get('/trash', [VaiTroHeThongController::class, 'trash'])->name('vaitrohethong.trash');
-        Route::post('/restore', [VaiTroHeThongController::class, 'restore'])->name('vaitrohethong.restore');
-        Route::post('/restore-all', [VaiTroHeThongController::class, 'restoreAll'])->name('vaitrohethong.restore-all');
-        Route::post('/force-destroy', [VaiTroHeThongController::class, 'forceDestroy'])->name('vaitrohethong.force-destroy');
-        Route::post('/force-destroy-all', [VaiTroHeThongController::class, 'forceDestroyAll'])->name('vaitrohethong.force-destroy-all');
+        Route::get('/', [VaiTroHeThongController::class, 'index'])->name('vaitrohethong.index')->middleware('can:vaitrohethong-danhsach');
+        Route::get('/create', [VaiTroHeThongController::class, 'create'])->name('vaitrohethong.create')->middleware('can:vaitrohethong-them');
+        Route::post('/store', [VaiTroHeThongController::class, 'store'])->name('vaitrohethong.store')->middleware('can:vaitrohethong-them');
+        Route::get('/edit/{id}', [VaiTroHeThongController::class, 'edit'])->name('vaitrohethong.edit')->middleware('can:vaitrohethong-sua');
+        Route::post('/update/{id}', [VaiTroHeThongController::class, 'update'])->name('vaitrohethong.update')->middleware('can:vaitrohethong-sua');
+        Route::post('/destroy', [VaiTroHeThongController::class, 'destroy'])->name('vaitrohethong.destroy')->middleware('can:vaitrohethong-xoa');
+        Route::get('/trash', [VaiTroHeThongController::class, 'trash'])->name('vaitrohethong.trash')->middleware('can:vaitrohethong-xoa');
+        Route::post('/restore', [VaiTroHeThongController::class, 'restore'])->name('vaitrohethong.restore')->middleware('can:vaitrohethong-xoa');
+        Route::post('/restore-all', [VaiTroHeThongController::class, 'restoreAll'])->name('vaitrohethong.restore-all')->middleware('can:vaitrohethong-xoa');
+        Route::post('/force-destroy', [VaiTroHeThongController::class, 'forceDestroy'])->name('vaitrohethong.force-destroy')->middleware('can:vaitrohethong-xoa');
+        Route::post('/force-destroy-all', [VaiTroHeThongController::class, 'forceDestroyAll'])->name('vaitrohethong.force-destroy-all')->middleware('can:vaitrohethong-xoa');
     });
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
+
+    Route::get('/iframe', function() {
+        return view('minhchung');
+    });
 });
-
-Route::get('/iframe', function() {
-    return view('minhchung');
-});
-
-
 
 Auth::routes();
 

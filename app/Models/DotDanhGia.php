@@ -19,8 +19,11 @@ class DotDanhGia extends Model
             ->withTimestamps();
     }
 
-    public function giaiDoan()
+    public function hoatDong()
     {
-        return $this->hasMany(GiaiDoan::class, 'dotDanhGia_id');
+        return $this
+            ->belongsToMany(HoatDong::class, 'giai_doans', 'dotDanhGia_id', 'hoatDong_id')
+            ->withPivot('ngayBD', 'ngayKT')
+            ->withTimestamps();
     }
 }

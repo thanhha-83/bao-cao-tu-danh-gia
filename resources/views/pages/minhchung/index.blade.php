@@ -31,12 +31,15 @@ $action = (object) [
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            @can('minhchung-them')
             <a href="{{ route('minhchung.create') }}" class="btn btn-primary btn-icon-split">
                 <span class="icon text-white-50">
                     <i class="fas fa-plus"></i>
                 </span>
                 <span class="text">Thêm mới</span>
             </a>
+            @endcan
+            @can('minhchung-xoa')
             <a href="{{ route('minhchung.trash') }}" class="btn btn-dark btn-icon-split">
                 <span class="icon text-white-50">
                     <i class="fas fa-trash"></i>
@@ -45,6 +48,7 @@ $action = (object) [
                     <span class="trash-count">{{ $trashCount > 0 ? '(' . $trashCount . ')' : '' }}</span>
                 </span>
             </a>
+            @endcan
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -65,14 +69,22 @@ $action = (object) [
                                     <td>{{ $item->ten }}</td>
                                     <td>{{ $item->donVi->ten }}</td>
                                     <td>
+                                        @can('minhchung-chitiet')
+                                        <a href="{{ route('minhchung.show', ['id' => $item->id]) }}"
+                                            class="btn btn-primary">Xem chi tiết</a>
+                                        @endcan
+                                        @can('minhchung-sua')
                                         <a href="{{ route('minhchung.edit', ['id' => $item->id]) }}"
                                             class="btn btn-secondary">Sửa</a>
                                         @if ($item->isMCGop == 1)
                                         <a href="{{ route('minhchung.add-detail', ['id' => $item->id]) }}"
                                                 class="btn btn-success">Quản lý MCTP</a>
                                         @endif
+                                        @endcan
+                                        @can('minhchung-xoa')
                                         <a href="#" class="btn btn-danger btn-delete"
                                             data-url="{{ route('minhchung.destroy') }}" data-id="{{ $item->id }}">Xóa</a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach

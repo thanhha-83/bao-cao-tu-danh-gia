@@ -25,47 +25,61 @@
         Danh mục
     </div>
 
+    @can('dotdanhgia-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'dotdanhgia.index',
         'icon' => 'fas fa-server',
         'title' => 'Đợt đánh giá'
     ])
+    @endcan
 
+    @can('tieuchuan-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'tieuchuan.index',
         'icon' => 'fas fa-server',
         'title' => 'Tiêu chuẩn'
     ])
+    @endcan
 
+    @can('tieuchi-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'tieuchi.index',
         'icon' => 'fas fa-server',
         'title' => 'Tiêu chí'
     ])
+    @endcan
 
+    @can('nguoidung-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'nguoidung.index',
         'icon' => 'fas fa fa-user',
         'title' => 'Người dùng'
     ])
+    @endcan
 
+    @can('donvi-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'donvi.index',
         'icon' => 'fas fa-building',
         'title' => 'Đơn vị'
     ])
+    @endcan
 
+    @can('nganh-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'nganh.index',
         'icon' => 'fas fa-briefcase',
         'title' => 'Ngành'
     ])
+    @endcan
 
+    @can('nhom-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'nhom.index',
         'icon' => 'fas fa fa-users',
         'title' => 'Nhóm'
     ])
+    @endcan
 
     @include('partials.sidebar-menu-item', [
         'route' => 'baocao.index',
@@ -73,17 +87,21 @@
         'title' => 'Báo cáo'
     ])
 
+    @can('minhchung-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'minhchung.index',
         'icon' => 'fas fa fa-users',
         'title' => 'Minh chứng'
     ])
+    @endcan
 
+    @can('vaitrohethong-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'vaitrohethong.index',
         'icon' => 'fas fa fa-users',
         'title' => 'Vai trò hệ thống'
     ])
+    @endcan
 
     <!-- Divider -->
     <hr class="sidebar-divider">

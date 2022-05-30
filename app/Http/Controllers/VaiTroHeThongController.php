@@ -63,17 +63,32 @@ class VaiTroHeThongController extends Controller
     public function edit($id)
     {
         $vaiTroHT = $this->vaiTroHTModel->find($id);
-        return view('pages.vaitrohethong.edit', compact('vaiTroHT'));
+        $currentQuyens = [];
+        foreach ($vaiTroHT->quyenHT as $item) {
+            array_push($currentQuyens, $item->id);
+        }
+        $parentQuyenHTs = $this->quyenHTModel->where('parent_id', 0)->get();
+        return view('pages.vaitrohethong.edit', compact('vaiTroHT', 'parentQuyenHTs', 'currentQuyens'));
     }
 
     public function update(Request $request, $id)
     {
+
         $this->callValidate($request, $id);
-        $this->vaiTroHTModel->find($id)->update([
-            'ten' => $request->ten,
-            'slug' => Str::slug($request->ten, '-')
-        ]);
-        return redirect()->route('vaitrohethong.index')->with('message', 'Sửa thành công!');
+        try {
+            DB::beginTransaction();
+            $vaiTroHT = $this->vaiTroHTModel->find($id);
+            $vaiTroHT->update([
+                'ten' => $request->ten,
+                'slug' => Str::slug($request->ten, '-')
+            ]);
+            $vaiTroHT->quyenHT()->sync($request->quyenHT);
+            DB::commit();
+            return redirect()->route('vaitrohethong.index')->with('message', 'Sửa thành công!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Message: ' . $e->getMessage() . ' --- Line : ' . $e->getLine());
+        }
     }
 
     public function destroy(Request $request)
@@ -133,7 +148,9 @@ class VaiTroHeThongController extends Controller
     public function forceDestroy(Request $request)
     {
         try {
-            $this->vaiTroHTModel->onlyTrashed()->find($request->id)->forceDelete();
+            $vaiTroHT = $this->vaiTroHTModel->onlyTrashed()->find($request->id);
+            $vaiTroHT->quyenHT()->detach();
+            $vaiTroHT->forceDelete();
             return response()->json([
                 'code' => 200,
                 'message' => 'success',
@@ -149,7 +166,11 @@ class VaiTroHeThongController extends Controller
     public function forceDestroyAll(Request $request)
     {
         try {
-            $this->vaiTroHTModel->onlyTrashed()->forceDelete();
+            $vaiTroHTs = $this->vaiTroHTModel->onlyTrashed()->forceDelete();
+            foreach ($vaiTroHTs as $vaiTroHT) {
+                $vaiTroHT->quyenHT()->detach();
+                $vaiTroHT->forceDelete();
+            }
             return response()->json([
                 'code' => 200,
                 'message' => 'success',

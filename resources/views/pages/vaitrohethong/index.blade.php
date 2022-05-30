@@ -31,12 +31,15 @@ $action = (object) [
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            @can('vaitrohethong-them')
             <a href="{{ route('vaitrohethong.create') }}" class="btn btn-primary btn-icon-split">
                 <span class="icon text-white-50">
                     <i class="fas fa-plus"></i>
                 </span>
                 <span class="text">Thêm mới</span>
             </a>
+            @endcan
+            @can('vaitrohethong-xoa')
             <a href="{{ route('vaitrohethong.trash') }}" class="btn btn-dark btn-icon-split">
                 <span class="icon text-white-50">
                     <i class="fas fa-trash"></i>
@@ -45,6 +48,7 @@ $action = (object) [
                     <span class="trash-count">{{ $trashCount > 0 ? '(' . $trashCount . ')' : '' }}</span>
                 </span>
             </a>
+            @endcan
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -65,10 +69,14 @@ $action = (object) [
                                     <td>{{ $item->ten }}</td>
                                     <td>{{ $item->slug }}</td>
                                     <td>
+                                        @can('vaitrohethong-sua')
                                         <a href="{{ route('vaitrohethong.edit', ['id' => $item->id]) }}"
                                             class="btn btn-secondary">Sửa</a>
+                                        @endcan
+                                        @can('vaitrohethong-xoa')
                                         <a href="#" class="btn btn-danger btn-delete"
                                             data-url="{{ route('vaitrohethong.destroy') }}" data-id="{{ $item->id }}">Xóa</a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach

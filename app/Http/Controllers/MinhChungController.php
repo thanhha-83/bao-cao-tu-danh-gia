@@ -19,21 +19,27 @@ class MinhChungController extends Controller
 
     protected function callValidate(Request $request, $id = null)
     {
-        if ($request->isMCGop == 'on') {
+        if ($request->isMCGop == 'on' || $id != null) {
             $request->validate([
                 'ten' => 'required|unique:minh_chungs' . ',ten,' . $id,
+                'donVi_id' => 'numeric|min:1'
             ], [
                 'ten.required' => 'Bạn chưa nhập tên minh chứng',
                 'ten.unique' => 'Tên minh chứng đã tồn tại',
+                'donVi_id.min' => 'Bạn chưa chọn đơn vị',
+                'donVi_id.numeric' => 'Bạn chưa chọn đơn vị',
             ]);
         } else {
             $request->validate([
                 'ten' => 'required|unique:minh_chungs' . ',ten,' . $id,
                 'fileMinhChung' => 'required',
+                'donVi_id' => 'numeric|min:1'
             ], [
                 'ten.required' => 'Bạn chưa nhập tên minh chứng',
                 'ten.unique' => 'Tên minh chứng đã tồn tại',
                 'fileMinhChung.required' => 'Bạn chưa chèn tệp minh chứng',
+                'donVi_id.min' => 'Bạn chưa chọn đơn vị',
+                'donVi_id.numeric' => 'Bạn chưa chọn đơn vị',
             ]);
         }
     }
@@ -70,15 +76,33 @@ class MinhChungController extends Controller
     public function edit($id)
     {
         $minhChung = $this->minhChungModel->find($id);
-        return view('pages.minhchung.edit', compact('minhChung'));
+        $donVis = $this->donViModel->all();
+        return view('pages.minhchung.edit', compact('minhChung', 'donVis'));
     }
 
     public function update(Request $request, $id)
     {
         $this->callValidate($request, $id);
-        $this->minhChungModel->find($id)->update([
-            'ten' => $request->ten,
-        ]);
+        $minhChung = $this->minhChungModel->find($id);
+        $fileUploaded = HandleUploadImage::upload($request, 'fileMinhChung', 'minhchungs');
+        if ($fileUploaded) {
+            $minhChung->update([
+                'ten' => $request->ten,
+                'ngayKhaoSat' => $request->ngayKhaoSat,
+                'ngayBanHanh' => $request->ngayBanHanh,
+                'noiBanHanh' => $request->noiBanHanh,
+                'link' => $fileUploaded,
+                'donVi_id' => $request->donVi_id,
+            ]);
+        } else {
+            $minhChung->update([
+                'ten' => $request->ten,
+                'ngayKhaoSat' => $request->ngayKhaoSat,
+                'ngayBanHanh' => $request->ngayBanHanh,
+                'noiBanHanh' => $request->noiBanHanh,
+                'donVi_id' => $request->donVi_id,
+            ]);
+        }
         return redirect()->route('minhchung.index')->with('message', 'Sửa thành công!');
     }
 
@@ -91,6 +115,13 @@ class MinhChungController extends Controller
             return redirect()->route('minhchung.index')->with('message', 'Bạn đang cố gắng truy cập vào chức năng quản lý MCTP đối với minh chứng đơn!');
         }
     }
+
+    public function show($id)
+    {
+        $minhChung = $this->minhChungModel->find($id);
+        return view('pages.minhchung.show', compact('minhChung'));
+    }
+
 
     public function destroy(Request $request)
     {

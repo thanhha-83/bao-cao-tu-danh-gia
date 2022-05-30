@@ -58,22 +58,26 @@ $action = (object) [
                             <th>Ngày bắt đầu</th>
                             <th>Ngày kết thúc</th>
                         </tr>
-                        @foreach ($dotDanhGia->giaiDoan as $item)
+                        @foreach ($dotDanhGia->hoatDong as $item)
                             <tr>
                                 <td></td>
-                                <td>{{ $item->hoatDong->ten }}</td>
-                                <td>{{ date("d-m-Y H:i", strtotime($item->ngayBD)) }}</td>
-                                <td>{{ date("d-m-Y H:i", strtotime($item->ngayKT)) }}</td>
+                                <td>{{ $item->ten }}</td>
+                                <td>{{ date("d-m-Y H:i", strtotime($item->pivot->ngayBD)) }}</td>
+                                <td>{{ date("d-m-Y H:i", strtotime($item->pivot->ngayKT)) }}</td>
                             </tr>
                         @endforeach
                         <tr>
                             <th>Chức năng:</th>
                             <td colspan="3">
+                                @can('dotdanhgia-sua')
                                 <a href="{{ route('dotdanhgia.edit', ['id' => $dotDanhGia->id]) }}"
                                     class="btn btn-secondary">Sửa</a>
+                                @endcan
+                                @can('dotdanhgia-xoa')
                                 <a href="#" class="btn btn-danger btn-delete" data-url="{{ route('dotdanhgia.destroy') }}"
                                     data-id="{{ $dotDanhGia->id }}"
                                     data-redirect="{{ route('dotdanhgia.index') }}">Xóa</a>
+                                @endcan
                             </td>
                         </tr>
                     </tbody>

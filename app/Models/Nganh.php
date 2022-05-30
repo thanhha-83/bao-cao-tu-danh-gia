@@ -15,4 +15,11 @@ class Nganh extends Model
     {
         return $this->belongsTo(DonVi::class, 'donVi_id');
     }
+
+    public function dotDanhGia()
+    {
+        return $this
+            ->belongsToMany(DotDanhGia::class, 'nganh_dot_danh_gias', 'nganh_id', 'dotDanhGia_id')
+            ->withTimestamps();
+    }
 }

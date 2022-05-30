@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use \Datetime;
 
 class User extends Authenticatable
 {
@@ -64,13 +65,24 @@ class User extends Authenticatable
 
     public function checkPermissionAccess($quyenCheck)
     {
-        // use login co quyen add, sua danh muc va xem menu
-        // B1 lay duoc tat ca cac quyen cua user dang login he thong
-        // B2 So sanh gia tri dua vao cua router hien tai xem co ton tai trong cac quyen ma minh lay dc hay khong
         $vaiTroHTs = auth()->user()->vaiTroHT;
         foreach ($vaiTroHTs as $vaiTroHT) {
             $quyenHTs = $vaiTroHT->quyenHT;
             if ($quyenHTs->contains('slug', $quyenCheck)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function checkTime($activity, $baoCao) {
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+        $hoatDongs = $baoCao->nganh->dotDanhGia[0]->hoatDong;
+        foreach ($hoatDongs as $hoatDong) {
+            $now = new DateTime();
+            $startDate = new DateTime($hoatDong->pivot->ngayBD);
+            $endDate = new DateTime($hoatDong->pivot->ngayKT);
+            if ($hoatDong->slug == $activity && $startDate <= $now && $now <= $endDate) {
                 return true;
             }
         }
