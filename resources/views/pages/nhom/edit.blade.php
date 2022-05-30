@@ -10,6 +10,10 @@ $action = (object) [
 ];
 @endphp
 
+@section('head')
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+@endsection
+
 @section('styles')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
@@ -34,10 +38,11 @@ $action = (object) [
         <div class="card-body">
             <form action="{{ route('nhom.update', ['id' => $nhom->id]) }}" method="POST">
                 @csrf
+                <input type="hidden" name="nhom_id" id="nhom_id" value={{$nhom->id}}>
                 <div class="form-group">
                     <label for="nganh_id">Ngành</label>
                     <select class="form-select form-control {{ $errors->has('nganh_id') ? 'is-invalid' : '' }}"
-                        id="nganh_id" name="nganh_id" aria-label="Chọn ngành">
+                        id="nganh_id" name="nganh_id" aria-label="Chọn ngành" readonly disabled>
                         <option {{ old('nganh_id', $nhom->nganh_id) == '' ? 'selected' : '' }}>Chọn ngành</option>
                         @foreach ($nganhs as $item)
                             <option value="{{ $item->id }}"
@@ -148,4 +153,5 @@ $action = (object) [
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="js/handleMultipleSelect.js"></script>
     <script src="js/handleTwoSelect.js"></script>
+    <script src="js/handleDataSelect.js"></script>
 @endsection

@@ -19,12 +19,23 @@ class MinhChungController extends Controller
 
     protected function callValidate(Request $request, $id = null)
     {
-        $request->validate([
-            'ten' => 'required|unique:minh_chungs' . ',ten,' . $id,
-        ], [
-            'ten.required' => 'Bạn chưa nhập tên minh chứng',
-            'ten.unique' => 'Tên minh chứng đã tồn tại',
-        ]);
+        if ($request->isMCGop == 'on') {
+            $request->validate([
+                'ten' => 'required|unique:minh_chungs' . ',ten,' . $id,
+            ], [
+                'ten.required' => 'Bạn chưa nhập tên minh chứng',
+                'ten.unique' => 'Tên minh chứng đã tồn tại',
+            ]);
+        } else {
+            $request->validate([
+                'ten' => 'required|unique:minh_chungs' . ',ten,' . $id,
+                'fileMinhChung' => 'required',
+            ], [
+                'ten.required' => 'Bạn chưa nhập tên minh chứng',
+                'ten.unique' => 'Tên minh chứng đã tồn tại',
+                'fileMinhChung.required' => 'Bạn chưa chèn tệp minh chứng',
+            ]);
+        }
     }
 
     public function index()
@@ -50,7 +61,8 @@ class MinhChungController extends Controller
             'ngayBanHanh' => $request->ngayBanHanh,
             'noiBanHanh' => $request->noiBanHanh,
             'link' => $fileUploaded,
-            'donVi_id' => $request->donVi_id
+            'donVi_id' => $request->donVi_id,
+            'isMCGop' => $request->isMCGop == 'on' ? 1 : 0,
         ]);
         return redirect()->route('minhchung.index')->with('message', 'Thêm thành công!');
     }
@@ -68,6 +80,16 @@ class MinhChungController extends Controller
             'ten' => $request->ten,
         ]);
         return redirect()->route('minhchung.index')->with('message', 'Sửa thành công!');
+    }
+
+    public function addDetail($id)
+    {
+        $minhChung = $this->minhChungModel->find($id);
+        if ($minhChung->isMCGop) {
+            return view('pages.minhchung.addDetail', compact('minhChung'));
+        } else {
+            return redirect()->route('minhchung.index')->with('message', 'Bạn đang cố gắng truy cập vào chức năng quản lý MCTP đối với minh chứng đơn!');
+        }
     }
 
     public function destroy(Request $request)

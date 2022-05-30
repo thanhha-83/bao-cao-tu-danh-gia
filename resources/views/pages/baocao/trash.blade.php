@@ -1,9 +1,9 @@
-@extends('layouts.index', ['title' => 'Thùng rác tiêu chuẩn'])
+@extends('layouts.index', ['title' => 'Thùng rác - Báo cáo'])
 
 @php
 $controller = (object) [
-    'name' => 'Tiêu chuẩn',
-    'href' => '/tieuchuan',
+    'name' => 'Báo cáo',
+    'href' => '/baocao',
 ];
 $action = (object) [
     'name' => 'Thùng rác',
@@ -30,19 +30,19 @@ $action = (object) [
 
 @section('content')
     <div class="card shadow mb-4">
-        @if (count($tieuChuans) > 0)
+        @if (count($baoCaos) > 0)
             <div class="trash-action card-header py-3 d-flex flex-row align-items-center">
                 <a href="#" class="btn btn-primary btn-icon-split btn-restore-all mr-3"
-                    data-url="{{ route('tieuchuan.restore-all') }}"
-                    data-redirect="{{ route('tieuchuan.index') }}">
+                    data-url="{{ route('baocao.restore-all') }}"
+                    data-redirect="{{ route('baocao.index') }}">
                     <span class="icon text-white-50">
                         <i class="fas fa-undo"></i>
                     </span>
                     <span class="text">Phục hồi tất cả</span>
                 </a>
                 <a href="#" class="btn btn-danger btn-icon-split btn-force-delete-all"
-                    data-url="{{ route('tieuchuan.force-destroy-all') }}"
-                    data-redirect="{{ route('tieuchuan.index') }}">
+                    data-url="{{ route('baocao.force-destroy-all') }}"
+                    data-redirect="{{ route('baocao.index') }}">
                     <span class="icon text-white-50">
                         <i class="fas fa-times"></i>
                     </span>
@@ -56,22 +56,22 @@ $action = (object) [
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Tên tiêu chuẩn</th>
+                            <th>Thời gian cập nhật</th>
                             <th>Chức năng</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if (count($tieuChuans) > 0)
-                            @foreach ($tieuChuans as $item)
+                        @if (count($baoCaos) > 0)
+                            @foreach ($baoCaos as $item)
                                 <tr>
-                                    <td>Tiêu chuẩn số {{ $item->stt }}</td>
-                                    <td>{{ $item->ten }}</td>
+                                    <td>Báo cáo số {{ $item->tieuChi->tieuChuan->stt }}.{{ $item->tieuChi->stt }}</td>
+                                    <td>{{ date("d-m-Y H:i", strtotime($item->updated_at)) }}</td>
                                     <td>
                                         <a href="#" class="btn btn-primary btn-restore"
-                                            data-url="{{ route('tieuchuan.restore') }}" data-id="{{ $item->id }}">Phục
+                                            data-url="{{ route('baocao.restore') }}" data-id="{{ $item->id }}">Phục
                                             hồi</a>
                                         <a href="#" class="btn btn-danger btn-force-delete"
-                                            data-url="{{ route('tieuchuan.force-destroy') }}"
+                                            data-url="{{ route('baocao.force-destroy') }}"
                                             data-id="{{ $item->id }}">Xóa vĩnh viễn</a>
                                     </td>
                                 </tr>
@@ -83,7 +83,7 @@ $action = (object) [
                         @endif
                     </tbody>
                 </table>
-                {{ $tieuChuans->render('pagination::bootstrap-4') }}
+                {{ $baoCaos->render('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>

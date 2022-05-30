@@ -14,6 +14,7 @@ use App\Http\Controllers\BaoCaoController;
 use App\Http\Controllers\NhomNguoiDungController;
 use App\Http\Controllers\BinhLuanController;
 use App\Http\Controllers\MinhChungController;
+use App\Http\Controllers\MinhChungThanhPhanController;
 use App\Http\Controllers\BaoCaoSaoLuuController;
 use App\Http\Controllers\VaiTroHeThongController;
 use Illuminate\Http\Request;
@@ -123,6 +124,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/restore-all', [NhomController::class, 'restoreAll'])->name('nhom.restore-all');
         Route::post('/force-destroy', [NhomController::class, 'forceDestroy'])->name('nhom.force-destroy');
         Route::post('/force-destroy-all', [NhomController::class, 'forceDestroyAll'])->name('nhom.force-destroy-all');
+        Route::post('/handle-select', [NhomController::class, 'handleSelect'])->name('nhom.handle-select');
     });
 
     Route::prefix('dotdanhgia')->group(function () {
@@ -155,6 +157,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/force-destroy-all', [BaoCaoController::class, 'forceDestroyAll'])->name('baocao.force-destroy-all');
         Route::get('/word/{id}', [BaoCaoController::class, 'word'])->name('baocao.word');
         Route::post('/backup', [BaoCaoController::class, 'backup'])->name('baocao.backup');
+        Route::post('/handle-select-nganh', [BaoCaoController::class, 'handleSelectNganh'])->name('baocao.handle-select-nganh');
+        Route::post('/handle-select-tieuchuan', [BaoCaoController::class, 'handleSelectTieuChuan'])->name('baocao.handle-select-tieuchuan');
     });
 
     Route::prefix('nhomnguoidung')->group(function () {
@@ -186,7 +190,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('minhchung')->group(function () {
-        Route::get('/index', [MinhChungController::class, 'index'])->name('minhchung.index');
+        Route::get('/', [MinhChungController::class, 'index'])->name('minhchung.index');
         Route::get('/create', [MinhChungController::class, 'create'])->name('minhchung.create');
         Route::post('/store', [MinhChungController::class, 'store'])->name('minhchung.store');
         Route::get('/show/{id}', [MinhChungController::class, 'show'])->name('minhchung.show');
@@ -199,6 +203,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/force-destroy', [MinhChungController::class, 'forceDestroy'])->name('minhchung.force-destroy');
         Route::post('/force-destroy-all', [MinhChungController::class, 'forceDestroyAll'])->name('minhchung.force-destroy-all');
         Route::post('/getall', [MinhChungController::class, 'getAll'])->name('minhchung.get-all');
+        Route::get('/add-detail/{id}', [MinhChungController::class, 'addDetail'])->name('minhchung.add-detail');
+    });
+
+    Route::prefix('minhchungthanhphan')->group(function () {
+        Route::post('/store', [MinhChungThanhPhanController::class, 'store'])->name('minhchungthanhphan.store');
+        Route::post('/destroy', [MinhChungThanhPhanController::class, 'destroy'])->name('minhchungthanhphan.destroy');
     });
 
     Route::prefix('baocaosaoluu')->group(function () {

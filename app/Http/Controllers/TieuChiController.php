@@ -44,11 +44,25 @@ class TieuChiController extends Controller
         ]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $tieuChis = $this->tieuChiModel->paginate(10);
+        $filterStt = $request->query('stt');
+        $filterTen = $request->query('ten');
+        $filterTieuChuanId = $request->query('tieuChuan_id');
+        $tieuChis = $this->tieuChiModel->sortable(['tieuChuan.stt', 'stt']);
+        if (!empty($filterStt)) {
+            $tieuChis->where('tieu_chis.stt', $filterStt);
+        }
+        if (!empty($filterTen)) {
+            $tieuChis->where('tieu_chis.ten', 'like', '%'.$filterTen.'%');
+        }
+        if (!empty($filterTieuChuanId)) {
+            $tieuChis->where('tieu_chis.tieuChuan_id', $filterTieuChuanId);
+        }
+        $tieuChis = $tieuChis->paginate(10);
         $trashCount = count($this->tieuChiModel->onlyTrashed()->get());
-        return view('pages.tieuchi.index', compact('tieuChis', 'trashCount'));
+        $tieuChuans = $this->tieuChuanModel->all();
+        return view('pages.tieuchi.index', compact('tieuChis', 'trashCount', 'tieuChuans', 'filterStt' ,'filterTen', 'filterTieuChuanId'));
     }
 
     public function create()

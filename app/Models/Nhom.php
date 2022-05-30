@@ -16,6 +16,12 @@ class Nhom extends Model
         return $this->belongsTo(Nganh::class, 'nganh_id');
     }
 
+    public function nhomNguoiDung()
+    {
+        return $this
+            ->hasMany(NhomNguoiDung::class, 'nhom_id');
+    }
+
     public function nhomQuyen()
     {
         return $this

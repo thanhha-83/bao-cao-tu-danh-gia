@@ -64,7 +64,7 @@ $action = (object) [
                         </tr>
                         <tr>
                             <th>Từ khóa:</th>
-                            <td class="text-danger">
+                            <td class="font-weight-bold text-danger">
                                 @foreach ($tieuChi->tuKhoa as $item)
                                     @if ($loop->last)
                                         @php echo $item->noiDung @endphp

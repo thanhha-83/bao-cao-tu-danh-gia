@@ -67,6 +67,10 @@ $action = (object) [
                                     <td>
                                         <a href="{{ route('minhchung.edit', ['id' => $item->id]) }}"
                                             class="btn btn-secondary">Sửa</a>
+                                        @if ($item->isMCGop == 1)
+                                        <a href="{{ route('minhchung.add-detail', ['id' => $item->id]) }}"
+                                                class="btn btn-success">Quản lý MCTP</a>
+                                        @endif
                                         <a href="#" class="btn btn-danger btn-delete"
                                             data-url="{{ route('minhchung.destroy') }}" data-id="{{ $item->id }}">Xóa</a>
                                     </td>

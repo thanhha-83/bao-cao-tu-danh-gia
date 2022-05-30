@@ -10,6 +10,10 @@ $action = (object) [
 ];
 @endphp
 
+@section('head')
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+@endsection
+
 @section('styles')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
@@ -37,7 +41,7 @@ $action = (object) [
                     <label for="nganh_id">Ngành</label>
                     <select class="form-select form-control {{ $errors->has('nganh_id') ? 'is-invalid' : '' }}"
                         id="nganh_id" name="nganh_id" aria-label="Chọn ngành">
-                        <option {{ old('nganh_id', '') == '' ? 'selected' : '' }}>Chọn ngành</option>
+                        <option value="" {{ old('nganh_id', '') == '' ? 'selected' : '' }}>Chọn ngành</option>
                         @foreach ($nganhs as $item)
                             <option value="{{ $item->id }}" {{ old('nganh_id', '') == $item->id ? 'selected' : '' }}>
                                 {{ $item->ten }}</option>
@@ -63,7 +67,7 @@ $action = (object) [
                     <div class="form-row pl-1 w-100">
                         <div class="form-group col-md-5">
                             <label>Quyền</label>
-                            <select class="form-select form-control" id="select-1" data-name="quyenNhom_id[]" aria-label="Chọn quyền">
+                            <select class="form-select form-control" id="select-1" data-name="quyenNhom_id[]" aria-label="Chọn quyền" disabled>
                                 <option value="" selected>Chọn quyền</option>
                                 @foreach ($quyenNhoms as $item)
                                     <option value="{{ $item->id }}">{{ $item->ten }}</option>
@@ -72,7 +76,7 @@ $action = (object) [
                         </div>
                         <div class="ml-3 form-group col-md-5">
                             <label>Tiêu chuẩn</label>
-                            <select class="form-select form-control" id="select-2" data-name="tieuChuan_id[]" aria-label="Chọn quyền">
+                            <select class="form-select form-control" id="select-2" data-name="tieuChuan_id[]" aria-label="Chọn tiêu chuẩn" disabled>
                                 <option value="" selected>Chọn tiêu chuẩn</option>
                                 @foreach ($tieuChuans as $item)
                                     <option value="{{ $item->id }}">Tiêu chuẩn số {{ $item->stt }}</option>
@@ -82,7 +86,7 @@ $action = (object) [
                         <div class="ml-3 mb-0 form-group col-md-1">
                             <label>&nbsp;</label>
                             <div class="input-group-prepend">
-                                <span class="input-group-text btn-primary btn-add" role="button"><i
+                                <span class="input-group-text btn-primary btn-add d-none" role="button"><i
                                         class="fa fa-plus"></i></span>
                             </div>
                         </div>
@@ -140,4 +144,5 @@ $action = (object) [
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="js/handleMultipleSelect.js"></script>
     <script src="js/handleTwoSelect.js"></script>
+    <script src="js/handleDataSelect.js"></script>
 @endsection

@@ -10,6 +10,15 @@ $action = (object) [
 ];
 @endphp
 
+@section('styles')
+    <style>
+        .btn-add,
+        .btn-remove {
+            padding: 0.6rem .75rem;
+        }
+    </style>
+@endsection
+
 @section('breadcrumb')
     @include('partials.breadcrumb', compact('controller', 'action'))
 @endsection
@@ -67,7 +76,7 @@ $action = (object) [
                     <label for="donVi_id">Đơn vị</label>
                     <select class="form-select form-control {{ $errors->has('donVi_id') ? 'is-invalid' : '' }}"
                         id="donVi_id" name="donVi_id" aria-label="Chọn đơn vị">
-                        <option {{ old('donVi_id', '') == '' ? 'selected' : '' }}>Chọn đơn vị</option>
+                        <option {{ old('donVi_id', '') == '' ? 'selected' : '' }} value="">Chọn đơn vị</option>
                         @foreach ($donVis as $item)
                             <option value="{{ $item->id }}" {{ old('donVi_id', '') == $item->id ? 'selected' : '' }}>{{ $item->ten }}</option>
                         @endforeach
@@ -78,7 +87,11 @@ $action = (object) [
                         </div>
                     @endif
                 </div>
-                <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="isMCGop" name="isMCGop" {{ old('isMCGop', '') == 'on' ? 'checked' : '' }}>
+                    <label class="form-check-label" for="isMCGop">Là minh chứng gộp</label>
+                </div>
+                <div class="form-group single-minhchung {{ old('isMCGop', '') == 'on' ? 'd-none' : '' }}">
                     <label for="fileMinhChung">Tệp minh chứng</label>
                     <input type="file" class="form-control {{ $errors->has('fileMinhChung') ? 'is-invalid' : '' }}" id="fileMinhChung"
                         name="fileMinhChung" value="{{ old('fileMinhChung', '') }}">
@@ -88,8 +101,27 @@ $action = (object) [
                         </div>
                     @endif
                 </div>
+                <div class="multi-minhchung {{ old('isMCGop', '') != 'on' ? 'd-none' : '' }}">
+                    <p class="font-italic">Minh chứng thành phần sẽ được thêm ở mục "Quản lý MCTP" sau khi tạo thành công minh chứng.</p>
+                </div>
                 <button type="submit" class="btn btn-primary">Xác nhận</button>
             </form>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            $('input#isMCGop').on('click', (e) => {
+                if ($(e.currentTarget).prop('checked') === true) {
+                    $('.single-minhchung').addClass('d-none');
+                    $('.multi-minhchung').removeClass('d-none');
+                } else {
+                    $('.single-minhchung').removeClass('d-none');
+                    $('.multi-minhchung').addClass('d-none');
+                }
+            })
+        })
+    </script>
 @endsection

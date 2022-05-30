@@ -76,15 +76,41 @@ $action = (object) [
 
 @section('scripts')
     <script>
-        $(function () {
-            $('.checkbox_wrapper').on('click', function () {
-                $(this).parents('.card').find('.checkbox_childrent').prop('checked', $(this).prop('checked'));
+        $(document).ready(function() {
+            function checkAllCheckboxWrapperChecked() {
+                $checkAll = $('.checkall');
+                $checkboxWrapper = $('.checkbox_wrapper');
+                $checkboxWrapperChecked = $('.checkbox_wrapper').filter(':checked');
+                if ($checkboxWrapper.length !== $checkboxWrapperChecked .length) {
+                    $checkAll.prop('checked', false);
+                } else {
+                    $checkAll.prop('checked', true);
+                }
+            }
+            $('.checkbox_wrapper').on('click', (e) => {
+                $checkboxChildrent = $(e.currentTarget).parent().closest('.card').find('.checkbox_childrent');
+                $checkboxChildrent.prop('checked', $(e.currentTarget).prop('checked'));
+                checkAllCheckboxWrapperChecked();
             });
 
-            $('.checkall').on('click', function () {
-                $(this).parents().find('.checkbox_childrent').prop('checked', $(this).prop('checked'));
-                $(this).parents().find('.checkbox_wrapper').prop('checked', $(this).prop('checked'));
+            $('.checkbox_childrent').on('click', (e) => {
+                $checkAll = $('.checkall');
+                $checkboxWrapper = $(e.currentTarget).parent().closest('.card').find('.checkbox_wrapper');
+                $checkboxChildrent = $(e.currentTarget).parent().closest('.card').find('.checkbox_childrent');
+                $checkboxChildrentChecked = $(e.currentTarget).parent().closest('.card').find('.checkbox_childrent').filter(':checked');
+                if ($checkboxChildrent.length !== $checkboxChildrentChecked .length) {
+                    $checkAll.prop('checked', false);
+                    $checkboxWrapper.prop('checked', false);
+                } else {
+                    $checkboxWrapper.prop('checked', true);
+                }
+                checkAllCheckboxWrapperChecked();
             });
-        });
+
+            $('.checkall').on('click', (e) => {
+                $(e.currentTarget).parents().find('.checkbox_childrent').prop('checked', $(e.currentTarget).prop('checked'));
+                $(e.currentTarget).parents().find('.checkbox_wrapper').prop('checked', $(e.currentTarget).prop('checked'));
+            });
+        })
     </script>
 @endsection

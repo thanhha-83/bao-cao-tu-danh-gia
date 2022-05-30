@@ -135,7 +135,6 @@ class NhomController extends Controller
             $nhom = $this->nhomModel->find($id);
             $nhom->update([
                 'ten' => $request->ten,
-                'nganh_id' => $request->nganh_id
             ]);
 
             $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhom->id)->get();
@@ -270,6 +269,53 @@ class NhomController extends Controller
                 'code' => 500,
                 'message' => 'fail',
             ], 500);
+        }
+    }
+
+    public function handleSelect(Request $request) {
+        if (!empty($request->quyenId)) {
+            $nhoms = $this->nhomModel->where('nganh_id', $request->nganhId)->get();
+            $quyenId = $request->quyenId;
+            $tieuChuanIds = [];
+            $curentNhomId = $request->nhomId;
+            foreach ($nhoms as $nhom) {
+                if ($nhom->id != $curentNhomId) {
+                    $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhom->id)->where('quyenNhom_id', $quyenId)->get();
+                    foreach ($nhomQuyens as $nhomQuyen) {
+                        array_push($tieuChuanIds, $nhomQuyen->tieuChuan_id);
+                    }
+                }
+            }
+            $tieuChuans = $this->tieuChuanModel->all();
+            return response()->json([
+                'tieuChuanIds' => $tieuChuanIds,
+                'tieuChuans' => $tieuChuans
+            ], 200);
+        } elseif (!empty($request->tieuChuanId)) {
+            $nhoms = $this->nhomModel->where('nganh_id', $request->nganhId)->get();
+            $tieuChuanId = $request->tieuChuanId;
+            $quyenIds = [];
+            $curentNhomId = $request->nhomId;
+            foreach ($nhoms as $nhom) {
+                if ($nhom->id != $curentNhomId) {
+                    $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhom->id)->where('tieuChuan_id', $tieuChuanId)->get();
+                    foreach ($nhomQuyens as $nhomQuyen) {
+                        array_push($quyenIds, $nhomQuyen->quyenNhom_id);
+                    }
+                }
+            }
+            $quyenNhoms = $this->quyenNhomModel->all();
+            return response()->json([
+                'quyenIds' => $quyenIds,
+                'quyenNhoms' => $quyenNhoms
+            ], 200);
+        } else {
+            $quyenNhoms = $this->quyenNhomModel->all();
+            $tieuChuans = $this->tieuChuanModel->all();
+            return response()->json([
+                'tieuChuans' => $tieuChuans,
+                'quyenNhoms' => $quyenNhoms
+            ], 200);
         }
     }
 }

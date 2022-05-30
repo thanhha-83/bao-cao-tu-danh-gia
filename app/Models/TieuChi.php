@@ -5,12 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use Kyslik\ColumnSortable\Sortable;
 
 class TieuChi extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Sortable;
     protected $dates = ['deleted_at'];
     protected $fillable = ['stt', 'ten', 'tieuChuan_id'];
+
+    public $sortable = ['id' ,'stt', 'ten'];
 
     public function tieuChuan()
     {

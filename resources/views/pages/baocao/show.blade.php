@@ -53,7 +53,7 @@ $action = (object) [
     <div class="row">
         <div class="card shadow mb-4 col mx-3 p-0">
             <div class="card-body p-5">
-                <h6 class="text-uppercase font-weight-bold text-dark text-center text-bold">Tiêu chí số 1.1. Kết quả đầu ra
+                <h6 class="text-uppercase font-weight-bold text-dark text-center text-bold">Tiêu chí số {{ $baoCao->tieuChi->tieuChuan->stt }}.{{ $baoCao->tieuChi->stt }}. {{ $baoCao->tieuChi->ten }}
                 </h6>
                 <p class="font-weight-bold text-dark">Mô tả</p>
                 {!! $baoCao->moTa !!}

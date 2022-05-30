@@ -19,8 +19,9 @@ class CreateMinhChungsTable extends Migration
             $table->date('ngayKhaoSat')->nullable();
             $table->date('ngayBanHanh')->nullable();
             $table->string('noiBanHanh')->nullable();
-            $table->string('link');
+            $table->string('link')->nullable();
             $table->integer('donVi_id');
+            $table->boolean('isMCGop')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

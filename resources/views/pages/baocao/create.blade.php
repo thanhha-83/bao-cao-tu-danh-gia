@@ -10,6 +10,10 @@ $action = (object) [
 ];
 @endphp
 
+@section('head')
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+@endsection
+
 @section('styles')
     <link rel="stylesheet" href="css/tiny-editor.css">
 @endsection
@@ -29,38 +33,40 @@ $action = (object) [
                 @csrf
                 <div class="form-group">
                     <label for="nganh_id">Ngành</label>
-                    <select class="form-select form-control {{ $errors->has('nganh_id') ? 'is-invalid' : '' }}"
-                        id="nganh_id" name="nganh_id" aria-label="Chọn ngành">
-                        <option {{ old('nganh_id', '') == '' ? 'selected' : '' }}>Chọn ngành</option>
+                    <select class="form-select form-control" id="nganh_id" name="nganh_id" aria-label="Chọn ngành">
                         @foreach ($nganhs as $item)
-                            <option value="{{ $item->id }}" {{ old('nganh_id', '') == $item->id ? 'selected' : '' }}>{{ $item->ten }}</option>
+                            <option value="{{ $item->id }}">{{ $item->ten }}</option>
                         @endforeach
                     </select>
-                    @if ($errors->has('nganh_id'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('nganh_id') }}
-                        </div>
-                    @endif
+                </div>
+                <div class="form-group">
+                    <label for="tieuChuan_id">Tiêu chuẩn</label>
+                    <select class="form-select form-control" id="tieuChuan_id" name="tieuChuan_id"
+                        aria-label="Chọn tiêu chuẩn">
+                        @foreach ($tieuChuans as $item)
+                            <option value="{{ $item->id }}">Tiêu chuẩn số {{ $item->stt }}: {{ $item->ten }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="tieuChi_id">Tiêu chí</label>
-                    <select class="form-select form-control {{ $errors->has('tieuChi_id') ? 'is-invalid' : '' }}"
-                        id="tieuChi_id" name="tieuChi_id" aria-label="Chọn tiêu chí">
-                        <option {{ old('tieuChi_id', '') == '' ? 'selected' : '' }}>Chọn tiêu chí</option>
+                    <select class="form-select form-control" id="tieuChi_id" name="tieuChi_id" aria-label="Chọn tiêu chí">
                         @foreach ($tieuChis as $item)
-                            <option value="{{ $item->id }}" {{ old('tieuChi_id', '') == $item->id ? 'selected' : '' }}>Tiêu chí số {{ $item->tieuChuan->stt }}.{{ $item->stt }}</option>
+                            @php
+                                if (strlen($item->ten) < 150) {
+                                    $ten = $item->ten;
+                                } else {
+                                    $ten = substr($item->ten, 0, strpos(wordwrap($item->ten, 150), "\n")) . '...';
+                                }
+                            @endphp
+                            <option value="{{ $item->id }}">Tiêu chí số {{ $item->tieuChuan->stt }}.{{ $item->stt }}: {{ $ten }}</option>
                         @endforeach
                     </select>
-                    @if ($errors->has('tieuChi_id'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('tieuChi_id') }}
-                        </div>
-                    @endif
                 </div>
                 <div class="form-group">
                     <label for="moTa">Mô tả</label>
-                    <textarea class="form-control tiny-editor" id="moTa" name="moTa"
-                        rows="8">{{ old('moTa', '') }}</textarea>
+                    <textarea class="form-control tiny-editor" id="moTa" name="moTa" rows="8">{{ old('moTa', '') }}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="diemManh">Điểm mạnh</label>
@@ -79,8 +85,8 @@ $action = (object) [
                 </div>
                 <div class="form-group">
                     <label for="diemTDG">Điểm tự đánh giá (0 - 7 điểm)</label>
-                    <input type="number" class="form-control" id="diemTDG"
-                        name="diemTDG" value="{{ old('diemTDG', '') }}">
+                    <input type="number" class="form-control" id="diemTDG" name="diemTDG"
+                        value="{{ old('diemTDG', '') }}">
                 </div>
                 <button type="submit" class="btn btn-primary">Xác nhận</button>
             </form>
@@ -92,4 +98,5 @@ $action = (object) [
     <script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
     <script src="js/customTinyMCE.js"></script>
     <script src="js/callTinyMCE.js"></script>
+    <script src="js/handleDataSelectBaoCao.js"></script>
 @endsection

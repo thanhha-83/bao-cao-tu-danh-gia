@@ -48,7 +48,11 @@
             data: { _token: $('input[name="_token"]').val() },
             success: (data) => {
                 data.forEach((item) => {
-                    $('#minhChung').append(`<option value="${item.link}">${item.ten}</option>`)
+                    if (item.isMCGop) {
+                        $('#minhChung').append(`<option value="/minhchung/detailTP/${$item.id}">${item.ten}</option>`)
+                    } else {
+                        $('#minhChung').append(`<option value="${item.link}">${item.ten}</option>`)
+                    }
                 })
             },
         })

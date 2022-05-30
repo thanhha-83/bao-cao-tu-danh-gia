@@ -29,6 +29,41 @@ $action = (object) [
 @endsection
 
 @section('content')
+<div class="card shadow mb-4 w-50 mx-auto">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-center">
+        <h6 class="m-0 text-center">TÌM KIẾM TIÊU CHÍ</h6>
+    </div>
+    <div class="card-body">
+        <form action="{{ route('tieuchi.index') }}" method="GET">
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="stt">Tiêu chí số</label>
+                    <input type="number" class="form-control {{ $errors->has('stt') ? 'is-invalid' : '' }}" id="stt"
+                        name="stt" value="{{ $filterStt }}">
+                </div>
+                <div class="form-group col-md-10">
+                    <label for="ten">Tên tiêu chí</label>
+                    <input type="text" class="form-control {{ $errors->has('ten') ? 'is-invalid' : '' }}" id="ten"
+                        name="ten" value="{{ $filterTen }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="tieuChuan_id">Tiêu chuẩn</label>
+                <select class="form-select form-control {{ $errors->has('tieuChuan_id') ? 'is-invalid' : '' }}"
+                    id="tieuChuan_id" name="tieuChuan_id" aria-label="Chọn tiêu chuẩn">
+                    <option {{ $filterTieuChuanId == '' ? 'selected' : '' }} value="">Chọn tiêu chuẩn</option>
+                    @foreach ($tieuChuans as $item)
+                        <option value="{{ $item->id }}" {{ $filterTieuChuanId == $item->id ? 'selected' : '' }}>Tiêu chuẩn số {{ $item->stt }}: {{$item->ten}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary mx-2">Tìm kiếm</button>
+                <a href="{{ route('tieuchi.index') }}" class="btn btn-secondary mx-2">Làm mới</a>
+            </div>
+        </form>
+    </div>
+</div>
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             @can('tieuchi-them')
@@ -56,7 +91,7 @@ $action = (object) [
                     <thead>
                         <tr align="center">
                             <th>Tiêu chí</th>
-                            <th>Tên tiêu chí</th>
+                            <th>@sortablelink('ten', 'Tên tiêu chí')</th>
                             <th>Chức năng</th>
                         </tr>
                     </thead>
@@ -65,7 +100,7 @@ $action = (object) [
                             @foreach ($tieuChis as $item)
                                 <tr>
                                     <td width="120" align="center">{{ $item->tieuchuan->stt }}.{{ $item->stt }}</td>
-                                    <td>{{ $item->ten }}</td>
+                                    <td>{!! \App\Filters\HighLightKeyword::addStrongTag($item->ten, $filterTen) !!}</td>
                                     <td width="300">
                                         @can('tieuchi-chitiet')
                                         <a href="{{ route('tieuchi.show', ['id' => $item->id]) }}"
@@ -84,12 +119,21 @@ $action = (object) [
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="999" class="text-center">Chưa có bản ghi nào!</td>
+                                @if (!empty($filterStt) || !empty($filterTen) || !empty($filterTieuChuanId))
+                                    <td colspan="999" class="text-center">Không có bản ghi nào phù hợp với bộ tìm kiếm!</td>
+                                @else
+                                    <td colspan="999" class="text-center">Chưa có bản ghi nào!</td>
+                                @endif
                             </tr>
                         @endif
                     </tbody>
                 </table>
-                {{ $tieuChis->render('pagination::bootstrap-4') }}
+                <div class="d-flex justify-content-between">
+                    {{ $tieuChis->appends(Request::except('page'))->render('pagination::bootstrap-4') }}
+                    <div>
+                        <a href="{{ route('tieuchi.index') }}" class="btn btn-primary mx-2">Làm mới</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
