@@ -75,11 +75,24 @@ class UserController extends Controller
         ]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->userModel->all();
+        $filterHoTen = $request->query('hoTen');
+        $filterGioiTinh = $request->query('gioiTinh');
+        $filterChucVu = $request->query('chucVu');
+        $users = $this->userModel->sortable('hoTen');
+        if (!empty($filterHoTen)) {
+            $users->where('users.hoTen', 'like', '%'.$filterHoTen.'%');
+        }
+        if ($filterGioiTinh != '') {
+            $users->where('users.gioiTinh', $filterGioiTinh);
+        }
+        if (!empty($filterChucVu)) {
+            $users->where('users.chucVu', 'like', '%'.$filterChucVu.'%');
+        }
+        $users = $users->paginate(10);
         $trashCount = count($this->userModel->onlyTrashed()->get());
-        return view('pages.user.index', compact('users', 'trashCount'));
+        return view('pages.user.index', compact('users', 'trashCount', 'filterHoTen' ,'filterGioiTinh', 'filterChucVu'));
     }
 
     public function create()

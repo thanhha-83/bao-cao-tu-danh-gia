@@ -47,7 +47,7 @@ $action = (object) [
                         </div>
                         <div class="form-check ml-2">
                             <input class="form-check-input" type="radio" name="gioiTinh" value="0"
-                                {{ old('gioiTinh', $user->gioiTinh) == '2' ? 'checked' : '' }}>
+                                {{ old('gioiTinh', $user->gioiTinh) == '0' ? 'checked' : '' }}>
                             <span class="form-check-label">Nữ</span>
                         </div>
                     </div>

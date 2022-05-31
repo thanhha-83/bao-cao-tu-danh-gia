@@ -21,4 +21,9 @@ class NhomNguoiDung extends Model
     {
         return $this->belongsTo(Nhom::class, 'nhom_id');
     }
+    public function quyenNguoiDung() {
+        return $this->belongsToMany(QuyenNguoiDung::class, 'nguoi_dung_quyens', 'nhomNguoiDung_id', 'quyenNguoiDung_id')
+        ->withPivot('baoCao_id')
+        ->withTimestamps();
+    }
 }

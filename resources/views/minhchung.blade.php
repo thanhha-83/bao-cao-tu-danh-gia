@@ -49,7 +49,7 @@
             success: (data) => {
                 data.forEach((item) => {
                     if (item.isMCGop) {
-                        $('#minhChung').append(`<option value="/minhchung/detailTP/${$item.id}">${item.ten}</option>`)
+                        $('#minhChung').append(`<option value="/minhchung/detailTP/${item.id}">${item.ten}</option>`)
                     } else {
                         $('#minhChung').append(`<option value="${item.link}">${item.ten}</option>`)
                     }

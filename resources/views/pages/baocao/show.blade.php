@@ -212,6 +212,29 @@ $action = (object) [
             <button @click="sendMessage" href="#" class="btn btn-primary">Gửi bình luận</button>
         </div>
     </div>
+    <button type="button" class="btn-show-modal btn btn-primary d-none" data-toggle="modal" data-target="#deleteCatModal">
+        <span class="sr-only">Show modal</span>
+    </button>
+    <!-- Modal -->
+    <div class="modal fade" id="deleteCatModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Minh chứng thành phần</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="title"></h5>
+                    <ul class="content"></ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -237,6 +260,35 @@ $action = (object) [
                     `<li><a class="minhchung" data-id="minhchung-${i + 1}" href="${window.location.href.split(/[?#]/)[0]}#minhchung-${i + 1}">${$(el).text()}</a></li>`
                 );
             });
+            $('.is-minhchung').on('click', (e) => {
+                if ($(e.currentTarget).attr('href').includes('/minhchung/detailTP/')) {
+                    e.preventDefault();
+                    $('.btn-show-modal').attr('data-url', $(e.currentTarget).attr('href'));
+                    $('.btn-show-modal').click();
+                }
+            });
+            $('#deleteCatModal').on('show.bs.modal', (e) => {
+                const _token = $('meta[name="csrf-token"]').attr('content');
+                const id = $(e.relatedTarget).data('url').split('/').pop();
+                $.ajax({
+                    type: "POST",
+                    url: 'minhchung/gettp',
+                    data: {
+                        id,
+                        _token
+                    },
+                    success: (datas) => {
+                        for (data of datas) {
+                            $('.modal-body').find('.content').html('');
+                            $('.modal-body').find('.content').append(
+                                `<li>
+                                    <a href="${data.link}" target="_blank" rel="noopener nofollower">${data.ten}</a>
+                                </li>`
+                            );
+                        }
+                    },
+                });
+            })
         });
     </script>
     <script>

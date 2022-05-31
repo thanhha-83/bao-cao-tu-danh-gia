@@ -29,60 +29,61 @@ $action = (object) [
 @endsection
 
 @section('content')
-<div class="card shadow mb-4 w-50 mx-auto">
-    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-center">
-        <h6 class="m-0 text-center">TÌM KIẾM TIÊU CHÍ</h6>
-    </div>
-    <div class="card-body">
-        <form action="{{ route('tieuchi.index') }}" method="GET">
-            <div class="form-row">
-                <div class="form-group col-md-2">
-                    <label for="stt">Tiêu chí số</label>
-                    <input type="number" class="form-control {{ $errors->has('stt') ? 'is-invalid' : '' }}" id="stt"
-                        name="stt" value="{{ $filterStt }}">
+    <div class="card shadow mb-4 w-50 mx-auto">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-center">
+            <h6 class="m-0 text-center">TÌM KIẾM TIÊU CHÍ</h6>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('tieuchi.index') }}" method="GET">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="stt">Tiêu chí số</label>
+                        <input type="number" class="form-control {{ $errors->has('stt') ? 'is-invalid' : '' }}" id="stt"
+                            name="stt" value="{{ $filterStt }}">
+                    </div>
+                    <div class="form-group col-md-10">
+                        <label for="ten">Tên tiêu chí</label>
+                        <input type="text" class="form-control {{ $errors->has('ten') ? 'is-invalid' : '' }}" id="ten"
+                            name="ten" value="{{ $filterTen }}">
+                    </div>
                 </div>
-                <div class="form-group col-md-10">
-                    <label for="ten">Tên tiêu chí</label>
-                    <input type="text" class="form-control {{ $errors->has('ten') ? 'is-invalid' : '' }}" id="ten"
-                        name="ten" value="{{ $filterTen }}">
+                <div class="form-group">
+                    <label for="tieuChuan_id">Tiêu chuẩn</label>
+                    <select class="form-select form-control {{ $errors->has('tieuChuan_id') ? 'is-invalid' : '' }}"
+                        id="tieuChuan_id" name="tieuChuan_id" aria-label="Chọn tiêu chuẩn">
+                        <option {{ $filterTieuChuanId == '' ? 'selected' : '' }} value="">Chọn tiêu chuẩn</option>
+                        @foreach ($tieuChuans as $item)
+                            <option value="{{ $item->id }}" {{ $filterTieuChuanId == $item->id ? 'selected' : '' }}>
+                                Tiêu chuẩn số {{ $item->stt }}: {{ $item->ten }}</option>
+                        @endforeach
+                    </select>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="tieuChuan_id">Tiêu chuẩn</label>
-                <select class="form-select form-control {{ $errors->has('tieuChuan_id') ? 'is-invalid' : '' }}"
-                    id="tieuChuan_id" name="tieuChuan_id" aria-label="Chọn tiêu chuẩn">
-                    <option {{ $filterTieuChuanId == '' ? 'selected' : '' }} value="">Chọn tiêu chuẩn</option>
-                    @foreach ($tieuChuans as $item)
-                        <option value="{{ $item->id }}" {{ $filterTieuChuanId == $item->id ? 'selected' : '' }}>Tiêu chuẩn số {{ $item->stt }}: {{$item->ten}}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="form-group d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary mx-2">Tìm kiếm</button>
-                <a href="{{ route('tieuchi.index') }}" class="btn btn-secondary mx-2">Làm mới</a>
-            </div>
-        </form>
+                <div class="form-group d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary mx-2">Tìm kiếm</button>
+                    <a href="{{ route('tieuchi.index') }}" class="btn btn-secondary mx-2">Làm mới</a>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             @can('tieuchi-them')
-            <a href="{{ route('tieuchi.create') }}" class="btn btn-primary btn-icon-split">
-                <span class="icon text-white-50">
-                    <i class="fas fa-plus"></i>
-                </span>
-                <span class="text">Thêm mới</span>
-            </a>
+                <a href="{{ route('tieuchi.create') }}" class="btn btn-primary btn-icon-split">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <span class="text">Thêm mới</span>
+                </a>
             @endcan
             @can('tieuchi-xoa')
-            <a href="{{ route('tieuchi.trash') }}" class="btn btn-dark btn-icon-split">
-                <span class="icon text-white-50">
-                    <i class="fas fa-trash"></i>
-                </span>
-                <span class="text">Thùng rác
-                    <span class="trash-count">{{ $trashCount > 0 ? '(' . $trashCount . ')' : '' }}</span>
-                </span>
-            </a>
+                <a href="{{ route('tieuchi.trash') }}" class="btn btn-dark btn-icon-split">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-trash"></i>
+                    </span>
+                    <span class="text">Thùng rác
+                        <span class="trash-count">{{ $trashCount > 0 ? '(' . $trashCount . ')' : '' }}</span>
+                    </span>
+                </a>
             @endcan
         </div>
         <div class="card-body">
@@ -103,16 +104,17 @@ $action = (object) [
                                     <td>{!! \App\Filters\HighLightKeyword::addStrongTag($item->ten, $filterTen) !!}</td>
                                     <td width="300">
                                         @can('tieuchi-chitiet')
-                                        <a href="{{ route('tieuchi.show', ['id' => $item->id]) }}"
-                                            class="btn btn-primary">Xem chi tiết</a>
+                                            <a href="{{ route('tieuchi.show', ['id' => $item->id]) }}"
+                                                class="btn btn-primary">Xem chi tiết</a>
                                         @endcan
                                         @can('tieuchi-sua')
-                                        <a href="{{ route('tieuchi.edit', ['id' => $item->id]) }}"
-                                            class="btn btn-secondary">Sửa</a>
+                                            <a href="{{ route('tieuchi.edit', ['id' => $item->id]) }}"
+                                                class="btn btn-secondary">Sửa</a>
                                         @endcan
                                         @can('tieuchi-xoa')
-                                        <a href="#" class="btn btn-danger btn-delete"
-                                            data-url="{{ route('tieuchi.destroy') }}" data-id="{{ $item->id }}">Xóa</a>
+                                            <a href="#" class="btn btn-danger btn-delete"
+                                                data-url="{{ route('tieuchi.destroy') }}"
+                                                data-id="{{ $item->id }}">Xóa</a>
                                         @endcan
                                     </td>
                                 </tr>
@@ -120,7 +122,8 @@ $action = (object) [
                         @else
                             <tr>
                                 @if (!empty($filterStt) || !empty($filterTen) || !empty($filterTieuChuanId))
-                                    <td colspan="999" class="text-center">Không có bản ghi nào phù hợp với bộ tìm kiếm!</td>
+                                    <td colspan="999" class="text-center">Không có bản ghi nào phù hợp với bộ tìm kiếm!
+                                    </td>
                                 @else
                                     <td colspan="999" class="text-center">Chưa có bản ghi nào!</td>
                                 @endif

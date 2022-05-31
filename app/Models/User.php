@@ -9,10 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use \Datetime;
+use Kyslik\ColumnSortable\Sortable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Sortable;
 
     protected $dates = ['deleted_at'];
     /**
@@ -51,9 +52,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public $sortable = ['hoTen', 'gioiTinh', 'chucVu'];
+
     public function donVi()
     {
         return $this->belongsTo(DonVi::class, 'donVi_id');
+    }
+
+    public function nhomNguoiDung()
+    {
+        return $this->hasMany(NhomNguoiDung::class, 'nguoiDung_id');
     }
 
     public function vaiTroHT()
@@ -78,11 +86,18 @@ class User extends Authenticatable
     public function checkTime($activity, $baoCao) {
         date_default_timezone_set('Asia/Ho_Chi_Minh');
         $hoatDongs = $baoCao->nganh->dotDanhGia[0]->hoatDong;
+        $nhomNguoiDungs = auth()->user()->nhomNguoiDung;
+        $baoCaoIds = [];
+        foreach ($nhomNguoiDungs as $nhomNguoiDung) {
+            foreach ($nhomNguoiDung->quyenNguoiDung as $quyen) {
+                array_push($baoCaoIds, $quyen->pivot->baoCao_id);
+            }
+        }
         foreach ($hoatDongs as $hoatDong) {
             $now = new DateTime();
             $startDate = new DateTime($hoatDong->pivot->ngayBD);
             $endDate = new DateTime($hoatDong->pivot->ngayKT);
-            if ($hoatDong->slug == $activity && $startDate <= $now && $now <= $endDate) {
+            if (($hoatDong->slug == $activity || in_array($baoCao->id, $baoCaoIds)) && $startDate <= $now && $now <= $endDate) {
                 return true;
             }
         }

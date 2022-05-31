@@ -44,11 +44,29 @@ class MinhChungController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $minhChungs = $this->minhChungModel->all();
+        $filterTen = $request->query('ten');
+        $filterNoiBanHanh = $request->query('noiBanHanh');
+        $filterDonViId = $request->query('donVi_id');
+        $filterIsMCGop = $request->query('isMCGop');
+        $minhChungs = $this->minhChungModel->sortable('ten');
+        $donVis = $this->donViModel->all();
+        if (!empty($filterTen)) {
+            $minhChungs->where('minh_chungs.ten', 'like', '%'.$filterTen.'%');
+        }
+        if (!empty($filterNoiBanHanh)) {
+            $minhChungs->where('minh_chungs.noiBanHanh', 'like', '%'.$filterNoiBanHanh.'%');
+        }
+        if (!empty($filterDonViId)) {
+            $minhChungs->where('minh_chungs.donVi_id', $filterDonViId);
+        }
+        if ($filterIsMCGop != '') {
+            $minhChungs->where('minh_chungs.isMCGop', $filterIsMCGop);
+        }
+        $minhChungs = $minhChungs->paginate(10);
         $trashCount = count($this->minhChungModel->onlyTrashed()->get());
-        return view('pages.minhchung.index', compact('minhChungs', 'trashCount'));
+        return view('pages.minhchung.index', compact('minhChungs', 'trashCount', 'donVis', 'filterTen', 'filterNoiBanHanh', 'filterDonViId', 'filterIsMCGop'));
     }
 
     public function create()
@@ -210,5 +228,9 @@ class MinhChungController extends Controller
     }
     public function getAll() {
         return response()->json($this->minhChungModel->all(), 200);
+    }
+    public function getTp(Request $request) {
+        $minhChung = $this->minhChungModel->find($request->id);
+        return response()->json($minhChung->cTMinhChung, 200);
     }
 }

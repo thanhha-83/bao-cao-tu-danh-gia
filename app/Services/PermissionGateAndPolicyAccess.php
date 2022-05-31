@@ -60,6 +60,7 @@ class PermissionGateAndPolicyAccess {
         Gate::define('nhom-them', [NhomPolicy::class, 'create']);
         Gate::define('nhom-sua', [NhomPolicy::class, 'update']);
         Gate::define('nhom-xoa', [NhomPolicy::class, 'delete']);
+        Gate::define('nhom-thanhvien', [NhomPolicy::class, 'detail']);
 
         Gate::define('nguoidung-danhsach', [NguoiDungPolicy::class, 'viewAny']);
         Gate::define('nguoidung-chitiet', [NguoiDungPolicy::class, 'view']);

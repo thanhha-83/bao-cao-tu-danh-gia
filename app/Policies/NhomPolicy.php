@@ -19,10 +19,16 @@ class NhomPolicy
         return $user->checkPermissionAccess(config('permissions.access.nhom-chitiet'));
     }
 
+    public function detail(User $user)
+    {
+        return $user->checkPermissionAccess(config('permissions.access.nhom-thanhvien'));
+    }
+
     public function create(User $user)
     {
         return $user->checkPermissionAccess(config('permissions.access.nhom-them'));
     }
+
 
     public function update(User $user)
     {
