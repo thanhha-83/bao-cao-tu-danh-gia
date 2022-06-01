@@ -49,11 +49,21 @@ class NhomController extends Controller
         ]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $nhoms = $this->nhomModel->all();
+        $filterTen = $request->query('ten');
+        $filterNganhId = $request->query('nganh_id');
+        $nhoms = $this->nhomModel->sortable('id');
+        if (!empty($filterTen)) {
+            $nhoms->where('nhoms.ten', 'like', '%'.$filterTen.'%');
+        }
+        if (!empty($filterNganhId)) {
+            $nhoms->where('nhoms.nganh_id', $filterNganhId);
+        }
+        $nhoms = $nhoms->paginate(10);
+        $nganhs = $this->nganhModel->all();
         $trashCount = count($this->nhomModel->onlyTrashed()->get());
-        return view('pages.nhom.index', compact('nhoms', 'trashCount'));
+        return view('pages.nhom.index', compact('nhoms', 'trashCount', 'nganhs', 'filterTen', 'filterNganhId'));
     }
 
     public function create()

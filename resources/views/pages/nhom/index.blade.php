@@ -29,6 +29,34 @@ $action = (object) [
 @endsection
 
 @section('content')
+    <div class="card shadow mb-4 w-50 mx-auto">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-center">
+            <h6 class="m-0 text-center">TÌM KIẾM TIÊU CHÍ</h6>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('nhom.index') }}" method="GET">
+                <div class="form-group">
+                    <label for="ten">Tên nhóm</label>
+                    <input type="text" class="form-control id="ten"
+                        name="ten" value="{{ $filterTen }}">
+                </div>
+                <div class="form-group">
+                    <label for="nganh_id">Ngành</label>
+                    <select class="form-select form-control"
+                        id="nganh_id" name="nganh_id" aria-label="Chọn ngành">
+                        <option {{ $filterNganhId == '' ? 'selected' : '' }} value="">Chọn ngành</option>
+                        @foreach ($nganhs as $item)
+                            <option value="{{ $item->id }}" {{ $filterNganhId == $item->id ? 'selected' : '' }}>{{ $item->ten }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary mx-2">Tìm kiếm</button>
+                    <a href="{{ route('nhom.index') }}" class="btn btn-secondary mx-2">Làm mới</a>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <a href="{{ route('nhom.create') }}" class="btn btn-primary btn-icon-split">
@@ -52,8 +80,8 @@ $action = (object) [
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Tên nhóm</th>
-                            <th>Tên ngành</th>
+                            <th>@sortablelink('ten', 'Tên nhóm')</th>
+                            <th>@sortablelink('nganh.ten', 'Ngành')</th>
                             <th>Chức năng</th>
                         </tr>
                     </thead>
@@ -83,6 +111,12 @@ $action = (object) [
                         @endif
                     </tbody>
                 </table>
+                <div class="d-flex justify-content-between">
+                    {{ $nhoms->appends(Request::except('page'))->render('pagination::bootstrap-4') }}
+                    <div>
+                        <a href="{{ route('nhom.index') }}" class="btn btn-primary mx-2">Làm mới</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
