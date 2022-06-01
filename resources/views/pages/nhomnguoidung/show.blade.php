@@ -2,11 +2,11 @@
 
 @php
 $controller = (object) [
-    'name' => 'Nhóm người dùng',
+    'name' => 'Nhóm',
     'href' => '/nhom',
 ];
 $action = (object) [
-    'name' => 'Chi tiết',
+    'name' => 'Nhóm người dùng',
 ];
 @endphp
 

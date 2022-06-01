@@ -63,12 +63,18 @@ class BaoCaoController extends Controller
         $nganhs = $this->nganhModel->whereIn('id', $nganhIds)->get();
         $nhomNguoiDung = $this->nhomNguoiDungModel->where('nguoiDung_id', auth()->user()->id)->first();
         $tieuChuanIds = [];
-        $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->get();
-        foreach ($nhomQuyens as $nhomQuyen) {
-            array_push($tieuChuanIds, $nhomQuyen->tieuChuan_id);
+        if ($nhomNguoiDung) {
+            $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->get();
+            foreach ($nhomQuyens as $nhomQuyen) {
+                array_push($tieuChuanIds, $nhomQuyen->tieuChuan_id);
+            }
         }
         $tieuChuans = $this->tieuChuanModel->whereIn('id', $tieuChuanIds)->get();
-        $tieuChis = $this->tieuChiModel->where('tieuChuan_id', $tieuChuans[0]->id)->get();
+        if (!empty($tieuChuans[0])) {
+            $tieuChis = $this->tieuChiModel->where('tieuChuan_id', $tieuChuans[0]->id)->get();
+        } else {
+            $tieuChis = [];
+        }
         return view('pages.baocao.create', compact('nganhs', 'tieuChuans', 'tieuChis'));
     }
 

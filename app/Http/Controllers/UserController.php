@@ -108,6 +108,13 @@ class UserController extends Controller
         try {
             DB::beginTransaction();
             $fileUploaded = HandleUploadImage::upload($request, 'hinhAnh', 'photos');
+            if (empty($fileUploaded)) {
+                if ($request->gioiTinh == 1) {
+                    $fileUploaded = '/img/man-1.jpg';
+                } else {
+                    $fileUploaded = '/img/girl-1.png';
+                }
+            }
             $user = $this->userModel->create([
                 'hoTen' => $request->hoTen,
                 'gioiTinh' => $request->gioiTinh,

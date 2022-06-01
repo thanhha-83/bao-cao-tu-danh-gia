@@ -36,7 +36,7 @@ $action = (object) [
                     <tbody>
                         <tr>
                             <th>Ảnh đại diện:</th>
-                            <td><img width="200" height="200" src="{{ $user->hinhAnh }}" alt="Avatar"></td>
+                            <td><img width="200" height="auto" src="{{ $user->hinhAnh }}" alt="Avatar"></td>
                         </tr>
                         <tr>
                             <th>Họ tên:</th>

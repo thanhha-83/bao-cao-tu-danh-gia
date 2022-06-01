@@ -16,6 +16,7 @@ class CreateNganhsTable extends Migration
         Schema::create('nganhs', function (Blueprint $table) {
             $table->id();
             $table->string('ten');
+            $table->integer('donVi_id');
             $table->timestamps();
             $table->softDeletes();
         });

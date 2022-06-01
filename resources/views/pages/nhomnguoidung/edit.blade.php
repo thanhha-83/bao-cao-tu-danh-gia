@@ -3,7 +3,7 @@
 @php
 $controller = (object) [
     'name' => 'Nhóm người dùng',
-    'href' => '/nhomnguoidung',
+    'href' => '/nhomnguoidung/show/'.$nhomNguoiDung->nhom_id,
 ];
 $action = (object) [
     'name' => 'Chỉnh sửa',
