@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Policies\BaoCaoPolicy;
 use Illuminate\Support\Facades\Gate;
 use App\Policies\DotDanhGiaPolicy;
 use App\Policies\VaiTroHeThongPolicy;
@@ -77,5 +78,11 @@ class PermissionGateAndPolicyAccess {
         Gate::define('time-viet-bao-cao', [GiaiDoanPolicy::class, 'update']);
         Gate::define('time-nhan-xet-bao-cao', [GiaiDoanPolicy::class, 'comment']);
         Gate::define('time-phan-bien-bao-cao', [GiaiDoanPolicy::class, 'counterArg']);
+
+        // Gate::define('minhchung-danhsach', [MinhChungPolicy::class, 'viewAny']);
+        // Gate::define('minhchung-chitiet', [MinhChungPolicy::class, 'view']);
+        Gate::define('baocao-them', [BaoCaoPolicy::class, 'create']);
+        // Gate::define('minhchung-sua', [MinhChungPolicy::class, 'update']);
+        // Gate::define('minhchung-xoa', [MinhChungPolicy::class, 'delete']);
     }
 }

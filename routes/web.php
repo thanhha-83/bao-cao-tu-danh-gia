@@ -17,6 +17,7 @@ use App\Http\Controllers\MinhChungController;
 use App\Http\Controllers\MinhChungThanhPhanController;
 use App\Http\Controllers\BaoCaoSaoLuuController;
 use App\Http\Controllers\VaiTroHeThongController;
+use App\Http\Controllers\QuanLyNhomController;
 use Illuminate\Http\Request;
 
 /*
@@ -144,8 +145,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('baocao')->group(function () {
         Route::get('/', [BaoCaoController::class, 'index'])->name('baocao.index');
-        Route::get('/create', [BaoCaoController::class, 'create'])->name('baocao.create');
-        Route::post('/store', [BaoCaoController::class, 'store'])->name('baocao.store');
+        Route::get('/create', [BaoCaoController::class, 'create'])->name('baocao.create')->middleware('can:baocao-them');
+        Route::post('/store', [BaoCaoController::class, 'store'])->name('baocao.store')->middleware('can:baocao-them');
         Route::get('/show/{id}', [BaoCaoController::class, 'show'])->name('baocao.show')->middleware('can:time-nhan-xet-bao-cao,id','can:time-phan-bien-bao-cao,id');
         Route::get('/edit/{id}', [BaoCaoController::class, 'edit'])->name('baocao.edit')->middleware('can:time-viet-bao-cao,id');
         Route::post('/update/{id}', [BaoCaoController::class, 'update'])->name('baocao.update')->middleware('can:time-viet-bao-cao,id');
@@ -231,6 +232,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/restore-all', [VaiTroHeThongController::class, 'restoreAll'])->name('vaitrohethong.restore-all')->middleware('can:vaitrohethong-xoa');
         Route::post('/force-destroy', [VaiTroHeThongController::class, 'forceDestroy'])->name('vaitrohethong.force-destroy')->middleware('can:vaitrohethong-xoa');
         Route::post('/force-destroy-all', [VaiTroHeThongController::class, 'forceDestroyAll'])->name('vaitrohethong.force-destroy-all')->middleware('can:vaitrohethong-xoa');
+    });
+
+    Route::prefix('quanlynhom')->group(function () {
+        Route::get('/', [QuanLyNhomController::class, 'index'])->name('quanlynhom.index');
+        Route::get('/show/{id}', [QuanLyNhomController::class, 'show'])->name('quanlynhom.show');
+        Route::get('/member/{id}', [QuanLyNhomController::class, 'member'])->name('quanlynhom.member');
+        Route::get('/edit/{id}', [QuanLyNhomController::class, 'edit'])->name('quanlynhom.edit');
+        Route::post('/update/{id}', [QuanLyNhomController::class, 'update'])->name('quanlynhom.update');
     });
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');

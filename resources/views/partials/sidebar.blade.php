@@ -106,6 +106,20 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Tự đánh giá
+    </div>
+
+    @include('partials.sidebar-menu-item', [
+        'route' => 'quanlynhom.index',
+        'icon' => 'fas fa fa-users',
+        'title' => 'Quản lý nhóm'
+    ])
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>

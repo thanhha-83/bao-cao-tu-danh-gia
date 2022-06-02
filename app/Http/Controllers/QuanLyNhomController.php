@@ -16,7 +16,7 @@ use App\Models\VaiTro;
 use Illuminate\Http\Request;
 use App\Services\HandleUpdate3Many;
 
-class NhomNguoiDungController extends Controller
+class QuanLyNhomController extends Controller
 {
     private $nhomNguoiDungModel;
     private $nguoiDungQuyenModel;
@@ -38,11 +38,27 @@ class NhomNguoiDungController extends Controller
         $this->baoCaoModel = $baoCaoModel;
     }
 
+    public function index()
+    {
+        $user = auth()->user();
+        $nhoms = $this->nhomModel->join('nhom_nguoi_dungs', 'nhom_nguoi_dungs.nhom_id', '=', 'nhoms.id')
+                ->where('nhom_nguoi_dungs.nguoiDung_id', $user->id)
+                ->where('nhom_nguoi_dungs.vaiTro_id', 2)->get();
+        return view('pages.quanlynhom.index', compact('nhoms'));
+    }
+
     public function show($id)
     {
-        $nhomNguoiDungs = $this->nhomNguoiDungModel->where('nhom_id', $id)->get();
-        return view('pages.nhomnguoidung.show', compact('nhomNguoiDungs'));
+        $nhom = $this->nhomModel->find($id);
+        $tieuChuans = $this->tieuChuanModel->all();
+        return view('pages.quanlynhom.show', compact('nhom', 'tieuChuans'));
     }
+
+    public function member($id) {
+        $nhomNguoiDungs = $this->nhomNguoiDungModel->where('nhom_id', $id)->get();
+        return view('pages.quanlynhom.member', compact('nhomNguoiDungs'));
+    }
+
     public function edit($id)
     {
         $nhomNguoiDung = $this->nhomNguoiDungModel->find($id);
@@ -56,7 +72,7 @@ class NhomNguoiDungController extends Controller
             array_push($current_quyenNguoiDungs, $item->quyenNguoiDung_id);
             array_push($current_baoCaos, $item->baoCao_id);
         }
-        return view('pages.nhomnguoidung.edit', compact('nhomNguoiDung', 'vaiTros', 'quyenNguoiDungs', 'baoCaos', 'current_quyenNguoiDungs', 'current_baoCaos'));
+        return view('pages.quanlynhom.edit', compact('nhomNguoiDung', 'vaiTros', 'quyenNguoiDungs', 'baoCaos', 'current_quyenNguoiDungs', 'current_baoCaos'));
     }
     public function update(Request $request, $id)
     {
@@ -80,6 +96,6 @@ class NhomNguoiDungController extends Controller
                 $nguoiDungQuyen->forceDelete();
             }
         }
-        return redirect()->route('nhomnguoidung.edit', ['id' => $id])->with('message', 'Sửa thành công!');
+        return redirect()->route('quanlynhom.edit', ['id' => $id])->with('message', 'Sửa thành công!');
     }
 }

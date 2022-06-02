@@ -96,7 +96,8 @@ class NhomController extends Controller
                 foreach ($request->thanhVien as $item) {
                     $this->nhomNguoiDungModel->create([
                         'nhom_id' => $nhom->id,
-                        'nguoiDung_id' => $item
+                        'nguoiDung_id' => $item,
+                        'nganh_id' => $request->nganh_id
                     ]);
                 }
             }

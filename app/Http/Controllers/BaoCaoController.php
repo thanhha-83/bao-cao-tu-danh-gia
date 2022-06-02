@@ -47,10 +47,12 @@ class BaoCaoController extends Controller
         $nganhIds = [];
         $nhomNguoiDungs = $this->nhomNguoiDungModel->where('nguoiDung_id', auth()->user()->id)->get();
         foreach ($nhomNguoiDungs as $nhomNguoiDung) {
-            $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->where('quyenNhom_id', 1)->get();
-            foreach ($nhomQuyens as $nhomQuyen) {
-                if (!in_array($nhomQuyen->nhom_id, $nhomIds, true)) {
-                    array_push($nhomIds, $nhomQuyen->nhom_id);
+            if ($nhomNguoiDung->vaiTro_id === 2 || $nhomNguoiDung->vaiTro_id === 3) {
+                $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->where('quyenNhom_id', 1)->get();
+                foreach ($nhomQuyens as $nhomQuyen) {
+                    if (!in_array($nhomQuyen->nhom_id, $nhomIds, true)) {
+                        array_push($nhomIds, $nhomQuyen->nhom_id);
+                    }
                 }
             }
         }
@@ -61,14 +63,17 @@ class BaoCaoController extends Controller
             }
         }
         $nganhs = $this->nganhModel->whereIn('id', $nganhIds)->get();
-        $nhomNguoiDung = $this->nhomNguoiDungModel->where('nguoiDung_id', auth()->user()->id)->first();
+        $nhomNguoiDungs = $this->nhomNguoiDungModel->where('nguoiDung_id', auth()->user()->id)->where('nganh_id', $nganhs[0]->id)->whereIn('vaiTro_id', [2, 3])->get();
         $tieuChuanIds = [];
-        if ($nhomNguoiDung) {
-            $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->get();
-            foreach ($nhomQuyens as $nhomQuyen) {
-                array_push($tieuChuanIds, $nhomQuyen->tieuChuan_id);
+        if ($nhomNguoiDungs) {
+            foreach ($nhomNguoiDungs as $nhomNguoiDung) {
+                $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->get();
+                foreach ($nhomQuyens as $nhomQuyen) {
+                    array_push($tieuChuanIds, $nhomQuyen->tieuChuan_id);
+                }
             }
         }
+
         $tieuChuans = $this->tieuChuanModel->whereIn('id', $tieuChuanIds)->get();
         if (!empty($tieuChuans[0])) {
             $tieuChis = $this->tieuChiModel->where('tieuChuan_id', $tieuChuans[0]->id)->get();
@@ -239,11 +244,15 @@ class BaoCaoController extends Controller
     }
 
     public function handleSelectNganh(Request $request) {
-        $nhomNguoiDung = $this->nhomNguoiDungModel->join('nhoms', 'nhoms.id', '=', 'nhom_nguoi_dungs.nhom_id')->where('nhoms.nganh_id', $request->nganhId)->where('nguoiDung_id', auth()->user()->id)->first();
+        $nhomNguoiDungs = $this->nhomNguoiDungModel->where('nganh_id', $request->nganhId)->where('nguoiDung_id', auth()->user()->id)->whereIn('vaiTro_id', [2, 3])->get();
         $tieuChuanIds = [];
-        $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->get();
-        foreach ($nhomQuyens as $nhomQuyen) {
-            array_push($tieuChuanIds, $nhomQuyen->tieuChuan_id);
+        if ($nhomNguoiDungs) {
+            foreach ($nhomNguoiDungs as $nhomNguoiDung) {
+                $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->get();
+                foreach ($nhomQuyens as $nhomQuyen) {
+                    array_push($tieuChuanIds, $nhomQuyen->tieuChuan_id);
+                }
+            }
         }
         $tieuChuans = $this->tieuChuanModel->whereIn('id', $tieuChuanIds)->get();
         $tieuChis = $this->tieuChiModel->with('tieuChuan')->where('tieuChuan_id', $tieuChuans[0]->id)->get();
