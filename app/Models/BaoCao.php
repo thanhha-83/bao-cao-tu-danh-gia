@@ -10,8 +10,8 @@ class BaoCao extends Model
 {
     use HasFactory, SoftDeletes;
     protected $dates = ['deleted_at'];
-    protected $fillable = ['moTa', 'diemManh', 'diemTonTai', 'keHoachHanhDong', 'diemTDG', 'trangThai', 'nganh_id', 'tieuChi_id'];
-
+    protected $fillable = ['moTa', 'diemManh', 'diemTonTai', 'keHoachHanhDong', 'diemTDG', 'trangThai', 'nganh_id', 'tieuChi_id', 'dotDanhGia_id', 'nguoiDung_id'];
+    public $timestamps = true;
     public function tieuChi()
     {
         return $this->belongsTo(TieuChi::class, 'tieuChi_id');
@@ -30,5 +30,12 @@ class BaoCao extends Model
     public function baoCaoSL()
     {
         return $this->hasMany(BaoCaoSaoLuu::class, 'baoCao_id');
+    }
+
+    public function nhomNguoiDung()
+    {
+        return $this
+            ->belongsToMany(NhomNguoiDung::class, 'nguoi_dung_quyens', 'baoCao_id', 'nhomNguoiDung_id')
+            ->withTimestamps();
     }
 }

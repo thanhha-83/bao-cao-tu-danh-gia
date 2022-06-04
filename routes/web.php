@@ -136,6 +136,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/edit/{id}', [DotDanhGiaController::class, 'edit'])->name('dotdanhgia.edit')->middleware('can:dotdanhgia-sua');
         Route::post('/update/{id}', [DotDanhGiaController::class, 'update'])->name('dotdanhgia.update')->middleware('can:dotdanhgia-sua');
         Route::post('/destroy', [DotDanhGiaController::class, 'destroy'])->name('dotdanhgia.destroy')->middleware('can:dotdanhgia-xoa');
+        Route::post('/finish', [DotDanhGiaController::class, 'finish'])->name('dotdanhgia.finish')->middleware('can:dotdanhgia-dieukhien');
+        Route::post('/reopen', [DotDanhGiaController::class, 'reopen'])->name('dotdanhgia.reopen')->middleware('can:dotdanhgia-dieukhien');
         Route::get('/trash', [DotDanhGiaController::class, 'trash'])->name('dotdanhgia.trash')->middleware('can:dotdanhgia-xoa');
         Route::post('/restore', [DotDanhGiaController::class, 'restore'])->name('dotdanhgia.restore')->middleware('can:dotdanhgia-xoa');
         Route::post('/restore-all', [DotDanhGiaController::class, 'restoreAll'])->name('dotdanhgia.restore-all')->middleware('can:dotdanhgia-xoa');
@@ -144,13 +146,15 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('baocao')->group(function () {
-        Route::get('/', [BaoCaoController::class, 'index'])->name('baocao.index');
+        Route::get('/', [BaoCaoController::class, 'index'])->name('baocao.index')->middleware('can:baocao-sua');
         Route::get('/create', [BaoCaoController::class, 'create'])->name('baocao.create')->middleware('can:baocao-them');
         Route::post('/store', [BaoCaoController::class, 'store'])->name('baocao.store')->middleware('can:baocao-them');
-        Route::get('/show/{id}', [BaoCaoController::class, 'show'])->name('baocao.show')->middleware('can:time-nhan-xet-bao-cao,id','can:time-phan-bien-bao-cao,id');
-        Route::get('/edit/{id}', [BaoCaoController::class, 'edit'])->name('baocao.edit')->middleware('can:time-viet-bao-cao,id');
-        Route::post('/update/{id}', [BaoCaoController::class, 'update'])->name('baocao.update')->middleware('can:time-viet-bao-cao,id');
+        Route::get('/show/{id}', [BaoCaoController::class, 'show'])->name('baocao.show');
+        Route::get('/edit/{id}', [BaoCaoController::class, 'edit'])->name('baocao.edit');
+        Route::post('/update/{id}', [BaoCaoController::class, 'update'])->name('baocao.update');
         Route::post('/destroy', [BaoCaoController::class, 'destroy'])->name('baocao.destroy');
+        Route::post('/finish', [BaoCaoController::class, 'finish'])->name('baocao.finish');
+        Route::post('/reopen', [BaoCaoController::class, 'reopen'])->name('baocao.reopen');
         Route::get('/trash', [BaoCaoController::class, 'trash'])->name('baocao.trash');
         Route::post('/restore', [BaoCaoController::class, 'restore'])->name('baocao.restore');
         Route::post('/restore-all', [BaoCaoController::class, 'restoreAll'])->name('baocao.restore-all');
@@ -235,11 +239,11 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('quanlynhom')->group(function () {
-        Route::get('/', [QuanLyNhomController::class, 'index'])->name('quanlynhom.index');
-        Route::get('/show/{id}', [QuanLyNhomController::class, 'show'])->name('quanlynhom.show');
-        Route::get('/member/{id}', [QuanLyNhomController::class, 'member'])->name('quanlynhom.member');
-        Route::get('/edit/{id}', [QuanLyNhomController::class, 'edit'])->name('quanlynhom.edit');
-        Route::post('/update/{id}', [QuanLyNhomController::class, 'update'])->name('quanlynhom.update');
+        Route::get('/', [QuanLyNhomController::class, 'index'])->name('quanlynhom.index')->middleware('can:quanlynhom');
+        Route::get('/show/{id}', [QuanLyNhomController::class, 'show'])->name('quanlynhom.show')->middleware('can:quanlynhom');
+        Route::get('/member/{id}', [QuanLyNhomController::class, 'member'])->name('quanlynhom.member')->middleware('can:quanlynhom');
+        Route::get('/edit/{id}', [QuanLyNhomController::class, 'edit'])->name('quanlynhom.edit')->middleware('can:quanlynhom');
+        Route::post('/update/{id}', [QuanLyNhomController::class, 'update'])->name('quanlynhom.update')->middleware('can:quanlynhom');
     });
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');

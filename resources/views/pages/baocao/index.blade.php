@@ -55,6 +55,8 @@ $action = (object) [
                         <tr>
                             <th>STT</th>
                             <th>Thời gian cập nhật</th>
+                            <th>Cán bộ đảm nhận viết</th>
+                            <th>Ngành</th>
                             <th>Chức năng</th>
                         </tr>
                     </thead>
@@ -65,6 +67,14 @@ $action = (object) [
                                     <td>Báo cáo số {{ $item->tieuChi->tieuChuan->stt }}.{{ $item->tieuChi->stt }}</td>
                                     <td>{{ date("d-m-Y H:i", strtotime($item->updated_at)) }}</td>
                                     <td>
+                                        <ul class="pl-0" type="none">
+                                        @foreach ($item->nhomNguoiDung as $nhomNguoiDung)
+                                            <li>{{ $nhomNguoiDung->nguoiDung->hoTen }}</li>
+                                        @endforeach
+                                        </ul>
+                                    </td>
+                                    <td>{{ $item->nganh->ten }}</td>
+                                    <td>
                                         <a href="{{ route('baocao.show', ['id' => $item->id]) }}"
                                             class="btn btn-primary">Xem chi tiết</a>
                                         <a href="{{ route('baocao.edit', ['id' => $item->id]) }}"
@@ -73,6 +83,13 @@ $action = (object) [
                                             data-url="{{ route('baocao.backup') }}" data-id="{{ $item->id }}">Sao lưu</a>
                                         <a href="#" class="btn btn-danger btn-delete"
                                             data-url="{{ route('baocao.destroy') }}" data-id="{{ $item->id }}">Xóa</a>
+                                        @if ($item->trangThai == 0)
+                                        <a href="#" class="btn btn-info btn-finish"
+                                            data-url="{{ route('baocao.finish') }}" data-id="{{ $item->id }}">Hoàn thành</a>
+                                        @else
+                                        <a href="#" class="btn btn-info btn-reopen"
+                                        data-url="{{ route('baocao.reopen') }}" data-id="{{ $item->id }}">Mở lại</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -93,4 +110,5 @@ $action = (object) [
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/handleDelete.js"></script>
     <script src="js/handleBackup.js"></script>
+    <script src="js/handleFinishBaoCao.js"></script>
 @endsection

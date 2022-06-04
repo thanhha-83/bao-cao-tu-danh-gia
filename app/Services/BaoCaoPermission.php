@@ -7,11 +7,13 @@ use App\Models\Nhom;
 use App\Models\NhomNguoiDung;
 use App\Models\NhomQuyen;
 use App\Models\TieuChuan;
+use App\models\NguoiDungQuyen;
 
 class BaoCaoPermission {
     private $tieuChuanModel;
     private $nhomNguoiDungModel;
     private $nhomQuyenModel;
+    private $nguoiDungQuyenModel;
     private $nhomModel;
     public function __construct()
     {
@@ -19,6 +21,7 @@ class BaoCaoPermission {
         $this->tieuChuanModel = new TieuChuan();
         $this->nhomNguoiDungModel = new NhomNguoiDung();
         $this->nhomQuyenModel = new NhomQuyen();
+        $this->nguoiDungQuyenModel = new NguoiDungQuyen();
         $this->nhomModel = new Nhom();
     }
 
@@ -43,5 +46,29 @@ class BaoCaoPermission {
         if (!empty($tieuChuans) && count($tieuChuans) > 0 && !empty($vaiTroIds) && count($vaiTroIds) > 0) {
             return true;
         } return false;
+    }
+
+    public function editAny() {
+        $user = auth()->user();
+        $nhomNguoiDungs = $this->nhomNguoiDungModel->where('nguoiDung_id', $user->id)->get();
+        $nhomIds = [];
+        foreach ($nhomNguoiDungs as $nhomNguoiDung) {
+            array_push($nhomIds, $nhomNguoiDung->nhom_id);
+        }
+        $sameNhomNguoiDungs = $this->nhomNguoiDungModel->whereIn('nhom_id', $nhomIds)->get();
+        $nhomNguoiDungIds = [];
+        foreach ($sameNhomNguoiDungs as $nhomNguoiDung) {
+            array_push($nhomNguoiDungIds, $nhomNguoiDung->id);
+        }
+        $nguoiDungQuyens = $this->nguoiDungQuyenModel->whereIn('nhomNguoiDung_id', $nhomNguoiDungIds)->get();
+        $baoCaoIds = [];
+        foreach ($nguoiDungQuyens as $nguoiDungQuyen) {
+            array_push($baoCaoIds, $nguoiDungQuyen->baoCao_id);
+        }
+        $baoCaos = $this->baoCaoModel->whereIn('id', $baoCaoIds)->orWhere('nguoiDung_id', $user->id)->get();
+        if (count($baoCaos) > 0) {
+            return true;
+        }
+        return false;
     }
 }

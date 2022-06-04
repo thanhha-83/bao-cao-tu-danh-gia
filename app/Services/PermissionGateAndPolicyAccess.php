@@ -14,6 +14,7 @@ use App\Policies\NhomPolicy;
 use App\Policies\NguoiDungPolicy;
 use App\Policies\MinhChungPolicy;
 use App\Policies\GiaiDoanPolicy;
+use App\Policies\QuanLyNhomPolicy;
 
 class PermissionGateAndPolicyAccess {
 
@@ -29,6 +30,7 @@ class PermissionGateAndPolicyAccess {
         Gate::define('dotdanhgia-them', [DotDanhGiaPolicy::class, 'create']);
         Gate::define('dotdanhgia-sua', [DotDanhGiaPolicy::class, 'update']);
         Gate::define('dotdanhgia-xoa', [DotDanhGiaPolicy::class, 'delete']);
+        Gate::define('dotdanhgia-dieukhien', [DotDanhGiaPolicy::class, 'control']);
 
         Gate::define('vaitrohethong-danhsach', [VaiTroHeThongPolicy::class, 'viewAny']);
         Gate::define('vaitrohethong-them', [VaiTroHeThongPolicy::class, 'create']);
@@ -82,7 +84,10 @@ class PermissionGateAndPolicyAccess {
         // Gate::define('minhchung-danhsach', [MinhChungPolicy::class, 'viewAny']);
         // Gate::define('minhchung-chitiet', [MinhChungPolicy::class, 'view']);
         Gate::define('baocao-them', [BaoCaoPolicy::class, 'create']);
+        Gate::define('baocao-sua', [BaoCaoPolicy::class, 'editAny']);
         // Gate::define('minhchung-sua', [MinhChungPolicy::class, 'update']);
         // Gate::define('minhchung-xoa', [MinhChungPolicy::class, 'delete']);
+
+        Gate::define('quanlynhom', [QuanLyNhomPolicy::class, 'control']);
     }
 }

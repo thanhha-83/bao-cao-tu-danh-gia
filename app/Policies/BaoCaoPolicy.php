@@ -10,9 +10,10 @@ class BaoCaoPolicy
 {
     use HandlesAuthorization;
 
-    public function viewAny(User $user)
+    public function editAny()
     {
-        return true;
+        $baoCaoPer = new BaoCaoPermission();
+        return $baoCaoPer->editAny();
     }
 
     public function create()

@@ -81,12 +81,6 @@
     ])
     @endcan
 
-    @include('partials.sidebar-menu-item', [
-        'route' => 'baocao.index',
-        'icon' => 'fas fa fa-users',
-        'title' => 'Báo cáo'
-    ])
-
     @can('minhchung-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'minhchung.index',
@@ -111,11 +105,21 @@
         Tự đánh giá
     </div>
 
+    @can('quanlynhom')
     @include('partials.sidebar-menu-item', [
         'route' => 'quanlynhom.index',
         'icon' => 'fas fa fa-users',
         'title' => 'Quản lý nhóm'
     ])
+    @endcan
+
+    @can(['baocao-them', 'baocao-sua'])
+    @include('partials.sidebar-menu-item', [
+        'route' => 'baocao.index',
+        'icon' => 'fas fa fa-users',
+        'title' => 'Viết báo cáo'
+    ])
+    @endcan
 
     <!-- Divider -->
     <hr class="sidebar-divider">

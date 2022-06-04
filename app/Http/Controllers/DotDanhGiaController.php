@@ -146,6 +146,42 @@ class DotDanhGiaController extends Controller
         }
     }
 
+    public function finish(Request $request)
+    {
+        try {
+            $this->dotDanhGiaModel->find($request->id)->update([
+                'trangThai' => 1
+            ]);
+            return response()->json([
+                'code' => 200,
+                'message' => 'success',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'message' => 'fail',
+            ], 500);
+        }
+    }
+
+    public function reopen(Request $request)
+    {
+        try {
+            $this->dotDanhGiaModel->find($request->id)->update([
+                'trangThai' => 0
+            ]);
+            return response()->json([
+                'code' => 200,
+                'message' => 'success',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'message' => 'fail',
+            ], 500);
+        }
+    }
+
     public function trash()
     {
         $dotDanhGias = $this->dotDanhGiaModel->onlyTrashed()->paginate(10);
@@ -189,7 +225,7 @@ class DotDanhGiaController extends Controller
         try {
             $dotDanhGia = $this->dotDanhGiaModel->onlyTrashed()->find($request->id);
             $dotDanhGia->nganh()->detach();
-            $dotDanhGia->giaiDoan()->forceDelete();
+            $dotDanhGia->hoatDong()->forceDelete();
             $dotDanhGia->forceDelete();
             return response()->json([
                 'code' => 200,
@@ -208,8 +244,8 @@ class DotDanhGiaController extends Controller
         try {
             $dotDanhGias = $this->dotDanhGiaModel->onlyTrashed()->get();
             foreach ($dotDanhGias as $dotDanhGia) {
-                $dotDanhGia->giaiDoan()->forceDelete();
-                $dotDanhGia->tuKhoa()->detach();
+                $dotDanhGia->nganh()->detach();
+                $dotDanhGia->hoatDong()->forceDelete();
             }
             $this->dotDanhGiaModel->onlyTrashed()->forceDelete();
             return response()->json([

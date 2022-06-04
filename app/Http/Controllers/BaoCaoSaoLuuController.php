@@ -56,6 +56,8 @@ class BaoCaoSaoLuuController extends Controller
                 'diemTDG' => $baocaoSL->diemTDG,
                 'nganh_id' => $baocaoSL->nganh_id,
                 'tieuChi_id' => $baocaoSL->tieuChi_id,
+                'dotDanhGia_id' => $baocaoSL->dotDanhGia_id,
+                'nguoiDung_id' => $baocaoSL->nguoiDung_id
             ]);
             return response()->json([
                 'code' => 200,

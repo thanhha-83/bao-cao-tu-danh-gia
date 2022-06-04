@@ -10,7 +10,7 @@ class DotDanhGia extends Model
 {
     use HasFactory, SoftDeletes;
     protected $dates = ['deleted_at'];
-    protected $fillable = ['ten', 'namHoc'];
+    protected $fillable = ['ten', 'namHoc', 'trangThai'];
 
     public function nganh()
     {

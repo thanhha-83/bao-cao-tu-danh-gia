@@ -87,6 +87,7 @@ class MinhChungController extends Controller
             'link' => $fileUploaded,
             'donVi_id' => $request->donVi_id,
             'isMCGop' => $request->isMCGop == 'on' ? 1 : 0,
+            'nguoiDung_id' => auth()->user()->id
         ]);
         return redirect()->route('minhchung.index')->with('message', 'Thêm thành công!');
     }

@@ -10,5 +10,6 @@
 <script src="js/sb-admin-2.min.js"></script>
 
 <script src="js/globalHandleInputIsInvalid.js"></script>
+<script src="js/activeMenu.js"></script>
 
 @yield('scripts')

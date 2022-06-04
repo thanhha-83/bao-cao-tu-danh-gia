@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\BaoCao;
 use App\Models\BaoCaoSaoLuu;
 use App\Models\Nganh;
+use App\Models\NguoiDungQuyen;
 use App\Models\Nhom;
 use App\Models\NhomNguoiDung;
 use App\Models\NhomQuyen;
 use App\Models\TieuChi;
 use App\Models\TieuChuan;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class BaoCaoController extends Controller
 {
@@ -20,23 +22,42 @@ class BaoCaoController extends Controller
     private $tieuChiModel;
     private $baoCaoSLModel;
     private $nhomNguoiDungModel;
+    private $nguoiDungQuyenModel;
     private $nhomQuyenModel;
     private $nhomModel;
-    public function __construct(BaoCao $baoCaoModel, Nganh $nganhModel, TieuChuan $tieuChuanModel, TieuChi $tieuChiModel, BaoCaoSaoLuu $baoCaoSLModel, NhomNguoiDung $nhomNguoiDungModel, NhomQuyen $nhomQuyenModel, Nhom $nhomModel)
+    public function __construct(BaoCao $baoCaoModel, Nganh $nganhModel, TieuChuan $tieuChuanModel, TieuChi $tieuChiModel, BaoCaoSaoLuu $baoCaoSLModel, NhomNguoiDung $nhomNguoiDungModel, NguoiDungQuyen $nguoiDungQuyenModel, NhomQuyen $nhomQuyenModel, Nhom $nhomModel)
     {
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
         $this->baoCaoModel = $baoCaoModel;
         $this->nganhModel = $nganhModel;
         $this->tieuChuanModel = $tieuChuanModel;
         $this->tieuChiModel = $tieuChiModel;
         $this->baoCaoSLModel = $baoCaoSLModel;
         $this->nhomNguoiDungModel = $nhomNguoiDungModel;
+        $this->nguoiDungQuyenModel = $nguoiDungQuyenModel;
         $this->nhomQuyenModel = $nhomQuyenModel;
         $this->nhomModel = $nhomModel;
     }
 
     public function index()
     {
-        $baoCaos = $this->baoCaoModel->all();
+        $user = auth()->user();
+        $nhomNguoiDungs = $this->nhomNguoiDungModel->where('nguoiDung_id', $user->id)->get();
+        $nhomIds = [];
+        foreach ($nhomNguoiDungs as $nhomNguoiDung) {
+            array_push($nhomIds, $nhomNguoiDung->nhom_id);
+        }
+        $sameNhomNguoiDungs = $this->nhomNguoiDungModel->whereIn('nhom_id', $nhomIds)->get();
+        $nhomNguoiDungIds = [];
+        foreach ($sameNhomNguoiDungs as $nhomNguoiDung) {
+            array_push($nhomNguoiDungIds, $nhomNguoiDung->id);
+        }
+        $nguoiDungQuyens = $this->nguoiDungQuyenModel->whereIn('nhomNguoiDung_id', $nhomNguoiDungIds)->get();
+        $baoCaoIds = [];
+        foreach ($nguoiDungQuyens as $nguoiDungQuyen) {
+            array_push($baoCaoIds, $nguoiDungQuyen->baoCao_id);
+        }
+        $baoCaos = $this->baoCaoModel->whereIn('id', $baoCaoIds)->orWhere('nguoiDung_id', $user->id)->get();
         $trashCount = count($this->baoCaoModel->onlyTrashed()->get());
         return view('pages.baocao.index', compact('baoCaos', 'trashCount'));
     }
@@ -85,6 +106,8 @@ class BaoCaoController extends Controller
 
     public function store(Request $request)
     {
+        $nganh = $this->nganhModel->find($request->nganh_id);
+        $dotDanhGia = $nganh->dotDanhGia->sortBy('namHoc')->where('trangThai', 0)->first();
         $this->baoCaoModel->create([
             'moTa' => $request->moTa,
             'diemManh' => $request->diemManh,
@@ -94,6 +117,8 @@ class BaoCaoController extends Controller
             'trangThai' => $request->trangThai,
             'nganh_id' => $request->nganh_id,
             'tieuChi_id' => $request->tieuChi_id,
+            'dotDanhGia_id' => $dotDanhGia->id,
+            'nguoiDung_id' => auth()->user()->id
         ]);
         return redirect()->route('baocao.index')->with('message', 'Thêm thành công!');
     }
@@ -114,14 +139,17 @@ class BaoCaoController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->baoCaoModel->find($id)->update([
+        $baoCao = $this->baoCaoModel->find($id);
+        $baoCao->update([
             'moTa' => $request->moTa,
             'diemManh' => $request->diemManh,
             'diemTonTai' => $request->diemTonTai,
             'keHoachHanhDong' => $request->keHoachHanhDong,
             'diemTDG' => $request->diemTDG,
-            'trangThai' => $request->trangThai
+            'trangThai' => $request->trangThai,
         ]);
+        $baoCao->updated_at = Carbon::now();
+        $baoCao->save(['timestamps' => FALSE]);
         return redirect()->route('baocao.show', ['id' => $id])->with('message', 'Sửa thành công!');
     }
 
@@ -129,6 +157,42 @@ class BaoCaoController extends Controller
     {
         try {
             $this->baoCaoModel->find($request->id)->delete();
+            return response()->json([
+                'code' => 200,
+                'message' => 'success',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'message' => 'fail',
+            ], 500);
+        }
+    }
+
+    public function finish(Request $request)
+    {
+        try {
+            $this->baoCaoModel->find($request->id)->update([
+                'trangThai' => 1
+            ]);
+            return response()->json([
+                'code' => 200,
+                'message' => 'success',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'message' => 'fail',
+            ], 500);
+        }
+    }
+
+    public function reopen(Request $request)
+    {
+        try {
+            $this->baoCaoModel->find($request->id)->update([
+                'trangThai' => 0
+            ]);
             return response()->json([
                 'code' => 200,
                 'message' => 'success',

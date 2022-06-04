@@ -1,5 +1,5 @@
-<li class="nav-item">
-    <a class="nav-link" href="{{ route($route) }}">
+<li class="nav-item menu-item">
+    <a class="nav-link menu-item-link" href="{{ route($route) }}">
         <i class="{{ $icon }}"></i>
         <span>{{ $title }}</span>
     </a>

@@ -41,6 +41,7 @@ return [
         'dotdanhgia-them' => 'them-dot-danh-gia',
         'dotdanhgia-sua' => 'sua-dot-danh-gia',
         'dotdanhgia-xoa' => 'xoa-dot-danh-gia',
+        'dotdanhgia-dieukhien' => 'dieu-khien-dot-danh-gia',
 
         'minhchung-danhsach' => 'xem-danh-sach-minh-chung',
         'minhchung-chitiet' => 'xem-chi-tiet-minh-chung',

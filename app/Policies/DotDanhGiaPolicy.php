@@ -33,4 +33,9 @@ class DotDanhGiaPolicy
     {
         return $user->checkPermissionAccess(config('permissions.access.dotdanhgia-xoa'));
     }
+
+    public function control(User $user)
+    {
+        return $user->checkPermissionAccess(config('permissions.access.dotdanhgia-dieukhien'));
+    }
 }

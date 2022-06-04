@@ -58,6 +58,7 @@ $action = (object) [
                             <th>STT</th>
                             <th>Tên đợt đánh giá</th>
                             <th>Năm học</th>
+                            <th>Trạng thái</th>
                             <th>Chức năng</th>
                         </tr>
                     </thead>
@@ -68,19 +69,31 @@ $action = (object) [
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $item->ten }}</td>
                                     <td>{{ $item->namHoc }}</td>
+                                    <td>{{ $item->trangThai == 0 ? 'Đang tiến hành' : 'Đã kết thúc' }}</td>
                                     <td>
-                                        @can('dotdanhgia-chitiet')
-                                        <a href="{{ route('dotdanhgia.show', ['id' => $item->id]) }}"
-                                            class="btn btn-primary">Xem chi tiết</a>
-                                        @endcan
-                                        @can('dotdanhgia-sua')
-                                        <a href="{{ route('dotdanhgia.edit', ['id' => $item->id]) }}"
-                                            class="btn btn-secondary">Sửa</a>
-                                        @endcan
-                                        @can('dotdanhgia-xoa')
-                                        <a href="#" class="btn btn-danger btn-delete"
-                                            data-url="{{ route('dotdanhgia.destroy') }}" data-id="{{ $item->id }}">Xóa</a>
-                                        @endcan
+                                        @if ($item->trangThai == 0)
+                                            @can('dotdanhgia-chitiet')
+                                            <a href="{{ route('dotdanhgia.show', ['id' => $item->id]) }}"
+                                                class="btn btn-primary">Xem chi tiết</a>
+                                            @endcan
+                                            @can('dotdanhgia-sua')
+                                            <a href="{{ route('dotdanhgia.edit', ['id' => $item->id]) }}"
+                                                class="btn btn-secondary">Sửa</a>
+                                            @endcan
+                                            @can('dotdanhgia-xoa')
+                                            <a href="#" class="btn btn-danger btn-delete"
+                                                data-url="{{ route('dotdanhgia.destroy') }}" data-id="{{ $item->id }}">Xóa</a>
+                                            @endcan
+                                            @can('dotdanhgia-dieukhien')
+                                            <a href="#" class="btn btn-info btn-finish"
+                                                data-url="{{ route('dotdanhgia.finish') }}" data-id="{{ $item->id }}">Đóng đợt đánh giá</a>
+                                            @endcan
+                                        @else
+                                            @can('dotdanhgia-dieukhien')
+                                            <a href="#" class="btn btn-info btn-reopen"
+                                            data-url="{{ route('dotdanhgia.reopen') }}" data-id="{{ $item->id }}">Mở lại đợt đánh giá</a>
+                                            @endcan
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -99,4 +112,5 @@ $action = (object) [
 @section('scripts')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/handleDelete.js"></script>
+    <script src="js/handleFinish.js"></script>
 @endsection
