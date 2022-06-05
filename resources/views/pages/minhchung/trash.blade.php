@@ -67,12 +67,14 @@ $action = (object) [
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $item->ten }}</td>
                                     <td>
+                                        @can(['minhchung-canhan'], $item->id)
                                         <a href="#" class="btn btn-primary btn-restore"
                                             data-url="{{ route('minhchung.restore') }}" data-id="{{ $item->id }}">Phục
                                             hồi</a>
                                         <a href="#" class="btn btn-danger btn-force-delete"
                                             data-url="{{ route('minhchung.force-destroy') }}"
                                             data-id="{{ $item->id }}">Xóa vĩnh viễn</a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
