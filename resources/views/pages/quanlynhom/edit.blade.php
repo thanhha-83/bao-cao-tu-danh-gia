@@ -14,6 +14,10 @@ $childAction = (object) [
 ]
 @endphp
 
+@section('head')
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+@endsection
+
 @section('styles')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
@@ -44,6 +48,7 @@ $childAction = (object) [
         <div class="card-body">
             <form action="{{ route('quanlynhom.update', ['id' => $nhomNguoiDung->id]) }}" method="POST">
                 @csrf
+                <input type="hidden" id="nhomNguoiDung_id" name="nhomNguoiDung_id" value="{{ $nhomNguoiDung->id }}">
                 <div class="form-row pl-1">
                     <div class="form-group col-md-5">
                         <label for="vaiTro_id">Vai trò</label>
@@ -75,7 +80,6 @@ $childAction = (object) [
                         <div class="ml-3 form-group col-md-5">
                             <label>Báo cáo</label>
                             <select class="form-select form-control" id="select-2" data-name="baoCao_id[]" aria-label="Chọn quyền">
-                                <option value="" selected>Chọn báo cáo</option>
                                 @foreach ($baoCaos as $item)
                                     <option value="{{ $item->id }}">Báo cáo số {{$item->tieuChi->tieuChuan->stt}}.{{$item->tieuChi->stt}}</option>
                                 @endforeach
@@ -136,4 +140,5 @@ $childAction = (object) [
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="js/handleMultipleSelect.js"></script>
     <script src="js/handleTwoSelect.js"></script>
+    <script src="js/handleDataSelectQuyen.js"></script>
 @endsection

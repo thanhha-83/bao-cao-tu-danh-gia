@@ -3,6 +3,8 @@
 namespace App\Policies;
 
 use App\Models\User;
+use App\Models\BaoCao;
+use App\Models\NhomNguoiDung;
 use App\Services\BaoCaoPermission;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -13,13 +15,13 @@ class BaoCaoPolicy
     public function view()
     {
         $baoCaoPer = new BaoCaoPermission();
-        return $baoCaoPer->editAny() || $baoCaoPer->create();
+        return $baoCaoPer->editSomething() || $baoCaoPer->create();
     }
 
-    public function editAny()
+    public function editSomething()
     {
         $baoCaoPer = new BaoCaoPermission();
-        return $baoCaoPer->editAny();
+        return $baoCaoPer->editSomething();
     }
 
     public function create()
@@ -28,13 +30,24 @@ class BaoCaoPolicy
         return $baoCaoPer->create();
     }
 
-    public function update(User $user)
+    public function trash()
     {
-        return $user->checkPermissionAccess(config('permissions.access.donvi-sua'));
+        $baoCaoPer = new BaoCaoPermission();
+        return $baoCaoPer->trash();
     }
 
-    public function delete(User $user)
+    public function editPersonal(User $user, $id)
     {
-        return $user->checkPermissionAccess(config('permissions.access.donvi-xoa'));
+        $baoCao = BaoCao::find($id);
+        $nhomNguoiDungs = NhomNguoiDung::where('nguoiDung_id', $user->id)->get();
+        $baoCaoPer = new BaoCaoPermission();
+        return $baoCaoPer->updatePersonal($nhomNguoiDungs, $baoCao);
+    }
+
+    public function deletePersonal(User $user, $id)
+    {
+        $baoCao = BaoCao::withTrashed()->find($id);
+        $baoCaoPer = new BaoCaoPermission();
+        return $baoCaoPer->deletePersonal($user, $baoCao);
     }
 }

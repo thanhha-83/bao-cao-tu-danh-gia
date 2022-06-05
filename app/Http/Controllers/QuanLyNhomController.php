@@ -116,4 +116,25 @@ class QuanLyNhomController extends Controller
         }
         return redirect()->route('quanlynhom.edit', ['id' => $id])->with('message', 'Sửa thành công!');
     }
+
+    public function handleSelectQuyen(Request $request)
+    {
+        $nhomNguoiDung = $this->nhomNguoiDungModel->find($request->nhomNguoiDung_id);
+        $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->get();
+        $tieuChuanIds = [];
+        foreach ($nhomQuyens as $nhomQuyen) {
+            if ($nhomQuyen->quyenNhom_id == $request->quyen_id && !in_array($nhomQuyen->quyenNhom_id, $tieuChuanIds, true)) {
+                array_push($tieuChuanIds, $nhomQuyen->tieuChuan_id);
+            }
+        }
+        $tieuChis = $this->tieuChiModel->whereIn('tieuChuan_id', $tieuChuanIds)->get();
+        $tieuChiIds = [];
+        foreach ($tieuChis as $tieuChi) {
+            array_push($tieuChiIds, $tieuChi->id);
+        }
+        $baoCaos = $this->baoCaoModel->with('tieuChi')->with('tieuChuan')->where('nganh_id', $nhomNguoiDung->nganh_id)->whereIn('tieuChi_id', $tieuChiIds)->get();
+        return response()->json([
+            'baoCaos' => $baoCaos
+        ], 200);
+    }
 }

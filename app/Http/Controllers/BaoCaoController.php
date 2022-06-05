@@ -47,18 +47,24 @@ class BaoCaoController extends Controller
         foreach ($nhomNguoiDungs as $nhomNguoiDung) {
             array_push($nhomIds, $nhomNguoiDung->nhom_id);
         }
-        $sameNhomNguoiDungs = $this->nhomNguoiDungModel->whereIn('nhom_id', $nhomIds)->get();
-        $nhomNguoiDungIds = [];
-        foreach ($sameNhomNguoiDungs as $nhomNguoiDung) {
-            array_push($nhomNguoiDungIds, $nhomNguoiDung->id);
+        // $sameNhomNguoiDungs = $this->nhomNguoiDungModel->whereIn('nhom_id', $nhomIds)->get();
+        // $nhomNguoiDungIds = [];
+        // foreach ($sameNhomNguoiDungs as $nhomNguoiDung) {
+        //     array_push($nhomNguoiDungIds, $nhomNguoiDung->id);
+        // }
+        // $nguoiDungQuyens = $this->nguoiDungQuyenModel->whereIn('nhomNguoiDung_id', $nhomNguoiDungIds)->get();
+        // $baoCaoIds = [];
+        // foreach ($nguoiDungQuyens as $nguoiDungQuyen) {
+        //     array_push($baoCaoIds, $nguoiDungQuyen->baoCao_id);
+        // }
+
+        $nhomTruongs = $this->nhomNguoiDungModel->whereIn('nhom_id', $nhomIds)->where('vaiTro_id', 2)->get();
+        $nguoiDungIds = [];
+        foreach ($nhomTruongs as $nhomTruong) {
+            array_push($nguoiDungIds, $nhomTruong->nguoiDung_id);
         }
-        $nguoiDungQuyens = $this->nguoiDungQuyenModel->whereIn('nhomNguoiDung_id', $nhomNguoiDungIds)->get();
-        $baoCaoIds = [];
-        foreach ($nguoiDungQuyens as $nguoiDungQuyen) {
-            array_push($baoCaoIds, $nguoiDungQuyen->baoCao_id);
-        }
-        $baoCaos = $this->baoCaoModel->whereIn('id', $baoCaoIds)->orWhere('nguoiDung_id', $user->id)->get();
-        $trashCount = count($this->baoCaoModel->onlyTrashed()->get());
+        $baoCaos = $this->baoCaoModel->whereIn('nguoiDung_id', $nguoiDungIds)->get();
+        $trashCount = count($this->baoCaoModel->onlyTrashed()->whereIn('nguoiDung_id', $nguoiDungIds)->get());
         return view('pages.baocao.index', compact('baoCaos', 'trashCount'));
     }
 
@@ -117,8 +123,11 @@ class BaoCaoController extends Controller
             'trangThai' => $request->trangThai,
             'nganh_id' => $request->nganh_id,
             'tieuChi_id' => $request->tieuChi_id,
+            'tieuChuan_id' => $request->tieuChuan_id,
             'dotDanhGia_id' => $dotDanhGia->id,
-            'nguoiDung_id' => auth()->user()->id
+            'nguoiDung_id' => auth()->user()->id,
+            'moDau' => $request->moDau,
+            'ketLuan' => $request->ketLuan,
         ]);
         return redirect()->route('baocao.index')->with('message', 'Thêm thành công!');
     }
@@ -147,16 +156,18 @@ class BaoCaoController extends Controller
             'keHoachHanhDong' => $request->keHoachHanhDong,
             'diemTDG' => $request->diemTDG,
             'trangThai' => $request->trangThai,
+            'moDau' => $request->moDau,
+            'ketLuan' => $request->ketLuan,
         ]);
         $baoCao->updated_at = Carbon::now();
         $baoCao->save(['timestamps' => FALSE]);
         return redirect()->route('baocao.show', ['id' => $id])->with('message', 'Sửa thành công!');
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request, $id)
     {
         try {
-            $this->baoCaoModel->find($request->id)->delete();
+            $this->baoCaoModel->find($id)->delete();
             return response()->json([
                 'code' => 200,
                 'message' => 'success',
@@ -169,10 +180,10 @@ class BaoCaoController extends Controller
         }
     }
 
-    public function finish(Request $request)
+    public function finish(Request $request, $id)
     {
         try {
-            $this->baoCaoModel->find($request->id)->update([
+            $this->baoCaoModel->find($id)->update([
                 'trangThai' => 1
             ]);
             return response()->json([
@@ -187,10 +198,10 @@ class BaoCaoController extends Controller
         }
     }
 
-    public function reopen(Request $request)
+    public function reopen(Request $request, $id)
     {
         try {
-            $this->baoCaoModel->find($request->id)->update([
+            $this->baoCaoModel->find($id)->update([
                 'trangThai' => 0
             ]);
             return response()->json([
@@ -207,14 +218,25 @@ class BaoCaoController extends Controller
 
     public function trash()
     {
-        $baoCaos = $this->baoCaoModel->onlyTrashed()->paginate(10);
+        $user = auth()->user();
+        $nhomNguoiDungs = $this->nhomNguoiDungModel->where('nguoiDung_id', $user->id)->get();
+        $nhomIds = [];
+        foreach ($nhomNguoiDungs as $nhomNguoiDung) {
+            array_push($nhomIds, $nhomNguoiDung->nhom_id);
+        }
+        $nhomTruongs = $this->nhomNguoiDungModel->whereIn('nhom_id', $nhomIds)->where('vaiTro_id', 2)->get();
+        $nguoiDungIds = [];
+        foreach ($nhomTruongs as $nhomTruong) {
+            array_push($nguoiDungIds, $nhomTruong->nguoiDung_id);
+        }
+        $baoCaos = $this->baoCaoModel->onlyTrashed()->whereIn('nguoiDung_id', $nguoiDungIds)->paginate(10);
         return view('pages.baocao.trash', compact('baoCaos'));
     }
 
-    public function restore(Request $request)
+    public function restore(Request $request, $id)
     {
         try {
-            $this->baoCaoModel->onlyTrashed()->find($request->id)->restore();
+            $this->baoCaoModel->onlyTrashed()->find($id)->restore();
             return response()->json([
                 'code' => 200,
                 'message' => 'success',
@@ -230,7 +252,18 @@ class BaoCaoController extends Controller
     public function restoreAll(Request $request)
     {
         try {
-            $this->baoCaoModel->onlyTrashed()->restore();
+            $user = auth()->user();
+            $nhomNguoiDungs = $this->nhomNguoiDungModel->where('nguoiDung_id', $user->id)->get();
+            $nhomIds = [];
+            foreach ($nhomNguoiDungs as $nhomNguoiDung) {
+                array_push($nhomIds, $nhomNguoiDung->nhom_id);
+            }
+            $nhomTruongs = $this->nhomNguoiDungModel->whereIn('nhom_id', $nhomIds)->where('vaiTro_id', 2)->get();
+            $nguoiDungIds = [];
+            foreach ($nhomTruongs as $nhomTruong) {
+                array_push($nguoiDungIds, $nhomTruong->nguoiDung_id);
+            }
+            $this->baoCaoModel->onlyTrashed()->whereIn('nguoiDung_id', $nguoiDungIds)->restore();
             return response()->json([
                 'code' => 200,
                 'message' => 'success',
@@ -243,10 +276,10 @@ class BaoCaoController extends Controller
         }
     }
 
-    public function forceDestroy(Request $request)
+    public function forceDestroy(Request $request, $id)
     {
         try {
-            $this->baoCaoModel->onlyTrashed()->find($request->id)->forceDelete();
+            $this->baoCaoModel->onlyTrashed()->find($id)->forceDelete();
             return response()->json([
                 'code' => 200,
                 'message' => 'success',
@@ -262,7 +295,18 @@ class BaoCaoController extends Controller
     public function forceDestroyAll(Request $request)
     {
         try {
-            $this->baoCaoModel->onlyTrashed()->forceDelete();
+            $user = auth()->user();
+            $nhomNguoiDungs = $this->nhomNguoiDungModel->where('nguoiDung_id', $user->id)->get();
+            $nhomIds = [];
+            foreach ($nhomNguoiDungs as $nhomNguoiDung) {
+                array_push($nhomIds, $nhomNguoiDung->nhom_id);
+            }
+            $nhomTruongs = $this->nhomNguoiDungModel->whereIn('nhom_id', $nhomIds)->where('vaiTro_id', 2)->get();
+            $nguoiDungIds = [];
+            foreach ($nhomTruongs as $nhomTruong) {
+                array_push($nguoiDungIds, $nhomTruong->nguoiDung_id);
+            }
+            $this->baoCaoModel->onlyTrashed()->whereIn('nguoiDung_id', $nguoiDungIds)->forceDelete();
             return response()->json([
                 'code' => 200,
                 'message' => 'success',
@@ -281,10 +325,10 @@ class BaoCaoController extends Controller
         return view('pages.baocao.word', compact('baoCao'));
     }
 
-    public function backup(Request $request)
+    public function backup(Request $request, $id)
     {
         try {
-            $baoCao = $this->baoCaoModel->find($request->id);
+            $baoCao = $this->baoCaoModel->find($id);
             $this->baoCaoSLModel->create([
                 'moTa' => $baoCao->moTa,
                 'diemManh' => $baoCao->diemManh,
@@ -293,7 +337,13 @@ class BaoCaoController extends Controller
                 'diemTDG' => $baoCao->diemTDG,
                 'nganh_id' => $baoCao->nganh_id,
                 'tieuChi_id' => $baoCao->tieuChi_id,
+                'tieuChuan_id' => $baoCao->tieuChuan_id,
+                'dotDanhGia_id' => $baoCao->dotDanhGia_id,
+                'nguoiDung_id' => $baoCao->nguoiDung_id,
                 'baoCao_id' => $baoCao->id,
+                'moDau' => $baoCao->moDau,
+                'ketLuan' => $baoCao->ketLuan,
+                'soTCDat' => $baoCao->soTCDat
             ]);
             return response()->json([
                 'code' => 200,

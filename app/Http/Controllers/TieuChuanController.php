@@ -48,12 +48,6 @@ class TieuChuanController extends Controller
         return redirect()->route('tieuchuan.index')->with('message', 'Thêm thành công!');
     }
 
-    // public function show($id)
-    // {
-    //     $tieuChuan = $this->tieuChuanModel->find($id);
-    //     return view('pages.tieuchuan.show', compact('tieuChuan'));
-    // }
-
     public function edit($id)
     {
         $tieuChuan = $this->tieuChuanModel->find($id);

@@ -146,22 +146,22 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('baocao')->group(function () {
-        Route::get('/', [BaoCaoController::class, 'index'])->name('baocao.index')->middleware('can:baocao-quanly');
+        Route::get('/', [BaoCaoController::class, 'index'])->name('baocao.index')->middleware('can:baocao-danhsach');
         Route::get('/create', [BaoCaoController::class, 'create'])->name('baocao.create')->middleware('can:baocao-them');
         Route::post('/store', [BaoCaoController::class, 'store'])->name('baocao.store')->middleware('can:baocao-them');
         Route::get('/show/{id}', [BaoCaoController::class, 'show'])->name('baocao.show');
-        Route::get('/edit/{id}', [BaoCaoController::class, 'edit'])->name('baocao.edit')->middleware('can:baocao-sua');
-        Route::post('/update/{id}', [BaoCaoController::class, 'update'])->name('baocao.update')->middleware('can:baocao-sua');
-        Route::post('/destroy', [BaoCaoController::class, 'destroy'])->name('baocao.destroy');
-        Route::post('/finish', [BaoCaoController::class, 'finish'])->name('baocao.finish');
-        Route::post('/reopen', [BaoCaoController::class, 'reopen'])->name('baocao.reopen');
-        Route::get('/trash', [BaoCaoController::class, 'trash'])->name('baocao.trash');
-        Route::post('/restore', [BaoCaoController::class, 'restore'])->name('baocao.restore');
-        Route::post('/restore-all', [BaoCaoController::class, 'restoreAll'])->name('baocao.restore-all');
-        Route::post('/force-destroy', [BaoCaoController::class, 'forceDestroy'])->name('baocao.force-destroy');
-        Route::post('/force-destroy-all', [BaoCaoController::class, 'forceDestroyAll'])->name('baocao.force-destroy-all');
+        Route::get('/edit/{id}', [BaoCaoController::class, 'edit'])->name('baocao.edit')->middleware('can:baocao-sua,id');
+        Route::post('/update/{id}', [BaoCaoController::class, 'update'])->name('baocao.update')->middleware('can:baocao-sua,id');
+        Route::post('/destroy/{id}', [BaoCaoController::class, 'destroy'])->name('baocao.destroy')->middleware('can:baocao-xoa,id');
+        Route::post('/finish/{id}', [BaoCaoController::class, 'finish'])->name('baocao.finish')->middleware('can:baocao-sua,id');
+        Route::post('/reopen/{id}', [BaoCaoController::class, 'reopen'])->name('baocao.reopen')->middleware('can:baocao-sua,id');
+        Route::get('/trash', [BaoCaoController::class, 'trash'])->name('baocao.trash')->middleware('can:baocao-thungrac');
+        Route::post('/restore/{id}', [BaoCaoController::class, 'restore'])->name('baocao.restore')->middleware('can:baocao-xoa,id');
+        Route::post('/restore-all', [BaoCaoController::class, 'restoreAll'])->name('baocao.restore-all')->middleware('can:baocao-thungrac');
+        Route::post('/force-destroy/{id}', [BaoCaoController::class, 'forceDestroy'])->name('baocao.force-destroy')->middleware('can:baocao-xoa,id');
+        Route::post('/force-destroy-all', [BaoCaoController::class, 'forceDestroyAll'])->name('baocao.force-destroy-all')->middleware('can:baocao-thungrac');
         Route::get('/word/{id}', [BaoCaoController::class, 'word'])->name('baocao.word');
-        Route::post('/backup', [BaoCaoController::class, 'backup'])->name('baocao.backup');
+        Route::post('/backup/{id}', [BaoCaoController::class, 'backup'])->name('baocao.backup')->middleware('can:baocao-sua,id');
         Route::post('/handle-select-nganh', [BaoCaoController::class, 'handleSelectNganh'])->name('baocao.handle-select-nganh');
         Route::post('/handle-select-tieuchuan', [BaoCaoController::class, 'handleSelectTieuChuan'])->name('baocao.handle-select-tieuchuan');
     });
@@ -244,6 +244,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/member/{id}', [QuanLyNhomController::class, 'member'])->name('quanlynhom.member')->middleware('can:quanlynhom');
         Route::get('/edit/{id}', [QuanLyNhomController::class, 'edit'])->name('quanlynhom.edit')->middleware('can:quanlynhom');
         Route::post('/update/{id}', [QuanLyNhomController::class, 'update'])->name('quanlynhom.update')->middleware('can:quanlynhom');
+        Route::post('/handle-select-quyen', [QuanLyNhomController::class, 'handleSelectQuyen'])->middleware('can:quanlynhom');
     });
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');

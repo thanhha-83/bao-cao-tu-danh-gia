@@ -32,6 +32,7 @@ $action = (object) [
     <div class="card shadow mb-4">
         @if (count($baoCaos) > 0)
             <div class="trash-action card-header py-3 d-flex flex-row align-items-center">
+                @can('baocao-thungrac')
                 <a href="#" class="btn btn-primary btn-icon-split btn-restore-all mr-3"
                     data-url="{{ route('baocao.restore-all') }}"
                     data-redirect="{{ route('baocao.index') }}">
@@ -48,6 +49,7 @@ $action = (object) [
                     </span>
                     <span class="text">Xóa tất cả</span>
                 </a>
+                @endcan
             </div>
         @endif
         <div class="card-body">
@@ -67,12 +69,14 @@ $action = (object) [
                                     <td>Báo cáo số {{ $item->tieuChi->tieuChuan->stt }}.{{ $item->tieuChi->stt }}</td>
                                     <td>{{ date("d-m-Y H:i", strtotime($item->updated_at)) }}</td>
                                     <td>
+                                        @can('baocao-xoa', $item->id)
                                         <a href="#" class="btn btn-primary btn-restore"
-                                            data-url="{{ route('baocao.restore') }}" data-id="{{ $item->id }}">Phục
+                                            data-url="{{ route('baocao.restore', ['id' => $item->id]) }}" data-id="{{ $item->id }}">Phục
                                             hồi</a>
                                         <a href="#" class="btn btn-danger btn-force-delete"
-                                            data-url="{{ route('baocao.force-destroy') }}"
+                                            data-url="{{ route('baocao.force-destroy', ['id' => $item->id]) }}"
                                             data-id="{{ $item->id }}">Xóa vĩnh viễn</a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach

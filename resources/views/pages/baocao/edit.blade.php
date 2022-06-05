@@ -39,11 +39,19 @@ $action = (object) [
                         readonly>
                 </div>
                 <div class="form-group">
+                    @php
+                        if (strlen($baoCao->tieuChi->ten) < 150) {
+                            $ten = $baoCao->tieuChi->ten;
+                        } else {
+                            $ten = substr($baoCao->tieuChi->ten, 0, strpos(wordwrap($baoCao->tieuChi->ten, 150), "\n")) . '...';
+                        }
+                    @endphp
                     <label for="tieuChi_id">Tiêu chí</label>
                     <input type="text" class="form-control" id="tieuChi_id" name="tieuChi_id"
-                        value="Tiêu chí số: {{ $baoCao->tieuChi->tieuChuan->stt }}.{{ $baoCao->tieuChi->stt }}: {{ substr($baoCao->tieuChi->ten, 0, strpos(wordwrap($baoCao->tieuChi->ten, 150), "\n")) . '...' }}"
+                        value="Tiêu chí số: {{ $baoCao->tieuChi->tieuChuan->stt }}.{{ $baoCao->tieuChi->stt }}: {{ $ten }}"
                         readonly>
                 </div>
+                @if ($baoCao->tieuChi->stt !== 0)
                 <div class="form-group">
                     <label for="moTa">Mô tả</label>
                     <textarea class="form-control tiny-editor" id="moTa" name="moTa" rows="8">{{ old('moTa', $baoCao->moTa) }}</textarea>
@@ -68,6 +76,16 @@ $action = (object) [
                     <input type="number" class="form-control" id="diemTDG" name="diemTDG"
                         value="{{ old('diemTDG', $baoCao->diemTDG) }}">
                 </div>
+                @else
+                <div class="form-group">
+                    <label for="moDau">Mở đầu</label>
+                    <textarea class="form-control tiny-editor" id="moDau" name="moDau" rows="8">{{ old('moDau', '') }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="ketLuan">Kết luận</label>
+                    <textarea class="form-control tiny-editor" id="ketLuan" name="ketLuan" rows="8">{{ old('ketLuan', '') }}</textarea>
+                </div>
+                @endif
                 <button type="submit" class="btn btn-primary">Xác nhận</button>
             </form>
         </div>

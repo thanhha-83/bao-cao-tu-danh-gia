@@ -39,6 +39,7 @@ $action = (object) [
                 <span class="text">Thêm mới</span>
             </a>
             @endcan
+            @can('baocao-thungrac')
             <a href="{{ route('baocao.trash') }}" class="btn btn-dark btn-icon-split">
                 <span class="icon text-white-50">
                     <i class="fas fa-trash"></i>
@@ -47,6 +48,7 @@ $action = (object) [
                     <span class="trash-count">{{ $trashCount > 0 ? '(' . $trashCount . ')' : '' }}</span>
                 </span>
             </a>
+            @endcan
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -77,19 +79,23 @@ $action = (object) [
                                     <td>
                                         <a href="{{ route('baocao.show', ['id' => $item->id]) }}"
                                             class="btn btn-primary">Xem chi tiết</a>
+                                        @can('baocao-sua', $item->id)
                                         <a href="{{ route('baocao.edit', ['id' => $item->id]) }}"
                                             class="btn btn-secondary">Sửa</a>
                                         <a href="#" class="btn btn-success btn-backup"
-                                            data-url="{{ route('baocao.backup') }}" data-id="{{ $item->id }}">Sao lưu</a>
-                                        <a href="#" class="btn btn-danger btn-delete"
-                                            data-url="{{ route('baocao.destroy') }}" data-id="{{ $item->id }}">Xóa</a>
+                                            data-url="{{ route('baocao.backup', ['id' => $item->id]) }}" data-id="{{ $item->id }}">Sao lưu</a>
                                         @if ($item->trangThai == 0)
                                         <a href="#" class="btn btn-info btn-finish"
-                                            data-url="{{ route('baocao.finish') }}" data-id="{{ $item->id }}">Hoàn thành</a>
+                                            data-url="{{ route('baocao.finish', ['id' => $item->id]) }}" data-id="{{ $item->id }}">Hoàn thành</a>
                                         @else
                                         <a href="#" class="btn btn-info btn-reopen"
-                                        data-url="{{ route('baocao.reopen') }}" data-id="{{ $item->id }}">Mở lại</a>
+                                        data-url="{{ route('baocao.reopen', ['id' => $item->id]) }}" data-id="{{ $item->id }}">Mở lại</a>
                                         @endif
+                                        @endcan
+                                        @can('baocao-xoa', $item->id)
+                                        <a href="#" class="btn btn-danger btn-delete"
+                                            data-url="{{ route('baocao.destroy', ['id' => $item->id]) }}" data-id="{{ $item->id }}">Xóa</a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
@@ -103,7 +109,6 @@ $action = (object) [
             </div>
         </div>
     </div>
-    @include('partials.backup-modal')
 @endsection
 
 @section('scripts')

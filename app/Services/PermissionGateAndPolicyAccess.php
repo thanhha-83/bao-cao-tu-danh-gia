@@ -82,13 +82,11 @@ class PermissionGateAndPolicyAccess {
         Gate::define('time-nhan-xet-bao-cao', [GiaiDoanPolicy::class, 'comment']);
         Gate::define('time-phan-bien-bao-cao', [GiaiDoanPolicy::class, 'counterArg']);
 
-        // Gate::define('minhchung-danhsach', [MinhChungPolicy::class, 'viewAny']);
-        // Gate::define('minhchung-chitiet', [MinhChungPolicy::class, 'view']);
-        Gate::define('baocao-quanly', [BaoCaoPolicy::class, 'view']);
+        Gate::define('baocao-danhsach', [BaoCaoPolicy::class, 'view']);
         Gate::define('baocao-them', [BaoCaoPolicy::class, 'create']);
-        Gate::define('baocao-sua', [BaoCaoPolicy::class, 'editAny']);
-        // Gate::define('minhchung-sua', [MinhChungPolicy::class, 'update']);
-        // Gate::define('minhchung-xoa', [MinhChungPolicy::class, 'delete']);
+        Gate::define('baocao-sua', [BaoCaoPolicy::class, 'editPersonal']);
+        Gate::define('baocao-xoa', [BaoCaoPolicy::class, 'deletePersonal']);
+        Gate::define('baocao-thungrac', [BaoCaoPolicy::class, 'trash']);
 
         Gate::define('quanlynhom', [QuanLyNhomPolicy::class, 'control']);
     }
