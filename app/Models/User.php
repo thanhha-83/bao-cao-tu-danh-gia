@@ -83,6 +83,18 @@ class User extends Authenticatable
         return false;
     }
 
+    public function checkPersonalPermissionAccess($quyenCheck, $model)
+    {
+        $vaiTroHTs = auth()->user()->vaiTroHT;
+        foreach ($vaiTroHTs as $vaiTroHT) {
+            $quyenHTs = $vaiTroHT->quyenHT;
+            if ($quyenHTs->contains('slug', $quyenCheck) && $model->nguoiDung_id == auth()->user()->id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function checkTime($activity, $baoCao) {
         date_default_timezone_set('Asia/Ho_Chi_Minh');
         $hoatDongs = $baoCao->nganh->dotDanhGia[0]->hoatDong;

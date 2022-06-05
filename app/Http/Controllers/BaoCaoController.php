@@ -97,7 +97,7 @@ class BaoCaoController extends Controller
 
         $tieuChuans = $this->tieuChuanModel->whereIn('id', $tieuChuanIds)->get();
         if (!empty($tieuChuans[0])) {
-            $tieuChis = $this->tieuChiModel->where('tieuChuan_id', $tieuChuans[0]->id)->get();
+            $tieuChis = $this->tieuChiModel->where('tieuChuan_id', $tieuChuans[0]->id)->get()->sortBy('stt');
         } else {
             $tieuChis = [];
         }

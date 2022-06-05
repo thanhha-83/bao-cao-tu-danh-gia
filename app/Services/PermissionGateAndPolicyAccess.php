@@ -76,6 +76,7 @@ class PermissionGateAndPolicyAccess {
         Gate::define('minhchung-them', [MinhChungPolicy::class, 'create']);
         Gate::define('minhchung-sua', [MinhChungPolicy::class, 'update']);
         Gate::define('minhchung-xoa', [MinhChungPolicy::class, 'delete']);
+        Gate::define('minhchung-canhan', [MinhChungPolicy::class, 'personal']);
 
         Gate::define('time-viet-bao-cao', [GiaiDoanPolicy::class, 'update']);
         Gate::define('time-nhan-xet-bao-cao', [GiaiDoanPolicy::class, 'comment']);

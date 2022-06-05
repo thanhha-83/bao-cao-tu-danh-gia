@@ -12,6 +12,7 @@ $('#nganh_id').on('change', (e) => {
                 $('#tieuChuan_id').append(`<option value="${data.id}">Tiêu chuẩn số ${data.stt}: ${data.ten}</option>`);
             }
             $('#tieuChi_id').html('');
+            datas.tieuChis.sort((a, b) => {return a.stt - b.stt});
             for (data of datas.tieuChis) {
                 const length = data.ten.split(' ').length;
                 if (length > 25) {
@@ -32,6 +33,7 @@ $('#tieuChuan_id').on('change', (e) => {
         data: { tieuChuanId , _token},
         success: (datas) => {
             $('#tieuChi_id').html('');
+            datas.tieuChis.sort((a, b) => {return a.stt - b.stt});
             for (data of datas.tieuChis) {
                 const length = data.ten.split(' ').length;
                 if (length > 25) {

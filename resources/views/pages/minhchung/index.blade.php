@@ -119,9 +119,9 @@ $action = (object) [
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $item->ten }}</td>
-                                    <td>{{ date("d-m-Y", strtotime($item->ngayKhaoSat)) }}</td>
-                                    <td>{{ date("d-m-Y", strtotime($item->ngayBanHanh)) }}</td>
-                                    <td>{{ date("d-m-Y", strtotime($item->noiBanHanh)) }}</td>
+                                    <td>{{ $item->ngayKhaoSat ? date("d-m-Y", strtotime($item->ngayKhaoSat)) : ''}}</td>
+                                    <td>{{ $item->ngayBanHanh ? date("d-m-Y", strtotime($item->ngayBanHanh)) : ''}}</td>
+                                    <td>{{ $item->noiBanHanh }}</td>
                                     <td>{{ $item->donVi->ten }}</td>
                                     <td>{{ $item->isMCGop ? 'Minh chứng gộp' : 'Minh chứng đơn' }}</td>
                                     <td>
@@ -129,7 +129,7 @@ $action = (object) [
                                             <a href="{{ route('minhchung.show', ['id' => $item->id]) }}"
                                                 class="btn btn-primary">Xem chi tiết</a>
                                         @endcan
-                                        @can('minhchung-sua')
+                                        @can('minhchung-canhan', $item->id)
                                             <a href="{{ route('minhchung.edit', ['id' => $item->id]) }}"
                                                 class="btn btn-secondary">Sửa</a>
                                             @if ($item->isMCGop == 1)

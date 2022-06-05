@@ -3,6 +3,8 @@
 namespace App\Policies;
 
 use App\Models\User;
+use App\Models\MinhChung;
+use Illuminate\Http\Request;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class MinhChungPolicy
@@ -32,5 +34,11 @@ class MinhChungPolicy
     public function delete(User $user)
     {
         return $user->checkPermissionAccess(config('permissions.access.minhchung-xoa'));
+    }
+
+    public function personal(User $user, $id)
+    {
+        $minhChung = MinhChung::find($id);
+        return $user->checkPersonalPermissionAccess(config('permissions.access.minhchung-canhan'), $minhChung) || $user->checkPermissionAccess(config('permissions.access.minhchung-sua'));
     }
 }
