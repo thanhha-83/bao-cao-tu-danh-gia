@@ -84,6 +84,7 @@ class PermissionGateAndPolicyAccess {
 
         // Gate::define('minhchung-danhsach', [MinhChungPolicy::class, 'viewAny']);
         // Gate::define('minhchung-chitiet', [MinhChungPolicy::class, 'view']);
+        Gate::define('baocao-quanly', [BaoCaoPolicy::class, 'view']);
         Gate::define('baocao-them', [BaoCaoPolicy::class, 'create']);
         Gate::define('baocao-sua', [BaoCaoPolicy::class, 'editAny']);
         // Gate::define('minhchung-sua', [MinhChungPolicy::class, 'update']);

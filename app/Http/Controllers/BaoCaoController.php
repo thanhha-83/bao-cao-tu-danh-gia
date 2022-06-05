@@ -88,7 +88,7 @@ class BaoCaoController extends Controller
         $tieuChuanIds = [];
         if ($nhomNguoiDungs) {
             foreach ($nhomNguoiDungs as $nhomNguoiDung) {
-                $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->get();
+                $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->where('quyenNhom_id', 1)->get();
                 foreach ($nhomQuyens as $nhomQuyen) {
                     array_push($tieuChuanIds, $nhomQuyen->tieuChuan_id);
                 }
@@ -312,7 +312,7 @@ class BaoCaoController extends Controller
         $tieuChuanIds = [];
         if ($nhomNguoiDungs) {
             foreach ($nhomNguoiDungs as $nhomNguoiDung) {
-                $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->get();
+                $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->where('quyenNhom_id', 1)->get();
                 foreach ($nhomQuyens as $nhomQuyen) {
                     array_push($tieuChuanIds, $nhomQuyen->tieuChuan_id);
                 }

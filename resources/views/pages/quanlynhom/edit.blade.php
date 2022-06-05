@@ -67,7 +67,6 @@ $childAction = (object) [
                         <div class="form-group col-md-5">
                             <label>Quyền</label>
                             <select class="form-select form-control" id="select-1" data-name="quyenNguoiDung_id[]" aria-label="Chọn quyền">
-                                <option value="" selected>Chọn quyền</option>
                                 @foreach ($quyenNguoiDungs as $item)
                                     <option value="{{ $item->id }}">{{ $item->ten }}</option>
                                 @endforeach

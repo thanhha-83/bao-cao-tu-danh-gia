@@ -146,12 +146,12 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('baocao')->group(function () {
-        Route::get('/', [BaoCaoController::class, 'index'])->name('baocao.index')->middleware('can:baocao-sua');
+        Route::get('/', [BaoCaoController::class, 'index'])->name('baocao.index')->middleware('can:baocao-quanly');
         Route::get('/create', [BaoCaoController::class, 'create'])->name('baocao.create')->middleware('can:baocao-them');
         Route::post('/store', [BaoCaoController::class, 'store'])->name('baocao.store')->middleware('can:baocao-them');
         Route::get('/show/{id}', [BaoCaoController::class, 'show'])->name('baocao.show');
-        Route::get('/edit/{id}', [BaoCaoController::class, 'edit'])->name('baocao.edit');
-        Route::post('/update/{id}', [BaoCaoController::class, 'update'])->name('baocao.update');
+        Route::get('/edit/{id}', [BaoCaoController::class, 'edit'])->name('baocao.edit')->middleware('can:baocao-sua');
+        Route::post('/update/{id}', [BaoCaoController::class, 'update'])->name('baocao.update')->middleware('can:baocao-sua');
         Route::post('/destroy', [BaoCaoController::class, 'destroy'])->name('baocao.destroy');
         Route::post('/finish', [BaoCaoController::class, 'finish'])->name('baocao.finish');
         Route::post('/reopen', [BaoCaoController::class, 'reopen'])->name('baocao.reopen');

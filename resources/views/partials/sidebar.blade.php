@@ -113,7 +113,7 @@
     ])
     @endcan
 
-    @can(['baocao-them', 'baocao-sua'])
+    @can('baocao-quanly')
     @include('partials.sidebar-menu-item', [
         'route' => 'baocao.index',
         'icon' => 'fas fa fa-users',
