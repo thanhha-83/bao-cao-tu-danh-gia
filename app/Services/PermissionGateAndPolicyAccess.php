@@ -15,6 +15,8 @@ use App\Policies\NguoiDungPolicy;
 use App\Policies\MinhChungPolicy;
 use App\Policies\GiaiDoanPolicy;
 use App\Policies\QuanLyNhomPolicy;
+use App\Policies\NhanXetBaoCaoPolicy;
+use App\Policies\PhanBienBaoCaoPolicy;
 
 class PermissionGateAndPolicyAccess {
 
@@ -89,5 +91,11 @@ class PermissionGateAndPolicyAccess {
         Gate::define('baocao-thungrac', [BaoCaoPolicy::class, 'trash']);
 
         Gate::define('quanlynhom', [QuanLyNhomPolicy::class, 'control']);
+
+        Gate::define('nhanxetbaocao-danhsach', [NhanXetBaoCaoPolicy::class, 'view']);
+        Gate::define('nhanxetbaocao-binhluan', [NhanXetBaoCaoPolicy::class, 'comment']);
+
+        Gate::define('phanbienbaocao-danhsach', [PhanBienBaoCaoPolicy::class, 'view']);
+        Gate::define('phanbienbaocao-binhluan', [PhanBienBaoCaoPolicy::class, 'comment']);
     }
 }

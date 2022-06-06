@@ -113,13 +113,35 @@
     ])
     @endcan
 
-    @can('baocao-quanly')
+    @can('baocao-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'baocao.index',
         'icon' => 'fas fa fa-users',
         'title' => 'Viết báo cáo'
     ])
     @endcan
+
+    @can('nhanxetbaocao-danhsach')
+    @include('partials.sidebar-menu-item', [
+        'route' => 'nhanxetbaocao.index',
+        'icon' => 'fas fa fa-users',
+        'title' => 'Nhận xét báo cáo'
+    ])
+    @endcan
+
+    @can('phanbienbaocao-danhsach')
+    @include('partials.sidebar-menu-item', [
+        'route' => 'phanbienbaocao.index',
+        'icon' => 'fas fa fa-users',
+        'title' => 'Phản biện báo cáo'
+    ])
+    @endcan
+
+    @include('partials.sidebar-menu-item', [
+        'route' => 'tiendobaocao.index',
+        'icon' => 'fas fa fa-users',
+        'title' => 'Tiến độ báo cáo'
+    ])
 
     <!-- Divider -->
     <hr class="sidebar-divider">

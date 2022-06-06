@@ -83,6 +83,7 @@ class QuanLyNhomController extends Controller
             array_push($tieuChiIds, $tieuChi->id);
         }
         $baoCaos = $this->baoCaoModel->where('nganh_id', $nhomNguoiDung->nganh_id)->whereIn('tieuChi_id', $tieuChiIds)->get();
+        $baoCaoAlls = $this->baoCaoModel->all();
         $current_quyenNguoiDungs = [];
         $current_baoCaos = [];
         $nguoiDungQuyens = $this->nguoiDungQuyenModel->where('nhomNguoiDung_id', $id)->get();
@@ -90,7 +91,7 @@ class QuanLyNhomController extends Controller
             array_push($current_quyenNguoiDungs, $item->quyenNguoiDung_id);
             array_push($current_baoCaos, $item->baoCao_id);
         }
-        return view('pages.quanlynhom.edit', compact('nhomNguoiDung', 'vaiTros', 'quyenNguoiDungs', 'baoCaos', 'current_quyenNguoiDungs', 'current_baoCaos'));
+        return view('pages.quanlynhom.edit', compact('nhomNguoiDung', 'vaiTros', 'quyenNguoiDungs', 'baoCaos', 'baoCaoAlls', 'current_quyenNguoiDungs', 'current_baoCaos'));
     }
     public function update(Request $request, $id)
     {

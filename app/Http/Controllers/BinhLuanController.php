@@ -14,6 +14,7 @@ class BinhLuanController extends Controller
     private $nguoiDungModel;
     public function __construct(BinhLuan $binhLuanModel, User $nguoiDungModel)
     {
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
         $this->binhLuanModel = $binhLuanModel;
         $this->nguoiDungModel = $nguoiDungModel;
     }

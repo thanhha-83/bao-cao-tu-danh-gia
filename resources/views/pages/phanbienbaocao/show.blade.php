@@ -78,7 +78,6 @@ $action = (object) [
             <div class="card-footer p-3">
                 <div class="text-right">
                     <a href="{{ route('baocao.word', ['id' => $baoCao->id]) }}" class="btn btn-primary">Xuất Word</a>
-                    <a href="{{ route('baocao.edit', ['id' => $baoCao->id]) }}" class="btn btn-secondary">Sửa</a>
                 </div>
             </div>
         </div>
@@ -94,47 +93,6 @@ $action = (object) [
         </div>
         @endif
     </div>
-    {{-- Backup --}}
-    @if (count($baoCao->baoCaoSL) > 0)
-    <div class="card shadow mb-4 mx-1">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h5 class="m-0">DANH SÁCH SAO LƯU</h5>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Ngày sao lưu</th>
-                            <th>Chức năng</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($baoCao->baoCaoSL as $key => $item)
-                            <tr>
-                                <td>{{ $key + 1 }}</td>
-                                <td>{{ date("d-m-Y H:i", strtotime($item->created_at)) }}</td>
-                                <td>
-                                    <a href="{{ route('baocaosaoluu.show', ['id' => $item->id]) }}"
-                                        class="btn btn-primary">Xem chi tiết</a>
-                                    <a href="{{ route('baocaosaoluu.compare', ['id' => $item->id]) }}"
-                                            class="btn btn-secondary">So sánh</a>
-                                            <a href="#" class="btn btn-success btn-restore-backup" data-url="{{ route('baocaosaoluu.restore') }}"
-                                            data-id="{{ $item->id }}"
-                                            data-redirect="{{ route('baocao.show', ['id' => $item->baoCao_id]) }}">Phục hồi</a>
-                                        <a href="#" class="btn btn-danger btn-delete-backup" data-url="{{ route('baocaosaoluu.destroy') }}"
-                                            data-id="{{ $item->id }}"
-                                            data-redirect="{{ route('baocao.show', ['id' => $item->baoCao_id]) }}">Xóa</a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    @endif
     {{-- Chat --}}
     <div class="app-chat-realtime card shadow mx-1">
         <div class="card-body p-5">

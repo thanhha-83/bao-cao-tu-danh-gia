@@ -16,8 +16,11 @@ use App\Http\Controllers\BinhLuanController;
 use App\Http\Controllers\MinhChungController;
 use App\Http\Controllers\MinhChungThanhPhanController;
 use App\Http\Controllers\BaoCaoSaoLuuController;
+use App\Http\Controllers\NhanXetBaoCaoController;
+use App\Http\Controllers\PhanBienBaoCaoController;
 use App\Http\Controllers\VaiTroHeThongController;
 use App\Http\Controllers\QuanLyNhomController;
+use App\Http\Controllers\TienDoBaoCaoController;
 use Illuminate\Http\Request;
 
 /*
@@ -164,6 +167,21 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/backup/{id}', [BaoCaoController::class, 'backup'])->name('baocao.backup')->middleware('can:baocao-sua,id');
         Route::post('/handle-select-nganh', [BaoCaoController::class, 'handleSelectNganh'])->name('baocao.handle-select-nganh');
         Route::post('/handle-select-tieuchuan', [BaoCaoController::class, 'handleSelectTieuChuan'])->name('baocao.handle-select-tieuchuan');
+    });
+
+    Route::prefix('nhanxetbaocao')->group(function () {
+        Route::get('/', [NhanXetBaoCaoController::class, 'index'])->name('nhanxetbaocao.index')->middleware('can:nhanxetbaocao-danhsach');
+        Route::get('/show/{id}', [NhanXetBaoCaoController::class, 'show'])->name('nhanxetbaocao.show')->middleware('can:nhanxetbaocao-binhluan,id');
+    });
+
+    Route::prefix('phanbienbaocao')->group(function () {
+        Route::get('/', [PhanBienBaoCaoController::class, 'index'])->name('phanbienbaocao.index')->middleware('can:phanbienbaocao-danhsach');
+        Route::get('/show/{id}', [PhanBienBaoCaoController::class, 'show'])->name('phanbienbaocao.show')->middleware('can:phanbienbaocao-binhluan,id');
+    });
+
+    Route::prefix('tiendobaocao')->group(function () {
+        Route::get('/', [TienDoBaoCaoController::class, 'index'])->name('tiendobaocao.index');
+        // Route::get('/show/{id}', [TienDoBaoCaoController::class, 'show'])->name('nhanxetbaocao.show')->middleware('can:nhanxetbaocao-binhluan,id');
     });
 
     Route::prefix('nhomnguoidung')->group(function () {

@@ -41,6 +41,7 @@ class BaoCao extends Model
     {
         return $this
             ->belongsToMany(NhomNguoiDung::class, 'nguoi_dung_quyens', 'baoCao_id', 'nhomNguoiDung_id')
+            ->where('quyenNguoiDung_id', '=', 1)
             ->withTimestamps();
     }
 }

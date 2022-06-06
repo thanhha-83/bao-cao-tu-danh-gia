@@ -47,17 +47,6 @@ class BaoCaoController extends Controller
         foreach ($nhomNguoiDungs as $nhomNguoiDung) {
             array_push($nhomIds, $nhomNguoiDung->nhom_id);
         }
-        // $sameNhomNguoiDungs = $this->nhomNguoiDungModel->whereIn('nhom_id', $nhomIds)->get();
-        // $nhomNguoiDungIds = [];
-        // foreach ($sameNhomNguoiDungs as $nhomNguoiDung) {
-        //     array_push($nhomNguoiDungIds, $nhomNguoiDung->id);
-        // }
-        // $nguoiDungQuyens = $this->nguoiDungQuyenModel->whereIn('nhomNguoiDung_id', $nhomNguoiDungIds)->get();
-        // $baoCaoIds = [];
-        // foreach ($nguoiDungQuyens as $nguoiDungQuyen) {
-        //     array_push($baoCaoIds, $nguoiDungQuyen->baoCao_id);
-        // }
-
         $nhomTruongs = $this->nhomNguoiDungModel->whereIn('nhom_id', $nhomIds)->where('vaiTro_id', 2)->get();
         $nguoiDungIds = [];
         foreach ($nhomTruongs as $nhomTruong) {
