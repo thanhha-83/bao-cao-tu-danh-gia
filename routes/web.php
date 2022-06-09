@@ -181,6 +181,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('tiendobaocao')->group(function () {
         Route::get('/', [TienDoBaoCaoController::class, 'index'])->name('tiendobaocao.index')->middleware('can:tiendo-danhsach');
+        Route::get('/word-all/{id}', [TienDoBaoCaoController::class, 'wordAll'])->name('tiendobaocao.word-all')->middleware('can:tiendo-danhsach');
     });
 
     Route::prefix('nhomnguoidung')->group(function () {

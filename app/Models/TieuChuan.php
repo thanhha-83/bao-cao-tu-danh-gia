@@ -14,6 +14,6 @@ class TieuChuan extends Model
 
     public function tieuChi()
     {
-        return $this->hasMany(TieuChi::class, 'tieuChuan_id');
+        return $this->hasMany(TieuChi::class, 'tieuChuan_id')->orderBy('stt');
     }
 }

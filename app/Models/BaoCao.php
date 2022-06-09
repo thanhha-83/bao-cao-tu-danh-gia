@@ -44,4 +44,11 @@ class BaoCao extends Model
             ->where('quyenNguoiDung_id', '=', 1)
             ->withTimestamps();
     }
+    public function minhChung()
+    {
+        return $this
+            ->belongsToMany(BaoCaoMinhChung::class, 'bao_cao_minh_chungs', 'baoCao_id', 'minhChung_id')
+            ->withPivot('tieuChuan_id', 'nganh_id', 'dotDanhGia_id', 'maHMC')
+            ->withTimestamps();
+    }
 }

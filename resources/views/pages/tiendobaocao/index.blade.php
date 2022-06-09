@@ -62,9 +62,9 @@ $action = (object) [
                             <td>{{ $nganh->namHoc }}</td>
                             <td>
                                 @if ($canExport)
-                                <a href="#" class="btn btn-primary">Xuất báo cáo</a>
+                                <a href="{{ route('tiendobaocao.word-all', ['id' => $nganh->id]) }}" class="btn btn-primary">Xuất báo cáo</a>
                                 @else
-                                <a href="#" class="btn btn-secondary disabled">Xuất báo cáo</a>
+                                <a href="{{ route('tiendobaocao.word-all', ['id' => $nganh->id]) }}" class="btn btn-secondary disabled">Xuất báo cáo</a>
                                 @endif
                             </td>
                             <td><button class="btn btn-default btn-xs"><i class="fas fa-plus"></i></button></td>
@@ -112,7 +112,7 @@ $action = (object) [
                                                                             $canBoDamNhan = '<span class="text-danger">Chưa có</span>';
                                                                             if (!empty($baoCao)) {
                                                                                 $ten = 'Báo cáo số ' . $baoCao->tieuChuan->stt . '.' . $baoCao->tieuChi->stt;
-                                                                                $trangThai = $baoCao->trangThai == 0 ? 'Đang tiến hành' : 'Đã hoàn thành';
+                                                                                $trangThai = $baoCao->trangThai == 0 ? 'Đang tiến hành' : '<span class="text-primary">Đã hoàn thành</span>';
                                                                                 $canBoDamNhan = '<ul class="pl-0" type="none">';
                                                                                 foreach ($baoCao->nhomNguoiDung as $nhomNguoiDung) {
                                                                                     $canBoDamNhan .= '<li>' . $nhomNguoiDung->nguoiDung->hoTen . '</li>';
