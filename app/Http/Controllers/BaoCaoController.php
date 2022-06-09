@@ -109,7 +109,7 @@ class BaoCaoController extends Controller
             'diemTonTai' => $request->diemTonTai,
             'keHoachHanhDong' => $request->keHoachHanhDong,
             'diemTDG' => $request->diemTDG,
-            'trangThai' => $request->trangThai,
+            'trangThai' => 0,
             'nganh_id' => $request->nganh_id,
             'tieuChi_id' => $request->tieuChi_id,
             'tieuChuan_id' => $request->tieuChuan_id,
@@ -144,7 +144,6 @@ class BaoCaoController extends Controller
             'diemTonTai' => $request->diemTonTai,
             'keHoachHanhDong' => $request->keHoachHanhDong,
             'diemTDG' => $request->diemTDG,
-            'trangThai' => $request->trangThai,
             'moDau' => $request->moDau,
             'ketLuan' => $request->ketLuan,
         ]);

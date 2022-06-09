@@ -36,22 +36,43 @@ $action = (object) [
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Nhóm</th>
                             <th>Ngành</th>
+                            <th>Năm học</th>
+                            <th>Chức năng</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-toggle="collapse" data-target="#demo1" class="accordion-toggle">
-                            <td>1</td>
-                            <td>Nhóm 1</td>
-                            <td>Công nghệ thông tin</td>
+                        @foreach ($nganhs as $key => $nganh)
+                        @php
+                            $canExport = true;
+                            foreach ($tieuChuans as $key => $tieuChuan) {
+                                foreach ($tieuChuan->tieuChi as $key => $tieuChi) {
+                                    $baoCao = $tieuChi->baoCao->where('nganh_id', $nganh->id)->where('dotDanhGia_id', $nganh->dotDanhGia_id)->first();
+                                    if (empty($baoCao) || ($baoCao && $baoCao->trangThai == 0)) {
+                                        $canExport = false;
+                                        break; break;
+                                    }
+                                }
+                            }
+                        @endphp
+                        <tr data-toggle="collapse" data-target="#nganh-{{$nganh->id}}{{$key}}" class="accordion-toggle">
+                            <td>{{ $key + 1 }}</td>
+                            <td>{{ $nganh->ten }}</td>
+                            <td>{{ $nganh->namHoc }}</td>
+                            <td>
+                                @if ($canExport)
+                                <a href="#" class="btn btn-primary">Xuất báo cáo</a>
+                                @else
+                                <a href="#" class="btn btn-secondary disabled">Xuất báo cáo</a>
+                                @endif
+                            </td>
                             <td><button class="btn btn-default btn-xs"><i class="fas fa-plus"></i></button></td>
                         </tr>
                         <tr>
                             <td colspan="12" class="hiddenRow">
-                                <div class="accordian-body collapse" id="demo1">
-                                    <table class="table table-bordered" width="100%" cellspacing="0">
+                                <div class="accordian-body collapse" id="nganh-{{$nganh->id}}{{$key}}">
+                                    <table class="table table-bordered bg-light" width="100%" cellspacing="0">
                                         <thead>
                                             <tr class="info">
                                                 <th>STT tiêu chuẩn</th>
@@ -60,15 +81,16 @@ $action = (object) [
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr data-toggle="collapse" class="accordion-toggle" data-target="#demo10">
-                                                <td>Tiêu chuẩn số 1</td>
-                                                <td>Mục tiêu và chuẩn đầu ra của chương trình đào tạo</td>
+                                            @foreach ($tieuChuans as $key => $tieuChuan)
+                                            <tr data-toggle="collapse" class="accordion-toggle" data-target="#tieuChuan-{{ $nganh->id }}{{$key}}">
+                                                <td>Tiêu chuẩn số {{ $tieuChuan->stt }}</td>
+                                                <td>{{ $tieuChuan->ten }}</td>
                                                 <td><button class="btn btn-default btn-xs"><i class="fas fa-plus"></i></button></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="12" class="hiddenRow">
-                                                    <div class="accordian-body collapse" id="demo10">
-                                                        <table class="table table-bordered" width="100%" cellspacing="0">
+                                                    <div class="accordian-body collapse" id="tieuChuan-{{ $nganh->id }}{{$key}}">
+                                                        <table class="table table-bordered bg-gradient-light" width="100%" cellspacing="0">
                                                             <thead>
                                                                 <tr>
                                                                     <th>STT tiêu chí</th>
@@ -79,29 +101,42 @@ $action = (object) [
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr>
-                                                                    <td>Tiêu chí 1.0</td>
-                                                                    <td>Tổng kết tiêu chuẩn 1</td>
-                                                                    <td>Báo cáo số 1.0</td>
-                                                                    <td>Đang tiến hành</td>
-                                                                    <td>Phan Thanh Hà</td>
-                                                                </tr>
+                                                                @foreach ($tieuChuan->tieuChi as $key => $tieuChi)
+                                                                    <tr>
+                                                                        <td>Tiêu chí số {{ $tieuChuan->stt }}.{{ $tieuChi->stt }}</td>
+                                                                        <td>{{ $tieuChi->ten }}</td>
+                                                                        @php
+                                                                            $baoCao = $tieuChi->baoCao->where('nganh_id', $nganh->id)->where('dotDanhGia_id', $nganh->dotDanhGia_id)->first();
+                                                                            $ten = '<span class="text-danger">Chưa có</span>';
+                                                                            $trangThai = '<span class="text-danger">Chưa có</span>';
+                                                                            $canBoDamNhan = '<span class="text-danger">Chưa có</span>';
+                                                                            if (!empty($baoCao)) {
+                                                                                $ten = 'Báo cáo số ' . $baoCao->tieuChuan->stt . '.' . $baoCao->tieuChi->stt;
+                                                                                $trangThai = $baoCao->trangThai == 0 ? 'Đang tiến hành' : 'Đã hoàn thành';
+                                                                                $canBoDamNhan = '<ul class="pl-0" type="none">';
+                                                                                foreach ($baoCao->nhomNguoiDung as $nhomNguoiDung) {
+                                                                                    $canBoDamNhan .= '<li>' . $nhomNguoiDung->nguoiDung->hoTen . '</li>';
+                                                                                }
+                                                                                $canBoDamNhan .= '</ul>';
+                                                                            }
+                                                                        @endphp
+                                                                        <td>{!! $ten !!}</td>
+                                                                        <td>{!! $trangThai !!}</td>
+                                                                        <td>{!! $canBoDamNhan !!}</td>
+                                                                    </tr>
+                                                                @endforeach
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </td>
                                             </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
                             </td>
                         </tr>
-                        <tr data-toggle="collapse" data-target="#demo2" class="accordion-toggle">
-                            <td>1</td>
-                            <td>Nhóm 1</td>
-                            <td>Công nghệ thông tin</td>
-                            <td><button class="btn btn-default btn-xs"><i class="fas fa-plus"></i></button></td>
-                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

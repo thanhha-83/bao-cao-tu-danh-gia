@@ -137,11 +137,13 @@
     ])
     @endcan
 
+    @can('tiendo-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'tiendobaocao.index',
         'icon' => 'fas fa fa-users',
         'title' => 'Tiến độ báo cáo'
     ])
+    @endcan
 
     <!-- Divider -->
     <hr class="sidebar-divider">

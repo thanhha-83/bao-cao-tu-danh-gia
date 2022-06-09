@@ -10,7 +10,7 @@ class BaoCao extends Model
 {
     use HasFactory, SoftDeletes;
     protected $dates = ['deleted_at'];
-    protected $fillable = ['moTa', 'diemManh', 'diemTonTai', 'keHoachHanhDong', 'diemTDG', 'trangThai', 'nganh_id', 'tieuChi_id', 'tieuChuan_id','dotDanhGia_id', 'nguoiDung_id'];
+    protected $fillable = ['moTa', 'diemManh', 'diemTonTai', 'keHoachHanhDong', 'diemTDG', 'trangThai', 'nganh_id', 'tieuChi_id', 'tieuChuan_id','dotDanhGia_id', 'nguoiDung_id', 'moDau', 'ketLuan', 'soTCDat'];
     public $timestamps = true;
     public function tieuChi()
     {

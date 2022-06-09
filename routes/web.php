@@ -180,8 +180,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('tiendobaocao')->group(function () {
-        Route::get('/', [TienDoBaoCaoController::class, 'index'])->name('tiendobaocao.index');
-        // Route::get('/show/{id}', [TienDoBaoCaoController::class, 'show'])->name('nhanxetbaocao.show')->middleware('can:nhanxetbaocao-binhluan,id');
+        Route::get('/', [TienDoBaoCaoController::class, 'index'])->name('tiendobaocao.index')->middleware('can:tiendo-danhsach');
     });
 
     Route::prefix('nhomnguoidung')->group(function () {
@@ -196,6 +195,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/restore-all', [NhomNguoiDungController::class, 'restoreAll'])->name('nhomnguoidung.restore-all')->middleware('can:nhom-them');
         Route::post('/force-destroy', [NhomNguoiDungController::class, 'forceDestroy'])->name('nhomnguoidung.force-destroy')->middleware('can:nhom-them');
         Route::post('/force-destroy-all', [NhomNguoiDungController::class, 'forceDestroyAll'])->name('nhomnguoidung.force-destroy-all')->middleware('can:nhom-them');
+        Route::post('/handle-select-quyen', [NhomNguoiDungController::class, 'handleSelectQuyen'])->middleware('can:nhom-them');
     });
 
     Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
@@ -219,7 +219,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/show/{id}', [MinhChungController::class, 'show'])->name('minhchung.show')->middleware('can:minhchung-chitiet');
         Route::get('/edit/{id}', [MinhChungController::class, 'edit'])->name('minhchung.edit')->middleware('can:minhchung-canhan,id');
         Route::post('/update/{id}', [MinhChungController::class, 'update'])->name('minhchung.update')->middleware('can:minhchung-canhan,id');
-        Route::post('/destroy', [MinhChungController::class, 'destroy'])->name('minhchung.destroy')->middleware('can:minhchung-canhan,id');
+        Route::post('/destroy/{id}', [MinhChungController::class, 'destroy'])->name('minhchung.destroy')->middleware('can:minhchung-canhan,id');
         Route::get('/trash', [MinhChungController::class, 'trash'])->name('minhchung.trash')->middleware('can:minhchung-xoa');
         Route::post('/restore', [MinhChungController::class, 'restore'])->name('minhchung.restore')->middleware('can:minhchung-xoa');
         Route::post('/restore-all', [MinhChungController::class, 'restoreAll'])->name('minhchung.restore-all')->middleware('can:minhchung-xoa');
@@ -231,8 +231,8 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('minhchungthanhphan')->group(function () {
-        Route::post('/store', [MinhChungThanhPhanController::class, 'store'])->name('minhchungthanhphan.store')->middleware('can:minhchung-sua');
-        Route::post('/destroy', [MinhChungThanhPhanController::class, 'destroy'])->name('minhchungthanhphan.destroy')->middleware('can:minhchung-sua');
+        Route::post('/store', [MinhChungThanhPhanController::class, 'store'])->name('minhchungthanhphan.store')->middleware('can:minhchung-them');
+        Route::post('/destroy', [MinhChungThanhPhanController::class, 'destroy'])->name('minhchungthanhphan.destroy')->middleware('can:minhchung-them');
     });
 
     Route::prefix('baocaosaoluu')->group(function () {

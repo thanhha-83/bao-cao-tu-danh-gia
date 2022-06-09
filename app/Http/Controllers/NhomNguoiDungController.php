@@ -10,6 +10,7 @@ use App\Models\NhomNguoiDung;
 use App\Models\NhomQuyen;
 use App\Models\QuyenNguoiDung;
 use App\Models\QuyenNhom;
+use App\Models\TieuChi;
 use App\Models\TieuChuan;
 use App\Models\User;
 use App\Models\VaiTro;
@@ -18,17 +19,22 @@ use App\Services\HandleUpdate3Many;
 
 class NhomNguoiDungController extends Controller
 {
+    private $nhomModel;
     private $nhomNguoiDungModel;
     private $nguoiDungQuyenModel;
     private $quyenNguoiDungModel;
     private $vaiTroModel;
     private $baoCaoModel;
-    public function __construct(Nhom $nhomModel, Nganh $nganhModel, QuyenNhom $quyenNhomModel, TieuChuan $tieuChuanModel, NhomQuyen $nhomQuyenModel, User $userModel, NhomNguoiDung $nhomNguoiDungModel, NguoiDungQuyen $nguoiDungQuyenModel, QuyenNguoiDung $quyenNguoiDungModel, VaiTro $vaiTroModel, BaoCao $baoCaoModel)
+    private $tieuChuanModel;
+    private $tieuChiModel;
+    private $userModel;
+    public function __construct(Nhom $nhomModel, Nganh $nganhModel, QuyenNhom $quyenNhomModel, TieuChuan $tieuChuanModel, TieuChi $tieuChiModel, NhomQuyen $nhomQuyenModel, User $userModel, NhomNguoiDung $nhomNguoiDungModel, NguoiDungQuyen $nguoiDungQuyenModel, QuyenNguoiDung $quyenNguoiDungModel, VaiTro $vaiTroModel, BaoCao $baoCaoModel)
     {
         $this->nhomModel = $nhomModel;
         $this->nganhModel = $nganhModel;
         $this->quyenNhomModel = $quyenNhomModel;
         $this->tieuChuanModel = $tieuChuanModel;
+        $this->tieuChiModel = $tieuChiModel;
         $this->nhomQuyenModel = $nhomQuyenModel;
         $this->userModel = $userModel;
         $this->nhomNguoiDungModel = $nhomNguoiDungModel;
@@ -48,7 +54,20 @@ class NhomNguoiDungController extends Controller
         $nhomNguoiDung = $this->nhomNguoiDungModel->find($id);
         $vaiTros = $this->vaiTroModel->all();
         $quyenNguoiDungs = $this->quyenNguoiDungModel->all();
-        $baoCaos = $this->baoCaoModel->all();
+        $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->get();
+        $tieuChuanIds = [];
+        foreach ($nhomQuyens as $nhomQuyen) {
+            if ($nhomQuyen->quyenNhom_id == 1 && !in_array($nhomQuyen->quyenNhom_id, $tieuChuanIds, true)) {
+                array_push($tieuChuanIds, $nhomQuyen->tieuChuan_id);
+            }
+        }
+        $tieuChis = $this->tieuChiModel->whereIn('tieuChuan_id', $tieuChuanIds)->get();
+        $tieuChiIds = [];
+        foreach ($tieuChis as $tieuChi) {
+            array_push($tieuChiIds, $tieuChi->id);
+        }
+        $baoCaos = $this->baoCaoModel->where('nganh_id', $nhomNguoiDung->nganh_id)->whereIn('tieuChi_id', $tieuChiIds)->get();
+        $baoCaoAlls = $this->baoCaoModel->all();
         $current_quyenNguoiDungs = [];
         $current_baoCaos = [];
         $nguoiDungQuyens = $this->nguoiDungQuyenModel->where('nhomNguoiDung_id', $id)->get();
@@ -56,7 +75,7 @@ class NhomNguoiDungController extends Controller
             array_push($current_quyenNguoiDungs, $item->quyenNguoiDung_id);
             array_push($current_baoCaos, $item->baoCao_id);
         }
-        return view('pages.nhomnguoidung.edit', compact('nhomNguoiDung', 'vaiTros', 'quyenNguoiDungs', 'baoCaos', 'current_quyenNguoiDungs', 'current_baoCaos'));
+        return view('pages.nhomnguoidung.edit', compact('nhomNguoiDung', 'vaiTros', 'quyenNguoiDungs', 'baoCaos', 'baoCaoAlls', 'current_quyenNguoiDungs', 'current_baoCaos'));
     }
     public function update(Request $request, $id)
     {
@@ -81,5 +100,26 @@ class NhomNguoiDungController extends Controller
             }
         }
         return redirect()->route('nhomnguoidung.edit', ['id' => $id])->with('message', 'Sửa thành công!');
+    }
+
+    public function handleSelectQuyen(Request $request)
+    {
+        $nhomNguoiDung = $this->nhomNguoiDungModel->find($request->nhomNguoiDung_id);
+        $nhomQuyens = $this->nhomQuyenModel->where('nhom_id', $nhomNguoiDung->nhom_id)->get();
+        $tieuChuanIds = [];
+        foreach ($nhomQuyens as $nhomQuyen) {
+            if ($nhomQuyen->quyenNhom_id == $request->quyen_id && !in_array($nhomQuyen->quyenNhom_id, $tieuChuanIds, true)) {
+                array_push($tieuChuanIds, $nhomQuyen->tieuChuan_id);
+            }
+        }
+        $tieuChis = $this->tieuChiModel->whereIn('tieuChuan_id', $tieuChuanIds)->get();
+        $tieuChiIds = [];
+        foreach ($tieuChis as $tieuChi) {
+            array_push($tieuChiIds, $tieuChi->id);
+        }
+        $baoCaos = $this->baoCaoModel->with('tieuChi')->with('tieuChuan')->where('nganh_id', $nhomNguoiDung->nganh_id)->whereIn('tieuChi_id', $tieuChiIds)->get();
+        return response()->json([
+            'baoCaos' => $baoCaos
+        ], 200);
     }
 }

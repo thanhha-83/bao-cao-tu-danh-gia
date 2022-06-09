@@ -32,6 +32,7 @@ $action = (object) [
     <div class="card shadow mb-4">
         @if (count($minhChungs) > 0)
             <div class="trash-action card-header py-3 d-flex flex-row align-items-center">
+                @can('minhchung-xoa')
                 <a href="#" class="btn btn-primary btn-icon-split btn-restore-all mr-3"
                     data-url="{{ route('minhchung.restore-all') }}"
                     data-redirect="{{ route('minhchung.index') }}">
@@ -48,6 +49,7 @@ $action = (object) [
                     </span>
                     <span class="text">Xóa tất cả</span>
                 </a>
+                @endcan
             </div>
         @endif
         <div class="card-body">
@@ -67,7 +69,7 @@ $action = (object) [
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $item->ten }}</td>
                                     <td>
-                                        @can(['minhchung-canhan'], $item->id)
+                                        @can('minhchung-xoa')
                                         <a href="#" class="btn btn-primary btn-restore"
                                             data-url="{{ route('minhchung.restore') }}" data-id="{{ $item->id }}">Phục
                                             hồi</a>

@@ -31,6 +31,11 @@ class TieuChi extends Model
         return $this->hasMany(MocChuan::class, 'tieuChi_id');
     }
 
+    public function baoCao()
+    {
+        return $this->hasMany(BaoCao::class, 'tieuChi_id');
+    }
+
     public function tuKhoa()
     {
         return $this

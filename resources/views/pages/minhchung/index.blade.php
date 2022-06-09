@@ -137,9 +137,9 @@ $action = (object) [
                                                     class="btn btn-success">Quản lý MCTP</a>
                                             @endif
                                         @endcan
-                                        @can('minhchung-xoa')
+                                        @can('minhchung-canhan', $item->id)
                                             <a href="#" class="btn btn-danger btn-delete"
-                                                data-url="{{ route('minhchung.destroy') }}"
+                                                data-url="{{ route('minhchung.destroy', ['id' => $item->id]) }}"
                                                 data-id="{{ $item->id }}">Xóa</a>
                                         @endcan
                                     </td>

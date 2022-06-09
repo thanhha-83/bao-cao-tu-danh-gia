@@ -48,12 +48,14 @@ return [
         'minhchung-them' => 'them-minh-chung',
         'minhchung-sua' => 'sua-minh-chung',
         'minhchung-xoa' => 'xoa-minh-chung',
-        'minhchung-canhan' => 'sua-minh-chung-ca-nhan',
+        'minhchung-canhan' => 'quan-ly-minh-chung-ca-nhan',
 
         'vaitrohethong-danhsach' => 'xem-danh-sach-vai-tro-he-thong',
         'vaitrohethong-them' => 'them-vai-tro-he-thong',
         'vaitrohethong-sua' => 'sua-vai-tro-he-thong',
         'vaitrohethong-xoa' => 'xoa-vai-tro-he-thong',
+
+        'tiendo-danhsach' => 'quan-ly-tien-do-bao-cao'
 
     ],
 ];

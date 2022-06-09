@@ -16,6 +16,7 @@ class VaiTroHT extends Model
     {
         return $this
             ->belongsToMany(QuyenHT::class, 'vai_tro_h_t_quyen_h_t_s', 'vaiTroHT_id', 'quyenHT_id')
+            ->withPivot('nganh_id')
             ->withTimestamps();
     }
 }

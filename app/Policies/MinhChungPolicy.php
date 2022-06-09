@@ -39,6 +39,6 @@ class MinhChungPolicy
     public function personal(User $user, $id)
     {
         $minhChung = MinhChung::find($id);
-        return $user->checkPersonalPermissionAccess(config('permissions.access.minhchung-canhan'), $minhChung) || $user->checkPermissionAccess(config('permissions.access.minhchung-sua'));
+        return $user->checkPersonalPermissionAccess(config('permissions.access.minhchung-canhan'), $minhChung);
     }
 }

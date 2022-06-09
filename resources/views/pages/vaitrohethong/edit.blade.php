@@ -10,6 +10,10 @@ $action = (object) [
 ];
 @endphp
 
+@section('styles')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endsection
+
 @section('breadcrumb')
     @include('partials.breadcrumb', compact('controller', 'action'))
 @endsection
@@ -44,6 +48,7 @@ $action = (object) [
                             </label>
                         </div>
                         @foreach($parentQuyenHTs as $item)
+                            @if ($item->slug !== 'quan-ly-tien-do-bao-cao')
                             <div class="card border-primary mb-3 col-md-12 p-0">
                                 <div class="card-header">
                                     <label>
@@ -66,6 +71,29 @@ $action = (object) [
                                     @endforeach
                                 </div>
                             </div>
+                            @else
+                            <div class="card border-primary mb-3 col-md-12 p-0">
+                                <div class="card-header">
+                                    <label>
+                                        <input type="checkbox" name="quanLyTienDo" value="{{ $item->id }}" class="quan-ly-tien-do checkbox_wrapper" {{ in_array($item->id, $currentQuyens) ? 'checked' : '' }}>
+                                        {{ $item->ten }}
+                                    </label>
+                                </div>
+                                <div class="row px-3">
+                                    <div class="card-body text-primary py-2 px-3">
+                                        <p class="card-title mb-0">
+                                            <label for="nganh_id">Ngành</label>
+                                            <select class="form-control tags-select"
+                                                multiple="multiple" name="nganh_id[]">
+                                                @foreach($nganhs as $item )
+                                                    <option value="{{ $item->id }}" {{ in_array($item->id, $nganhIds) ? 'selected' : '' }}>{{ $item->ten }}</option>
+                                                @endforeach
+                                            </select>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                         @endforeach
                     </div>
                 </div>
@@ -76,21 +104,21 @@ $action = (object) [
 @endsection
 
 @section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="js/handleMultipleSelect.js"></script>
     <script>
         $(document).ready(function() {
             initCheckedCheckbox();
             function initCheckedCheckbox() {
-                $(window).on('load', () => {
-                    $checkboxWrapper = $('.checkbox_wrapper');
-                    $checkboxWrapper.each((i, el) => {
-                        $checkboxChildrent = $(el).parent().closest('.card').find('.checkbox_childrent');
-                        $checkboxChildrentChecked = $(el).parent().closest('.card').find('.checkbox_childrent').filter(':checked');
-                        if ($checkboxChildrent.length === $checkboxChildrentChecked .length) {
-                            $(el).prop('checked', true);
-                        }
-                    })
-                    checkAllCheckboxWrapperChecked();
+                $checkboxWrapper = $('.checkbox_wrapper:not(.quan-ly-tien-do)');
+                $checkboxWrapper.each((i, el) => {
+                    $checkboxChildrent = $(el).parent().closest('.card').find('.checkbox_childrent');
+                    $checkboxChildrentChecked = $(el).parent().closest('.card').find('.checkbox_childrent').filter(':checked');
+                    if ($checkboxChildrent.length === $checkboxChildrentChecked .length) {
+                        $(el).prop('checked', true);
+                    }
                 })
+                checkAllCheckboxWrapperChecked();
             }
             function checkAllCheckboxWrapperChecked() {
                 $checkAll = $('.checkall');

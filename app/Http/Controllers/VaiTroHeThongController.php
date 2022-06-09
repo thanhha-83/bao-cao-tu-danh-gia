@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Nganh;
 use App\Models\QuyenHT;
 use App\Models\VaiTroHT;
+use App\Models\VaiTroHTQuyenHT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -13,10 +15,14 @@ class VaiTroHeThongController extends Controller
 {
     private $vaiTroHTModel;
     private $quyenHTModel;
-    public function __construct(VaiTroHT $vaiTroHTModel, QuyenHT $quyenHTModel)
+    private $nganhModel;
+    private $vaiTroHTQuyenHTModel;
+    public function __construct(VaiTroHT $vaiTroHTModel, QuyenHT $quyenHTModel, Nganh $nganhModel, VaiTroHTQuyenHT $vaiTroHTQuyenHTModel)
     {
         $this->vaiTroHTModel = $vaiTroHTModel;
         $this->quyenHTModel = $quyenHTModel;
+        $this->nganhModel = $nganhModel;
+        $this->vaiTroHTQuyenHTModel = $vaiTroHTQuyenHTModel;
     }
 
     protected function callValidate(Request $request, $id = null)
@@ -39,7 +45,8 @@ class VaiTroHeThongController extends Controller
     public function create()
     {
         $parentQuyenHTs = $this->quyenHTModel->where('parent_id', 0)->get();
-        return view('pages.vaitrohethong.create', compact('parentQuyenHTs'));
+        $nganhs = $this->nganhModel->all();
+        return view('pages.vaitrohethong.create', compact('parentQuyenHTs', 'nganhs'));
     }
 
     public function store(Request $request)
@@ -52,6 +59,18 @@ class VaiTroHeThongController extends Controller
                 'slug' => Str::slug($request->ten, '-')
             ]);
             $vaiTroHT->quyenHT()->attach($request->quyenHT);
+            if (!empty($request->nganh_id) && count($request->nganh_id) > 0 && !empty($request->quanLyTienDo)) {
+                $datas = array();
+                foreach ( $request->nganh_id as $value ){
+                    $quyenHTs = array(
+                        'vaiTroHT_id'  => $vaiTroHT->id,
+                        'quyenHT_id'  => $request->quanLyTienDo,
+                        'nganh_id'    => $value
+                    );
+                    array_push($datas, $quyenHTs);
+                }
+                $vaiTroHT->quyenHT()->attach($datas);
+            }
             DB::commit();
             return redirect()->route('vaitrohethong.index')->with('message', 'Thêm thành công!');
         } catch (\Exception $e) {
@@ -67,8 +86,14 @@ class VaiTroHeThongController extends Controller
         foreach ($vaiTroHT->quyenHT as $item) {
             array_push($currentQuyens, $item->id);
         }
+        $nganhIds = [];
+        $quyenQLtienDos = $this->vaiTroHTQuyenHTModel->where('vaiTroHT_id', $vaiTroHT->id)->where('quyenHT_id', 54)->get();
+        foreach ($quyenQLtienDos as $quyenQLTienDo) {
+            array_push($nganhIds, $quyenQLTienDo->nganh_id);
+        }
         $parentQuyenHTs = $this->quyenHTModel->where('parent_id', 0)->get();
-        return view('pages.vaitrohethong.edit', compact('vaiTroHT', 'parentQuyenHTs', 'currentQuyens'));
+        $nganhs = $this->nganhModel->all();
+        return view('pages.vaitrohethong.edit', compact('vaiTroHT', 'parentQuyenHTs', 'currentQuyens', 'nganhs', 'nganhIds'));
     }
 
     public function update(Request $request, $id)
@@ -82,7 +107,19 @@ class VaiTroHeThongController extends Controller
                 'ten' => $request->ten,
                 'slug' => Str::slug($request->ten, '-')
             ]);
-            $vaiTroHT->quyenHT()->sync($request->quyenHT);
+            $request->quyenHT = !empty($request->quyenHT) ? $request->quyenHT : array();
+            $datas = array();
+            if (!empty($request->nganh_id) && count($request->nganh_id) > 0 && !empty($request->quanLyTienDo)) {
+                foreach ( $request->nganh_id as $value ){
+                    $quyenHTs = array(
+                        'vaiTroHT_id'  => $vaiTroHT->id,
+                        'quyenHT_id'  => $request->quanLyTienDo,
+                        'nganh_id'    => $value
+                    );
+                    array_push($datas, $quyenHTs);
+                }
+            }
+            $vaiTroHT->quyenHT()->sync(array_merge($request->quyenHT, $datas));
             DB::commit();
             return redirect()->route('vaitrohethong.index')->with('message', 'Sửa thành công!');
         } catch (\Exception $e) {

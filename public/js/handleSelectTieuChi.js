@@ -1,11 +1,10 @@
 $('#tieuChi_id').on('change', () => {
     const stt = $('#tieuChi_id').find('option:selected').data('stt');
-    console.log(stt);
+    $('.is-normal-tieuchi').removeClass('d-none');
+    $('.is-tieuchi-0').removeClass('d-none');
     if (stt == 0) {
-        $('.is-normal-tieuchi').toggleClass('d-none');
-        $('.is-tieuchi-0').toggleClass('d-none');
+        $('.is-normal-tieuchi').addClass('d-none');
     } else {
-        $('.is-normal-tieuchi').toggleClass('d-none');
-        $('.is-tieuchi-0').toggleClass('d-none');
+        $('.is-tieuchi-0').addClass('d-none');
     }
 })

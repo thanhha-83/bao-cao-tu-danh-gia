@@ -17,6 +17,7 @@ use App\Policies\GiaiDoanPolicy;
 use App\Policies\QuanLyNhomPolicy;
 use App\Policies\NhanXetBaoCaoPolicy;
 use App\Policies\PhanBienBaoCaoPolicy;
+use App\Policies\TienDoBaoCaoPolicy;
 
 class PermissionGateAndPolicyAccess {
 
@@ -97,5 +98,7 @@ class PermissionGateAndPolicyAccess {
 
         Gate::define('phanbienbaocao-danhsach', [PhanBienBaoCaoPolicy::class, 'view']);
         Gate::define('phanbienbaocao-binhluan', [PhanBienBaoCaoPolicy::class, 'comment']);
+
+        Gate::define('tiendo-danhsach', [TienDoBaoCaoPolicy::class, 'viewAny']);
     }
 }

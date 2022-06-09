@@ -27,7 +27,6 @@ tinymce.init({
     selector: "textarea.tiny-editor",
     relative_urls: false,
     content_css: "../../css/tiny-editor.css",
-    content_style: "body { font-size: 13pt; font-family: 'Times News Roman', sans-serif; }",
     fontsize_formats: "8pt 10pt 12pt 13pt 14pt 18pt 24pt 36pt",
     plugins:
         "advlist autolink lists link image charmap preview anchor pagebreak searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking save table directionality emoticons template",
@@ -65,7 +64,7 @@ tinymce.init({
 
         editor.addCommand("iframeCommand", function (ui, value) {
             editor.insertContent(
-                `<a target="_blank" rel="nofollow noopener" href="${value.href}" class="is-minhchung">[${value.title}]</a>`
+                `<a target="_blank" rel="nofollow noopener" href="${value.href}" class="is-minhchung" style="color: #000;font-weight: bold;text-decoration: none;">[${value.title}]</a>`
             );
         });
     },
