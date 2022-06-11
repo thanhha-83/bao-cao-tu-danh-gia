@@ -97,7 +97,7 @@ class User extends Authenticatable
 
     public function checkTime($activity, $baoCao) {
         date_default_timezone_set('Asia/Ho_Chi_Minh');
-        $hoatDongs = $baoCao->nganh->dotDanhGia[0]->hoatDong;
+        $hoatDongs = $baoCao->dotDanhGia->hoatDong;
         $nhomNguoiDungs = auth()->user()->nhomNguoiDung;
         $baoCaoIds = [];
         foreach ($nhomNguoiDungs as $nhomNguoiDung) {
@@ -109,7 +109,7 @@ class User extends Authenticatable
             $now = new DateTime();
             $startDate = new DateTime($hoatDong->pivot->ngayBD);
             $endDate = new DateTime($hoatDong->pivot->ngayKT);
-            if (($hoatDong->slug == $activity || in_array($baoCao->id, $baoCaoIds)) && $startDate <= $now && $now <= $endDate) {
+            if ($hoatDong->slug == $activity && $startDate <= $now && $now <= $endDate) {
                 return true;
             }
         }

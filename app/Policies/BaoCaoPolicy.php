@@ -41,7 +41,7 @@ class BaoCaoPolicy
         $baoCao = BaoCao::find($id);
         $nhomNguoiDungs = NhomNguoiDung::where('nguoiDung_id', $user->id)->get();
         $baoCaoPer = new BaoCaoPermission();
-        return $baoCaoPer->updatePersonal($nhomNguoiDungs, $baoCao);
+        return $baoCaoPer->updatePersonal($nhomNguoiDungs, $baoCao) && $user->checkTime('viet-bao-cao', $baoCao);
     }
 
     public function deletePersonal(User $user, $id)
@@ -49,5 +49,13 @@ class BaoCaoPolicy
         $baoCao = BaoCao::withTrashed()->find($id);
         $baoCaoPer = new BaoCaoPermission();
         return $baoCaoPer->deletePersonal($user, $baoCao);
+    }
+
+    public function controlPersonal(User $user, $id)
+    {
+        $baoCao = BaoCao::find($id);
+        $nhomNguoiDungs = NhomNguoiDung::where('nguoiDung_id', $user->id)->get();
+        $baoCaoPer = new BaoCaoPermission();
+        return $baoCaoPer->controlPersonal($nhomNguoiDungs, $baoCao);
     }
 }

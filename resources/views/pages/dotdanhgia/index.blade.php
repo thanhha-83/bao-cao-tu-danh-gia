@@ -71,12 +71,12 @@ $action = (object) [
                                     <td>{{ $item->namHoc }}</td>
                                     <td>{{ $item->trangThai == 0 ? 'Đang tiến hành' : 'Đã kết thúc' }}</td>
                                     <td>
+                                        @can('dotdanhgia-chitiet')
+                                        <a href="{{ route('dotdanhgia.show', ['id' => $item->id]) }}"
+                                            class="btn btn-primary">Xem chi tiết</a>
+                                        @endcan
                                         @if ($item->trangThai == 0)
-                                            @can('dotdanhgia-chitiet')
-                                            <a href="{{ route('dotdanhgia.show', ['id' => $item->id]) }}"
-                                                class="btn btn-primary">Xem chi tiết</a>
-                                            @endcan
-                                            @can('dotdanhgia-sua')
+                                            @can('dotdanhgia-sua', $item->id)
                                             <a href="{{ route('dotdanhgia.edit', ['id' => $item->id]) }}"
                                                 class="btn btn-secondary">Sửa</a>
                                             @endcan

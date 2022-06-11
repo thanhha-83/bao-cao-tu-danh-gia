@@ -38,7 +38,7 @@ class BaoCaoPermission {
                     array_push($nhomIds, $nhomQuyen->nhom_id);
                 }
             }
-            if ($nhomNguoiDung->vaiTro_id === 2 || $nhomNguoiDung->vaiTro_id === 3) {
+            if ($nhomNguoiDung->vaiTro_id === 2) {
                 array_push($vaiTroIds, $nhomNguoiDung->vaiTro_id);
             }
         }
@@ -68,6 +68,21 @@ class BaoCaoPermission {
     }
 
     public function updatePersonal($nhomNguoiDungs, $baoCao)
+    {
+        $nhomNguoiDungIds = [];
+        foreach ($nhomNguoiDungs as $nhomNguoiDung) {
+            array_push($nhomNguoiDungIds, $nhomNguoiDung->id);
+        }
+        $nguoiDungQuyens = $this->nguoiDungQuyenModel->whereIn('nhomNguoiDung_id', $nhomNguoiDungIds)->get();
+        foreach ($nguoiDungQuyens as $nguoiDungQuyen) {
+            if ($nguoiDungQuyen->baoCao_id === $baoCao->id && $baoCao->trangThai == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function controlPersonal($nhomNguoiDungs, $baoCao)
     {
         $nhomNguoiDungIds = [];
         foreach ($nhomNguoiDungs as $nhomNguoiDung) {

@@ -11,6 +11,7 @@ use App\Models\NhomNguoiDung;
 use App\Models\NhomQuyen;
 use App\Models\TieuChi;
 use App\Models\TieuChuan;
+use App\Models\DotDanhGia;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -149,6 +150,31 @@ class BaoCaoController extends Controller
         ]);
         $baoCao->updated_at = Carbon::now();
         $baoCao->save(['timestamps' => FALSE]);
+        $nganh = DotDanhGia::orderBy('namHoc')
+                        ->join('nganh_dot_danh_gias', 'nganh_dot_danh_gias.dotDanhGia_id', '=', 'dot_danh_gias.id')
+                        ->join('nganhs', 'nganhs.id', '=', 'nganh_dot_danh_gias.nganh_id')
+                        ->where('dot_danh_gias.trangThai', 0)
+                        ->where('nganh_dot_danh_gias.nganh_id', $baoCao->nganh_id)->first();
+        $tieuChuans = $this->tieuChuanModel->all();
+        foreach ($tieuChuans as $tieuChuan) {
+            $count = 0;
+            $baoCaoTongKet = null;
+            foreach ($tieuChuan->tieuChi as $key => $tieuChi) {
+                if ($key == 0) {
+                    $baoCaoTongKet = $tieuChi->baoCao->where('nganh_id', $nganh->id)->where('dotDanhGia_id', $nganh->dotDanhGia_id)->first();
+                }
+                $found = $tieuChi->baoCao->where('nganh_id', $nganh->id)->where('dotDanhGia_id', $nganh->dotDanhGia_id)->first();
+                if (!empty($found->diemTDG) && $found->diemTDG >= 4) {
+                    $count++;
+                }
+            }
+            if (!empty($baoCaoTongKet)) {
+                $baoCaoTongKet->update([
+                    'tongSoTC' => count($tieuChuan->tieuChi) - 1,
+                    'soTCDat' => $count
+                ]);
+            }
+        }
         return redirect()->route('baocao.show', ['id' => $id])->with('message', 'Sửa thành công!');
     }
 
@@ -305,12 +331,6 @@ class BaoCaoController extends Controller
                 'message' => 'fail',
             ], 500);
         }
-    }
-
-    public function word($id)
-    {
-        $baoCao = $this->baoCaoModel->find($id);
-        return view('pages.baocao.word', compact('baoCao'));
     }
 
     public function backup(Request $request, $id)

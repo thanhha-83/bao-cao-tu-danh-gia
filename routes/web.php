@@ -136,9 +136,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/create', [DotDanhGiaController::class, 'create'])->name('dotdanhgia.create')->middleware('can:dotdanhgia-them');
         Route::post('/store', [DotDanhGiaController::class, 'store'])->name('dotdanhgia.store')->middleware('can:dotdanhgia-them');
         Route::get('/show/{id}', [DotDanhGiaController::class, 'show'])->name('dotdanhgia.show')->middleware('can:dotdanhgia-chitiet');
-        Route::get('/edit/{id}', [DotDanhGiaController::class, 'edit'])->name('dotdanhgia.edit')->middleware('can:dotdanhgia-sua');
-        Route::post('/update/{id}', [DotDanhGiaController::class, 'update'])->name('dotdanhgia.update')->middleware('can:dotdanhgia-sua');
-        Route::post('/destroy', [DotDanhGiaController::class, 'destroy'])->name('dotdanhgia.destroy')->middleware('can:dotdanhgia-xoa');
+        Route::get('/showbaocao/{dotDanhGia_id}/{nganh_id}', [DotDanhGiaController::class, 'showBaoCao'])->name('dotdanhgia.showbaocao')->middleware('can:dotdanhgia-chitiet');
+        Route::get('/edit/{id}', [DotDanhGiaController::class, 'edit'])->name('dotdanhgia.edit')->middleware('can:dotdanhgia-sua,id');
+        Route::post('/update/{id}', [DotDanhGiaController::class, 'update'])->name('dotdanhgia.update')->middleware('can:dotdanhgia-sua,id');
+        Route::post('/destroy/', [DotDanhGiaController::class, 'destroy'])->name('dotdanhgia.destroy')->middleware('can:dotdanhgia-xoa');
         Route::post('/finish', [DotDanhGiaController::class, 'finish'])->name('dotdanhgia.finish')->middleware('can:dotdanhgia-dieukhien');
         Route::post('/reopen', [DotDanhGiaController::class, 'reopen'])->name('dotdanhgia.reopen')->middleware('can:dotdanhgia-dieukhien');
         Route::get('/trash', [DotDanhGiaController::class, 'trash'])->name('dotdanhgia.trash')->middleware('can:dotdanhgia-xoa');
@@ -156,14 +157,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/edit/{id}', [BaoCaoController::class, 'edit'])->name('baocao.edit')->middleware('can:baocao-sua,id');
         Route::post('/update/{id}', [BaoCaoController::class, 'update'])->name('baocao.update')->middleware('can:baocao-sua,id');
         Route::post('/destroy/{id}', [BaoCaoController::class, 'destroy'])->name('baocao.destroy')->middleware('can:baocao-xoa,id');
-        Route::post('/finish/{id}', [BaoCaoController::class, 'finish'])->name('baocao.finish')->middleware('can:baocao-sua,id');
-        Route::post('/reopen/{id}', [BaoCaoController::class, 'reopen'])->name('baocao.reopen')->middleware('can:baocao-sua,id');
+        Route::post('/finish/{id}', [BaoCaoController::class, 'finish'])->name('baocao.finish')->middleware('can:baocao-dieukhien,id');
+        Route::post('/reopen/{id}', [BaoCaoController::class, 'reopen'])->name('baocao.reopen')->middleware('can:baocao-dieukhien,id');
         Route::get('/trash', [BaoCaoController::class, 'trash'])->name('baocao.trash')->middleware('can:baocao-thungrac');
         Route::post('/restore/{id}', [BaoCaoController::class, 'restore'])->name('baocao.restore')->middleware('can:baocao-xoa,id');
         Route::post('/restore-all', [BaoCaoController::class, 'restoreAll'])->name('baocao.restore-all')->middleware('can:baocao-thungrac');
         Route::post('/force-destroy/{id}', [BaoCaoController::class, 'forceDestroy'])->name('baocao.force-destroy')->middleware('can:baocao-xoa,id');
         Route::post('/force-destroy-all', [BaoCaoController::class, 'forceDestroyAll'])->name('baocao.force-destroy-all')->middleware('can:baocao-thungrac');
-        Route::get('/word/{id}', [BaoCaoController::class, 'word'])->name('baocao.word');
         Route::post('/backup/{id}', [BaoCaoController::class, 'backup'])->name('baocao.backup')->middleware('can:baocao-sua,id');
         Route::post('/handle-select-nganh', [BaoCaoController::class, 'handleSelectNganh'])->name('baocao.handle-select-nganh');
         Route::post('/handle-select-tieuchuan', [BaoCaoController::class, 'handleSelectTieuChuan'])->name('baocao.handle-select-tieuchuan');
@@ -182,6 +182,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('tiendobaocao')->group(function () {
         Route::get('/', [TienDoBaoCaoController::class, 'index'])->name('tiendobaocao.index')->middleware('can:tiendo-danhsach');
         Route::get('/word-all/{id}', [TienDoBaoCaoController::class, 'wordAll'])->name('tiendobaocao.word-all')->middleware('can:tiendo-danhsach');
+        Route::get('/publish/{id}', [TienDoBaoCaoController::class, 'publish'])->name('tiendobaocao.publish')->middleware('can:tiendo-danhsach');
+        Route::get('/unpublish/{id}', [TienDoBaoCaoController::class, 'unpublish'])->name('tiendobaocao.unpublish')->middleware('can:tiendo-danhsach');
     });
 
     Route::prefix('nhomnguoidung')->group(function () {

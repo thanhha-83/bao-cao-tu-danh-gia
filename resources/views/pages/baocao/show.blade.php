@@ -11,7 +11,7 @@ $action = (object) [
 @endphp
 
 @section('styles')
-    <link rel="stylesheet" href="css/tiny-editor.css">
+    <link rel="stylesheet" href="css/style-word.css">
     <style>
         .minhchung {
             display: block;
@@ -52,35 +52,35 @@ $action = (object) [
     {{-- Content --}}
     <div class="row">
         <div class="card shadow mb-4 col mx-3 p-0">
-            <div class="card-body p-5">
-                <h6 class="text-uppercase font-weight-bold text-dark text-center text-bold">Tiêu chí số {{ $baoCao->tieuChi->tieuChuan->stt }}.{{ $baoCao->tieuChi->stt }}. {{ $baoCao->tieuChi->ten }}
-                </h6>
+            <div class="wrap-word-content card-body p-5">
+                <h3>Tiêu chí số {{ $baoCao->tieuChi->tieuChuan->stt }}.{{ $baoCao->tieuChi->stt }}. {{ $baoCao->tieuChi->ten }}</h3>
                 @if ($baoCao->tieuChi->stt !== 0)
-                <p class="font-weight-bold text-dark">Mô tả</p>
+                <p class="h3">1. Mô tả hiện trạng</p>
                 {!! $baoCao->moTa !!}
-                <p class="font-weight-bold text-dark">Điểm mạnh</p>
+                <p class="h3">2. Điểm mạnh</p>
                 {!! $baoCao->diemManh !!}
-                <p class="font-weight-bold text-dark">Điểm tồn tại</p>
+                <p class="h3">3. Điểm tồn tại</p>
                 {!! $baoCao->diemTonTai !!}
-                <p class="font-weight-bold text-dark">Kế hoạch hành động</p>
+                <p class="h3">4. Kế hoạch hành động</p>
                 {!! $baoCao->keHoachHanhDong !!}
-                <p class="font-weight-bold text-dark">Điểm tự đánh giá</p>
-                {!! $baoCao->diemTDG !!}/7
+                <p class="h3">5. Tự đánh giá</p>
+                <p>{!! $baoCao->diemTDG >= 4 ? 'Đạt' : 'Chưa đạt' !!} (Điểm TĐG: {!! $baoCao->diemTDG !!}/7)</p>
                 @else
-                <p class="font-weight-bold text-dark">Mở đầu</p>
+                <h3>Mở đầu</h3>
                 {!! $baoCao->moDau !!}
-                <p class="font-weight-bold text-dark">Kết luận</p>
+                <h3>Kết luận</h3>
                 {!! $baoCao->ketLuan !!}
-                <p class="font-weight-bold text-dark">Số tiêu chí đạt</p>
+                <h3>Số tiêu chí đạt</h3>
                 {!! $baoCao->soTCDat !!}
                 @endif
             </div>
+            @can('baocao-sua', $baoCao->id)
             <div class="card-footer p-3">
                 <div class="text-right">
-                    <a href="{{ route('baocao.word', ['id' => $baoCao->id]) }}" class="btn btn-primary">Xuất Word</a>
                     <a href="{{ route('baocao.edit', ['id' => $baoCao->id]) }}" class="btn btn-secondary">Sửa</a>
                 </div>
             </div>
+            @endcan
         </div>
         @if ($baoCao->tieuChi->stt !== 0)
         <div class="mb-4 col-md-3 mx-2">
@@ -262,46 +262,7 @@ $action = (object) [
         integrity="sha512-LvYVj/X6QpABcaqJBqgfOkSjuXv81bLz+rpz0BQoEbamtLkUF2xhPNwtI/xrokAuaNEQAMMA1/YhbeykYzNKWg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="js/handleDelete.js"></script>
-    <script>
-        $(document).ready(function() {
-            $listMinhChung = $('.list-minhchung');
-            $('.is-minhchung').each((i, el) => {
-                $(el).attr('id', `minhchung-${i + 1}`);
-                $listMinhChung.append(
-                    `<li><a class="minhchung" data-id="minhchung-${i + 1}" href="${window.location.href.split(/[?#]/)[0]}#minhchung-${i + 1}">${$(el).text()}</a></li>`
-                );
-            });
-            $('.is-minhchung').on('click', (e) => {
-                if ($(e.currentTarget).attr('href').includes('/minhchung/detailTP/')) {
-                    e.preventDefault();
-                    $('.btn-show-modal').attr('data-url', $(e.currentTarget).attr('href'));
-                    $('.btn-show-modal').click();
-                }
-            });
-            $('#deleteCatModal').on('show.bs.modal', (e) => {
-                const _token = $('meta[name="csrf-token"]').attr('content');
-                const id = $(e.relatedTarget).data('url').split('/').pop();
-                $.ajax({
-                    type: "POST",
-                    url: 'minhchung/gettp',
-                    data: {
-                        id,
-                        _token
-                    },
-                    success: (datas) => {
-                        for (data of datas) {
-                            $('.modal-body').find('.content').html('');
-                            $('.modal-body').find('.content').append(
-                                `<li>
-                                    <a href="${data.link}" target="_blank" rel="noopener nofollower">${data.ten}</a>
-                                </li>`
-                            );
-                        }
-                    },
-                });
-            })
-        });
-    </script>
+    <script src="js/handleScrollToMinhChung.js"></script>
     <script>
         $(document).ready(function() {
             const _token = $('meta[name="csrf-token"]').attr('content');

@@ -23,6 +23,6 @@ class PhanBienBaoCaoPolicy
         $baoCao = BaoCao::find($id);
         $nhomNguoiDungs = NhomNguoiDung::where('nguoiDung_id', $user->id)->get();
         $baoCaoPer = new PhanBienBaoCaoPermission();
-        return $baoCaoPer->comment($nhomNguoiDungs, $baoCao);
+        return $baoCaoPer->comment($nhomNguoiDungs, $baoCao) && $user->checkTime('phan-bien-bao-cao', $baoCao);
     }
 }

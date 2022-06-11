@@ -16,4 +16,9 @@ class TieuChuan extends Model
     {
         return $this->hasMany(TieuChi::class, 'tieuChuan_id')->orderBy('stt');
     }
+
+    public function baoCao()
+    {
+        return $this->hasMany(BaoCao::class, 'tieuChuan_id');
+    }
 }

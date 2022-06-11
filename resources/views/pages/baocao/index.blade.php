@@ -84,6 +84,8 @@ $action = (object) [
                                             class="btn btn-secondary">Sửa</a>
                                         <a href="#" class="btn btn-success btn-backup"
                                             data-url="{{ route('baocao.backup', ['id' => $item->id]) }}" data-id="{{ $item->id }}">Sao lưu</a>
+                                        @endcan
+                                        @can('baocao-dieukhien', $item->id)
                                         @if ($item->trangThai == 0)
                                         <a href="#" class="btn btn-info btn-finish"
                                             data-url="{{ route('baocao.finish', ['id' => $item->id]) }}" data-id="{{ $item->id }}">Hoàn thành</a>

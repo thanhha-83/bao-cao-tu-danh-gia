@@ -1,9 +1,9 @@
-@extends('layouts.index', ['title' => 'Quản lý nhóm'])
+@extends('layouts.index', ['title' => 'Tiến độ báo cáo'])
 
 @php
 $controller = (object) [
-    'name' => 'Quản lý nhóm',
-    'href' => '/quanlynhom',
+    'name' => 'Tiến độ báo cáo',
+    'href' => '/tiendobaocao',
 ];
 $action = (object) [
     'name' => 'Danh sách',
@@ -46,11 +46,19 @@ $action = (object) [
                         @foreach ($nganhs as $key => $nganh)
                         @php
                             $canExport = true;
+                            $isPublished = false;
                             foreach ($tieuChuans as $key => $tieuChuan) {
                                 foreach ($tieuChuan->tieuChi as $key => $tieuChi) {
                                     $baoCao = $tieuChi->baoCao->where('nganh_id', $nganh->id)->where('dotDanhGia_id', $nganh->dotDanhGia_id)->first();
                                     if (empty($baoCao) || ($baoCao && $baoCao->trangThai == 0)) {
                                         $canExport = false;
+                                        break; break;
+                                    }
+                                }
+                                foreach ($tieuChuan->tieuChi as $key => $tieuChi) {
+                                    $baoCao = $tieuChi->baoCao->where('nganh_id', $nganh->id)->where('dotDanhGia_id', $nganh->dotDanhGia_id)->first();
+                                    if (!empty($baoCao) && $baoCao->congKhai == 1) {
+                                        $isPublished = true;
                                         break; break;
                                     }
                                 }
@@ -66,6 +74,11 @@ $action = (object) [
                                 @else
                                 <a href="{{ route('tiendobaocao.word-all', ['id' => $nganh->id]) }}" class="btn btn-secondary disabled">Xuất báo cáo</a>
                                 @endif
+                                @if ($isPublished)
+                                <a href="{{ route('tiendobaocao.unpublish', ['id' => $nganh->id]) }}" class="btn btn-success">Huỷ công khai</a>
+                                @else
+                                <a href="{{ route('tiendobaocao.publish', ['id' => $nganh->id]) }}" class="btn btn-success">Công khai</a>
+                                @endif
                             </td>
                             <td><button class="btn btn-default btn-xs"><i class="fas fa-plus"></i></button></td>
                         </tr>
@@ -77,14 +90,37 @@ $action = (object) [
                                             <tr class="info">
                                                 <th>STT tiêu chuẩn</th>
                                                 <th>Tên tiêu chuẩn</th>
+                                                <th>Tiến độ</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($tieuChuans as $key => $tieuChuan)
+                                            @php
+                                                $count = 0;
+                                                foreach($tieuChuan->tieuChi as $tieuChi) {
+                                                    $baoCao = $tieuChi->baoCao->where('nganh_id', $nganh->id)
+                                                            ->where('dotDanhGia_id', $nganh->dotDanhGia_id)
+                                                            ->where('trangThai', 1)->first();
+                                                    if ($baoCao) {
+                                                        $count++;
+                                                    }
+                                                }
+                                                $tieuChis = $tieuChuan->tieuChi;
+                                                $tienDo = $count / count($tieuChis) * 100;
+                                            @endphp
                                             <tr data-toggle="collapse" class="accordion-toggle" data-target="#tieuChuan-{{ $nganh->id }}{{$key}}">
                                                 <td>Tiêu chuẩn số {{ $tieuChuan->stt }}</td>
                                                 <td>{{ $tieuChuan->ten }}</td>
+                                                <td>
+                                                    <h4 class="small font-weight-bold">
+                                                        <span class="float-right">{{ $tienDo == 100 ? 'Hoàn thành!' : $tienDo.'%' }}</span>
+                                                    </h4>
+                                                    <div class="progress w-100">
+                                                        <div class="progress-bar {{ $tienDo == 100 ? 'bg-success' : 'bg-primary' }}" role="progressbar" style="width: {{$tienDo}}%"
+                                                            aria-valuenow="{{$tienDo}}" aria-valuemin="0" aria-valuemax="{{$tienDo}}"></div>
+                                                    </div>
+                                                </td>
                                                 <td><button class="btn btn-default btn-xs"><i class="fas fa-plus"></i></button></td>
                                             </tr>
                                             <tr>

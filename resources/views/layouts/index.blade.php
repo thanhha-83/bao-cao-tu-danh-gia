@@ -11,9 +11,13 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
+        @if (!empty($isShowBaoCao) && $isShowBaoCao)
+        @include('partials.sidebar-baocao', ['tieuChuans' => !empty($tieuChuans) ? $tieuChuans : null])
+        @else
         <!-- Sidebar -->
         @include('partials.sidebar')
         <!-- End of Sidebar -->
+        @endif
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">

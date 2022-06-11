@@ -62,7 +62,6 @@ class TienDoBaoCaoController extends Controller
             $nganh = DotDanhGia::orderBy('namHoc')
                         ->join('nganh_dot_danh_gias', 'nganh_dot_danh_gias.dotDanhGia_id', '=', 'dot_danh_gias.id')
                         ->join('nganhs', 'nganhs.id', '=', 'nganh_dot_danh_gias.nganh_id')
-                        ->where('dot_danh_gias.trangThai', 0)
                         ->where('nganh_dot_danh_gias.nganh_id', $nganhId)->first();
             $nganhs[] = $nganh;
         }
@@ -74,7 +73,6 @@ class TienDoBaoCaoController extends Controller
         $nganh = DotDanhGia::orderBy('namHoc')
                         ->join('nganh_dot_danh_gias', 'nganh_dot_danh_gias.dotDanhGia_id', '=', 'dot_danh_gias.id')
                         ->join('nganhs', 'nganhs.id', '=', 'nganh_dot_danh_gias.nganh_id')
-                        ->where('dot_danh_gias.trangThai', 0)
                         ->where('nganh_dot_danh_gias.nganh_id', $id)->first();
         $tieuChuans = $this->tieuChuanModel->all();
         $needle = '<a class="is-minhchung" style="color: #000; font-weight: bold; text-decoration: none;"';
@@ -145,9 +143,35 @@ class TienDoBaoCaoController extends Controller
                 }
                 $baoCao->minhChung()->sync($datas);
             }
-            // dd($saveDatas);
         }
-        // dd($hopMCs);
         return view('pages.tiendobaocao.word-all', compact('nganh', 'tieuChuans', 'hopMCs'));
+    }
+
+    public function publish($id) {
+        $nganh = DotDanhGia::orderBy('namHoc')
+                        ->join('nganh_dot_danh_gias', 'nganh_dot_danh_gias.dotDanhGia_id', '=', 'dot_danh_gias.id')
+                        ->join('nganhs', 'nganhs.id', '=', 'nganh_dot_danh_gias.nganh_id')
+                        ->where('nganh_dot_danh_gias.nganh_id', $id)->first();
+        $baoCaos = $this->baoCaoModel->where('nganh_id', $nganh->id)->where('dotDanhGia_id', $nganh->dotDanhGia_id)->get();
+        foreach ($baoCaos as $baoCao) {
+            $baoCao->update([
+                'congKhai' => 1
+            ]);
+        }
+        return redirect()->route('tiendobaocao.index')->with('message', 'Công khai thành công!');
+    }
+
+    public function unpublish($id) {
+        $nganh = DotDanhGia::orderBy('namHoc')
+                        ->join('nganh_dot_danh_gias', 'nganh_dot_danh_gias.dotDanhGia_id', '=', 'dot_danh_gias.id')
+                        ->join('nganhs', 'nganhs.id', '=', 'nganh_dot_danh_gias.nganh_id')
+                        ->where('nganh_dot_danh_gias.nganh_id', $id)->first();
+        $baoCaos = $this->baoCaoModel->where('nganh_id', $nganh->id)->where('dotDanhGia_id', $nganh->dotDanhGia_id)->get();
+        foreach ($baoCaos as $baoCao) {
+            $baoCao->update([
+                'congKhai' => 0
+            ]);
+        }
+        return redirect()->route('tiendobaocao.index')->with('message', 'Hủy công khai thành công!');
     }
 }

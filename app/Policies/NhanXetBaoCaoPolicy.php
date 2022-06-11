@@ -23,6 +23,6 @@ class NhanXetBaoCaoPolicy
         $baoCao = BaoCao::find($id);
         $nhomNguoiDungs = NhomNguoiDung::where('nguoiDung_id', $user->id)->get();
         $baoCaoPer = new NhanXetBaoCaoPermission();
-        return $baoCaoPer->comment($nhomNguoiDungs, $baoCao);
+        return $baoCaoPer->comment($nhomNguoiDungs, $baoCao) && $user->checkTime('nhan-xet-bao-cao', $baoCao);
     }
 }

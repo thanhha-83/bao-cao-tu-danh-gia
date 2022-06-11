@@ -89,6 +89,7 @@ class PermissionGateAndPolicyAccess {
         Gate::define('baocao-them', [BaoCaoPolicy::class, 'create']);
         Gate::define('baocao-sua', [BaoCaoPolicy::class, 'editPersonal']);
         Gate::define('baocao-xoa', [BaoCaoPolicy::class, 'deletePersonal']);
+        Gate::define('baocao-dieukhien', [BaoCaoPolicy::class, 'controlPersonal']);
         Gate::define('baocao-thungrac', [BaoCaoPolicy::class, 'trash']);
 
         Gate::define('quanlynhom', [QuanLyNhomPolicy::class, 'control']);

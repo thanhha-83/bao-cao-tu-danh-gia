@@ -101,6 +101,7 @@ header('Cache-Control: private, max-age=0, must-revalidate');
             @endforeach
             <h3>Kết luận về Tiêu chuẩn {{ $tieuChuan->stt }}</h3>
             {!! $ketLuanBaoCao->ketLuan !!}
+            <p class="h3">Tổng số tiêu chí đạt yêu cầu: {{$ketLuanBaoCao->soTCDat}}/{{$ketLuanBaoCao->tongSoTC}}</p>
         @endforeach
     </div>
 </body>

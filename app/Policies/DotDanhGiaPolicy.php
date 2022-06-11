@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
+use App\Models\DotDanhGia;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class DotDanhGiaPolicy
@@ -24,9 +25,10 @@ class DotDanhGiaPolicy
         return $user->checkPermissionAccess(config('permissions.access.dotdanhgia-them'));
     }
 
-    public function update(User $user)
+    public function update(User $user, $id)
     {
-        return $user->checkPermissionAccess(config('permissions.access.dotdanhgia-sua'));
+        $dotDanhGia = DotDanhGia::find($id);
+        return $user->checkPermissionAccess(config('permissions.access.dotdanhgia-sua')) && $dotDanhGia->trangThai == 0;
     }
 
     public function delete(User $user)
