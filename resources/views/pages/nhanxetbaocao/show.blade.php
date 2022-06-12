@@ -11,15 +11,11 @@ $action = (object) [
 @endphp
 
 @section('styles')
-    <link rel="stylesheet" href="css/style-wword.css">
+    <link rel="stylesheet" href="css/style-word.css">
     <style>
         .minhchung {
             display: block;
             text-decoration: none;
-        }
-
-        html {
-            scroll-behavior: smooth;
         }
 
         .media img {
@@ -71,7 +67,7 @@ $action = (object) [
                 <h3>Kết luận</h3>
                 {!! $baoCao->ketLuan !!}
                 <h3>Số tiêu chí đạt</h3>
-                {!! $baoCao->soTCDat !!}
+                <p>{!! $baoCao->soTCDat !!}</p>
                 @endif
             </div>
         </div>

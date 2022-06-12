@@ -67,7 +67,7 @@ $action = (object) [
                 <h3>Kết luận</h3>
                 {!! $baoCao->ketLuan !!}
                 <h3>Số tiêu chí đạt</h3>
-                {!! $baoCao->soTCDat !!}
+                <p>{!! $baoCao->soTCDat !!}</p>
                 @endif
             </div>
         </div>

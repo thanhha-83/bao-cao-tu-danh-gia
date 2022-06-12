@@ -18,10 +18,6 @@ $action = (object) [
             text-decoration: none;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         .media img {
             width: 60px;
             height: 60px;
@@ -71,7 +67,7 @@ $action = (object) [
                 <h3>Kết luận</h3>
                 {!! $baoCao->ketLuan !!}
                 <h3>Số tiêu chí đạt</h3>
-                {!! $baoCao->soTCDat !!}
+                <p>{!! $baoCao->soTCDat !!}</p>
                 @endif
             </div>
             @can('baocao-sua', $baoCao->id)

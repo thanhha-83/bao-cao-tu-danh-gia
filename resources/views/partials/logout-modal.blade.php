@@ -8,7 +8,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">Chọn "Đăng nhập" bên dưới nếu bạn thật sự muốn kết thúc phiên làm việc hiện tại.</div>
+            <div class="modal-body">Chọn "Đăng xuất" bên dưới nếu bạn thật sự muốn kết thúc phiên làm việc hiện tại.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                 <a class="btn btn-primary" href="{{ route('logout') }}"
