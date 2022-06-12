@@ -153,12 +153,15 @@ class TienDoBaoCaoController extends Controller
                         ->join('nganhs', 'nganhs.id', '=', 'nganh_dot_danh_gias.nganh_id')
                         ->where('nganh_dot_danh_gias.nganh_id', $id)->first();
         $baoCaos = $this->baoCaoModel->where('nganh_id', $nganh->id)->where('dotDanhGia_id', $nganh->dotDanhGia_id)->get();
-        foreach ($baoCaos as $baoCao) {
-            $baoCao->update([
-                'congKhai' => 1
-            ]);
+        if (!empty($baoCaos) && count($baoCaos) > 0) {
+            foreach ($baoCaos as $baoCao) {
+                $baoCao->update([
+                    'congKhai' => 1
+                ]);
+            }
+            return redirect()->route('tiendobaocao.index')->with('message', 'Công khai thành công!');
         }
-        return redirect()->route('tiendobaocao.index')->with('message', 'Công khai thành công!');
+        return redirect()->route('tiendobaocao.index')->with('message', 'Lỗi công khai! (Lý do: Cần có ít nhất 1 bản báo cáo)');
     }
 
     public function unpublish($id) {

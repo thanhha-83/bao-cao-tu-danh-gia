@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\BaoCao;
 use App\Models\NhomNguoiDung;
+use App\Models\DotDanhGia;
 use App\Services\NhanXetBaoCaoPermission;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -23,6 +24,8 @@ class NhanXetBaoCaoPolicy
         $baoCao = BaoCao::find($id);
         $nhomNguoiDungs = NhomNguoiDung::where('nguoiDung_id', $user->id)->get();
         $baoCaoPer = new NhanXetBaoCaoPermission();
-        return $baoCaoPer->comment($nhomNguoiDungs, $baoCao) && $user->checkTime('nhan-xet-bao-cao', $baoCao);
+        $dotDanhGia = DotDanhGia::find($baoCao->dotDanhGia_id);
+        $isInprocess = $dotDanhGia->trangThai == 0 ? true : false;
+        return $isInprocess && $baoCaoPer->comment($nhomNguoiDungs, $baoCao) && $user->checkTime('nhan-xet-bao-cao', $baoCao);
     }
 }

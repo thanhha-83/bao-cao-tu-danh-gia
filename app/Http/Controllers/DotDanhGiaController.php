@@ -151,42 +151,46 @@ class DotDanhGiaController extends Controller
                     continue;
                 }
                 $baoCao = $tieuChi->baoCao->where('nganh_id', $nganh->id)->where('dotDanhGia_id', $nganh->dotDanhGia_id)->first();
-                $html = $baoCao->moTa;
-                $lastPos = 0;
-                $key = 1;
-                while (($lastPos = strpos($html, $needle, $lastPos))!== false) {
-                    $textFrom = strpos($html, $from, $lastPos);
-                    $textTo = strpos($html, $to, $lastPos);
-                    $text = html_entity_decode(substr($html, $textFrom + strlen($from) + 1, $textTo - $textFrom - strlen($from) - 2));
-                    $minhChung = $this->minhChungModel->where('ten', $text)->first();
-                    $existMC = array_filter(
-                        $hopMCs,
-                        function ($e) use (&$text) {
-                            return $e->text == $text;
+                if (!empty($baoCao)) {
+                    $html = $baoCao->moTa;
+                    $lastPos = 0;
+                    $key = 1;
+                    while (($lastPos = strpos($html, $needle, $lastPos))!== false) {
+                        $textFrom = strpos($html, $from, $lastPos);
+                        $textTo = strpos($html, $to, $lastPos);
+                        $text = html_entity_decode(substr($html, $textFrom + strlen($from) + 1, $textTo - $textFrom - strlen($from) - 2));
+                        $minhChung = $this->minhChungModel->where('ten', $text)->first();
+                        $existMC = array_filter(
+                            $hopMCs,
+                            function ($e) use (&$text) {
+                                return $e->text == $text;
+                            }
+                        );
+                        if (!empty($existMC) && count($existMC) > 0) {
+                            $found = array_pop($existMC);
+                            $maHMC = $found->maHMC;
+                        } else {
+                            $maHMC = 'H'.$tieuChuan->stt.'.'.sprintf("%02d", $tieuChuan->stt).'.'.sprintf("%02d", $tieuChi->stt).'.'.sprintf("%02d", $key);
+                            $key++;
                         }
-                    );
-                    if (!empty($existMC) && count($existMC) > 0) {
-                        $found = array_pop($existMC);
-                        $maHMC = $found->maHMC;
-                    } else {
-                        $maHMC = 'H'.$tieuChuan->stt.'.'.sprintf("%02d", $tieuChuan->stt).'.'.sprintf("%02d", $tieuChi->stt).'.'.sprintf("%02d", $key);
-                        $key++;
+                        $hopMCs[] = (object) [
+                            'text' => $text,
+                            'minhChung_id' => $minhChung->id,
+                            'tieuChuan_id' => $tieuChuan->id,
+                            'tieuChi_id' => $tieuChi->id,
+                            'baoCao_id' => $baoCao->id,
+                            'nganh_id' => $nganh->nganh_id,
+                            'dotDanhGia_id' => $nganh->dotDanhGia_id,
+                            'maHMC' => $maHMC,
+                            'link' => $minhChung->link,
+                        ];
+                        $lastPos = $lastPos + strlen($needle);
                     }
-                    $hopMCs[] = (object) [
-                        'text' => $text,
-                        'minhChung_id' => $minhChung->id,
-                        'tieuChuan_id' => $tieuChuan->id,
-                        'tieuChi_id' => $tieuChi->id,
-                        'baoCao_id' => $baoCao->id,
-                        'nganh_id' => $nganh->nganh_id,
-                        'dotDanhGia_id' => $nganh->dotDanhGia_id,
-                        'maHMC' => $maHMC
-                    ];
-                    $lastPos = $lastPos + strlen($needle);
                 }
             }
         }
-        return view('pages.dotdanhgia.showbaocao', compact('nganh', 'tieuChuans', 'hopMCs'));
+        $dotDanhGia = $this->dotDanhGiaModel->find($dotDanhGia_id);
+        return view('pages.dotdanhgia.showbaocao', compact('dotDanhGia', 'nganh', 'tieuChuans', 'hopMCs'));
     }
 
     public function edit($id)

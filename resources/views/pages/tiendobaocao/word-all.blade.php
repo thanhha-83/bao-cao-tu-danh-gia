@@ -14,7 +14,7 @@ header('Cache-Control: private, max-age=0, must-revalidate');
 
         body {
             text-align: justify;
-            line-height: 130%;
+            line-height: 150%;
         }
         p {
             font-size: 17.333333px;
@@ -22,7 +22,7 @@ header('Cache-Control: private, max-age=0, must-revalidate');
             padding: 0;
             text-align: justify;
             text-indent: 37.467px;
-            line-height: 130%;
+            line-height: 150%;
         }
 
         table {
@@ -33,7 +33,7 @@ header('Cache-Control: private, max-age=0, must-revalidate');
             font-size: 18.6666666667px;
             margin: 0;
             padding: 0;
-            line-height: 130%;
+            line-height: 150%;
         }
 
         h2,
@@ -43,7 +43,7 @@ header('Cache-Control: private, max-age=0, must-revalidate');
             margin: 0;
             padding: 0;
             text-indent: 37.467px;
-            line-height: 130%;
+            line-height: 150%;
         }
 
         h1,

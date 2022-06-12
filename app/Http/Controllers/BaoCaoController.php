@@ -40,8 +40,18 @@ class BaoCaoController extends Controller
         $this->nhomModel = $nhomModel;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $filterNganhId = $request->query('nganh_id');
+        $filterTrangThai = $request->query('trangThai');
+        $baoCaos = $this->baoCaoModel->sortable('id');
+        $nganhs = $this->nganhModel->all();
+        if (!empty($filterNganhId)) {
+            $baoCaos->where('bao_caos.nganh_id', $filterNganhId);
+        }
+        if ($filterTrangThai != '') {
+            $baoCaos->where('bao_caos.trangThai', $filterTrangThai);
+        }
         $user = auth()->user();
         $nhomNguoiDungs = $this->nhomNguoiDungModel->where('nguoiDung_id', $user->id)->get();
         $nhomIds = [];
@@ -53,9 +63,9 @@ class BaoCaoController extends Controller
         foreach ($nhomTruongs as $nhomTruong) {
             array_push($nguoiDungIds, $nhomTruong->nguoiDung_id);
         }
-        $baoCaos = $this->baoCaoModel->whereIn('nguoiDung_id', $nguoiDungIds)->get();
+        $baoCaos = $baoCaos->whereIn('nguoiDung_id', $nguoiDungIds)->paginate(10);
         $trashCount = count($this->baoCaoModel->onlyTrashed()->whereIn('nguoiDung_id', $nguoiDungIds)->get());
-        return view('pages.baocao.index', compact('baoCaos', 'trashCount'));
+        return view('pages.baocao.index', compact('baoCaos', 'trashCount', 'nganhs', 'filterNganhId', 'filterTrangThai'));
     }
 
     public function create()

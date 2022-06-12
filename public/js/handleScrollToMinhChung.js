@@ -45,8 +45,9 @@ $("#deleteCatModal").on("show.bs.modal", (e) => {
             _token,
         },
         success: (datas) => {
+            $(".modal-body").find(".content").html("");
             for (data of datas) {
-                $(".modal-body").find(".content").html("");
+                console.log(data);
                 $(".modal-body")
                     .find(".content")
                     .append(

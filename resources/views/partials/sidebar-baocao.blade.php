@@ -13,13 +13,13 @@
 
     @include('partials.sidebar-menu-item', [
         'route' => 'home.index',
-        'icon' => 'fas fa-fw fa-tachometer-alt',
+        'icon' => 'fa fa-home',
         'title' => 'Trang chủ'
     ])
 
+    <div id="sticky-sidebar" style="position: sticky;">
     <!-- Divider -->
     <hr class="sidebar-divider">
-
     <!-- Heading -->
     <div class="sidebar-heading">
         Bảng điều khiển
@@ -30,19 +30,19 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#nav-tieu-chuan-{{ $tieuChuan->stt }}"
                     aria-expanded="true" aria-controls="nav-tieu-chuan-{{ $tieuChuan->stt }}">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fas fa-server"></i>
                     <span>Tiêu chuẩn {{ $tieuChuan->stt }}</span>
                 </a>
                 <div id="nav-tieu-chuan-{{ $tieuChuan->stt }}" class="collapse" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item baocao-scrollItem" href="#modau-tieuchuan-{{ $tieuChuan->stt }}">Mở đầu</a>
+                        <a class="collapse-item baocao-scrollItem" href="#modau-tieuchuan-{{ $tieuChuan->stt }}"><i class="fas fa-server"></i>&nbsp;&nbsp;Mở đầu</a>
                         @foreach($tieuChuan->tieuChi as $key => $tieuChi)
                             @if($loop->first)
                                 @continue
                             @endif
-                            <a class="collapse-item baocao-scrollItem" href="#tieuchi-{{ $tieuChuan->stt }}-{{ $tieuChi->stt }}">Tiêu chí {{ $tieuChuan->stt }}.{{ $tieuChi->stt }}</a>
+                            <a class="collapse-item baocao-scrollItem" href="#tieuchi-{{ $tieuChuan->stt }}-{{ $tieuChi->stt }}"><i class="fas fa-server"></i>&nbsp;&nbsp;Tiêu chí {{ $tieuChuan->stt }}.{{ $tieuChi->stt }}</a>
                         @endforeach
-                        <a class="collapse-item baocao-scrollItem" href="#ketluan-tieuchuan-{{ $tieuChuan->stt }}">Kết luận</a>
+                        <a class="collapse-item baocao-scrollItem" href="#ketluan-tieuchuan-{{ $tieuChuan->stt }}"><i class="fas fa-server"></i>&nbsp;&nbsp;Kết luận</a>
                     </div>
                 </div>
             </li>
@@ -53,8 +53,9 @@
     <hr class="sidebar-divider">
 
     <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
+    <div class="text-center d-none d-md-block">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
     </div>
 
 </ul>

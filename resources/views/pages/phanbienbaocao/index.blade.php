@@ -1,9 +1,9 @@
-@extends('layouts.index', ['title' => 'Danh sách báo cáo'])
+@extends('layouts.index', ['title' => 'Phản biện báo cáo'])
 
 @php
 $controller = (object) [
-    'name' => 'Báo cáo',
-    'href' => '/baocao',
+    'name' => 'Phản biện báo cáo',
+    'href' => '/phanbienbaocao',
 ];
 $action = (object) [
     'name' => 'Danh sách',
@@ -29,6 +29,44 @@ $action = (object) [
 @endsection
 
 @section('content')
+    <div class="card shadow mb-4 w-50 mx-auto">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-center">
+            <h6 class="m-0 text-center">TÌM KIẾM BÁO CÁO</h6>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('nhanxetbaocao.index') }}" method="GET">
+                <div class="form-group">
+                    <span for="trangThai">Trạng thái</span>
+                    <div class="form-row pl-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="trangThai" value="0"
+                                {{ $filterTrangThai == '0' ? 'checked' : '' }}>
+                            <span class="form-check-label">Đang tiến hành</span>
+                        </div>
+                        <div class="form-check ml-2">
+                            <input class="form-check-input" type="radio" name="trangThai" value="1"
+                                {{ $filterTrangThai == '1' ? 'checked' : '' }}>
+                            <span class="form-check-label">Đã hoàn thành</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="nganh_id">Ngành</label>
+                    <select class="form-select form-control"
+                        id="nganh_id" name="nganh_id" aria-label="Chọn ngành">
+                        <option {{ $filterNganhId == '' ? 'selected' : '' }} value="">Chọn ngành</option>
+                        @foreach ($nganhs as $item)
+                            <option value="{{ $item->id }}" {{ $filterNganhId == $item->id ? 'selected' : '' }}>{{ $item->ten }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary mx-2">Tìm kiếm</button>
+                    <a href="{{ route('nhanxetbaocao.index') }}" class="btn btn-secondary mx-2">Làm mới</a>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="card shadow mb-4">
         <div class="card-body">
             <div class="table-responsive">
@@ -38,7 +76,8 @@ $action = (object) [
                             <th>STT</th>
                             <th>Thời gian cập nhật</th>
                             <th>Cán bộ đảm nhận viết</th>
-                            <th>Ngành</th>
+                            <th>@sortablelink('nganh_id', 'Ngành')</th>
+                            <th>@sortablelink('trangThai', 'Trạng thái')</th>
                             <th>Chức năng</th>
                         </tr>
                     </thead>
@@ -56,6 +95,7 @@ $action = (object) [
                                         </ul>
                                     </td>
                                     <td>{{ $item->nganh->ten }}</td>
+                                    <td>{{ $item->trangThai == 0 ? 'Đang tiến hành' : 'Đã hoàn thành' }}</td>
                                     <td>
                                         @can('phanbienbaocao-binhluan', $item->id)
                                         <a href="{{ route('phanbienbaocao.show', ['id' => $item->id]) }}"
@@ -71,6 +111,12 @@ $action = (object) [
                         @endif
                     </tbody>
                 </table>
+                <div class="d-flex justify-content-between">
+                    {{ $baoCaos->appends(Request::except('page'))->render('pagination::bootstrap-4') }}
+                    <div>
+                        <a href="{{ route('nhanxetbaocao.index') }}" class="btn btn-primary mx-2">Làm mới</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

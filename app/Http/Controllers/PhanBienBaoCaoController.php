@@ -39,8 +39,18 @@ class PhanBienBaoCaoController extends Controller
         $this->nhomModel = $nhomModel;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $filterNganhId = $request->query('nganh_id');
+        $filterTrangThai = $request->query('trangThai');
+        $baoCaos = $this->baoCaoModel->sortable('id');
+        $nganhs = $this->nganhModel->all();
+        if (!empty($filterNganhId)) {
+            $baoCaos->where('bao_caos.nganh_id', $filterNganhId);
+        }
+        if ($filterTrangThai != '') {
+            $baoCaos->where('bao_caos.trangThai', $filterTrangThai);
+        }
         $user = auth()->user();
         $nhomNguoiDungs = $this->nhomNguoiDungModel->where('nguoiDung_id', $user->id)->get();
         $nhomIds = [];
@@ -59,8 +69,8 @@ class PhanBienBaoCaoController extends Controller
                 array_push($baoCaoIds, $nguoiDungQuyen->baoCao_id);
             }
         }
-        $baoCaos = $this->baoCaoModel->whereIn('id', $baoCaoIds)->get();
-        return view('pages.phanbienbaocao.index', compact('baoCaos'));
+        $baoCaos = $baoCaos->whereIn('id', $baoCaoIds)->paginate(10);
+        return view('pages.phanbienbaocao.index', compact('baoCaos', 'nganhs', 'filterNganhId', 'filterTrangThai'));
     }
 
     public function show($id)

@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\BaoCao;
 use App\Models\NhomNguoiDung;
+use App\Models\DotDanhGia;
 use App\Services\BaoCaoPermission;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -40,8 +41,10 @@ class BaoCaoPolicy
     {
         $baoCao = BaoCao::find($id);
         $nhomNguoiDungs = NhomNguoiDung::where('nguoiDung_id', $user->id)->get();
+        $dotDanhGia = DotDanhGia::find($baoCao->dotDanhGia_id);
+        $isInprocess = $dotDanhGia->trangThai == 0 ? true : false;
         $baoCaoPer = new BaoCaoPermission();
-        return $baoCaoPer->updatePersonal($nhomNguoiDungs, $baoCao) && $user->checkTime('viet-bao-cao', $baoCao);
+        return $isInprocess && $baoCaoPer->updatePersonal($nhomNguoiDungs, $baoCao) && $user->checkTime('viet-bao-cao', $baoCao);
     }
 
     public function deletePersonal(User $user, $id)

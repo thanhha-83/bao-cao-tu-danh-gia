@@ -13,7 +13,7 @@
 
     @include('partials.sidebar-menu-item', [
         'route' => 'home.index',
-        'icon' => 'fas fa-fw fa-tachometer-alt',
+        'icon' => 'fa fa-home',
         'title' => 'Trang chủ'
     ])
 
@@ -84,7 +84,7 @@
     @can('minhchung-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'minhchung.index',
-        'icon' => 'fas fa fa-users',
+        'icon' => 'fa fa-paperclip',
         'title' => 'Minh chứng'
     ])
     @endcan
@@ -92,7 +92,7 @@
     @can('vaitrohethong-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'vaitrohethong.index',
-        'icon' => 'fas fa fa-users',
+        'icon' => 'fa fa-wrench',
         'title' => 'Vai trò hệ thống'
     ])
     @endcan
@@ -116,7 +116,7 @@
     @can('baocao-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'baocao.index',
-        'icon' => 'fas fa fa-users',
+        'icon' => 'fas fa-pencil-alt',
         'title' => 'Viết báo cáo'
     ])
     @endcan
@@ -124,7 +124,7 @@
     @can('nhanxetbaocao-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'nhanxetbaocao.index',
-        'icon' => 'fas fa fa-users',
+        'icon' => 'fa fa-comments',
         'title' => 'Nhận xét báo cáo'
     ])
     @endcan
@@ -132,7 +132,7 @@
     @can('phanbienbaocao-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'phanbienbaocao.index',
-        'icon' => 'fas fa fa-users',
+        'icon' => 'fa fa-comments',
         'title' => 'Phản biện báo cáo'
     ])
     @endcan
@@ -140,7 +140,7 @@
     @can('tiendo-danhsach')
     @include('partials.sidebar-menu-item', [
         'route' => 'tiendobaocao.index',
-        'icon' => 'fas fa fa-users',
+        'icon' => 'fa fa-tasks',
         'title' => 'Tiến độ báo cáo'
     ])
     @endcan
