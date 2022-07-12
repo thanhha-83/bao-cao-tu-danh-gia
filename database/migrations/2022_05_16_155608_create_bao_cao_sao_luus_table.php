@@ -20,8 +20,17 @@ class CreateBaoCaoSaoLuusTable extends Migration
             $table->text('diemTonTai')->nullable();
             $table->text('keHoachHanhDong')->nullable();
             $table->integer('diemTDG')->nullable();
+            $table->text('moDau')->nullable();
+            $table->text('ketLuan')->nullable();
+            $table->integer('tongSoTC')->nullable();
+            $table->integer('soTCDat')->nullable();
+            $table->boolean('trangThai')->nullable();
+            $table->boolean('congKhai')->nullable();
             $table->integer('nganh_id');
             $table->integer('tieuChi_id');
+            $table->integer('tieuChuan_id');
+            $table->integer('dotDanhGia_id');
+            $table->integer('nguoiDung_id');
             $table->integer('baoCao_id');
             $table->timestamps();
         });

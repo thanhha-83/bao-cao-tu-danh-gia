@@ -17,6 +17,7 @@ class CreateDotDanhGiasTable extends Migration
             $table->id();
             $table->string('ten');
             $table->integer('namHoc');
+            $table->boolean('trangThai');
             $table->timestamps();
             $table->softDeletes();
         });

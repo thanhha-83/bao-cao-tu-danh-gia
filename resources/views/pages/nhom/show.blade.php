@@ -57,6 +57,16 @@ $action = (object) [
                             </td>
                         </tr>
                         <tr>
+                            <th>Thành viên:</th>
+                            <td>
+                                <ul class="pl-3">
+                                    @foreach ($nhom->nhomNguoiDung as $item)
+                                        <li>{{ $item->nguoiDung->hoTen }} {{ $item->vaiTro->id == 2 || $item->vaiTro->id == 3 ? '(' . $item->vaiTro->ten . ')' : ''}}</li>
+                                    @endforeach
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
                             <th>Chức năng:</th>
                             <td>
                                 <a href="{{ route('nhom.edit', ['id' => $nhom->id]) }}" class="btn btn-secondary">Sửa</a>

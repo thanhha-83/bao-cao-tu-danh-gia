@@ -179,7 +179,8 @@ class NhomController extends Controller
                     if (!in_array($item, $stayedIds)) {
                         $this->nhomNguoiDungModel->create([
                             'nhom_id' => $id,
-                            'nguoiDung_id' => $item
+                            'nguoiDung_id' => $item,
+                            'nganh_id' => $nhom->nganh_id
                         ]);
                     }
                 }

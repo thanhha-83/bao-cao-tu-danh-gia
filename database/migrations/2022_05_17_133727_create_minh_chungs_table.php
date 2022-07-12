@@ -22,6 +22,7 @@ class CreateMinhChungsTable extends Migration
             $table->string('link')->nullable();
             $table->integer('donVi_id');
             $table->boolean('isMCGop')->default(0);
+            $table->integer('nguoiDung_id');
             $table->timestamps();
             $table->softDeletes();
         });

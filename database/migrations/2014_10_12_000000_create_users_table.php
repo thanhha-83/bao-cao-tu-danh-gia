@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->integer('donVi_id');
             $table->rememberToken();
             $table->timestamps();
+            $table->string('hinhAnh');
             $table->softDeletes();
         });
     }

@@ -147,6 +147,64 @@ class TienDoBaoCaoController extends Controller
         return view('pages.tiendobaocao.word-all', compact('nganh', 'tieuChuans', 'hopMCs'));
     }
 
+    public function wordDSMC($id) {
+        $nganh = DotDanhGia::orderBy('namHoc')
+                        ->join('nganh_dot_danh_gias', 'nganh_dot_danh_gias.dotDanhGia_id', '=', 'dot_danh_gias.id')
+                        ->join('nganhs', 'nganhs.id', '=', 'nganh_dot_danh_gias.nganh_id')
+                        ->where('nganh_dot_danh_gias.nganh_id', $id)->first();
+        $tieuChuans = $this->tieuChuanModel->all();
+        $needle = '<a class="is-minhchung" style="color: #000; font-weight: bold; text-decoration: none;"';
+        $from = 'target="_blank" rel="nofollow noopener">';
+        $to = '</a>';
+        $hopMCs = array();
+        foreach ($tieuChuans as $tieuChuan) {
+            foreach ($tieuChuan->tieuChi as $key => $tieuChi) {
+                if ($key == 0) {
+                    continue;
+                }
+                $baoCao = $tieuChi->baoCao->where('nganh_id', $nganh->id)->where('dotDanhGia_id', $nganh->dotDanhGia_id)->first();
+                $html = $baoCao->moTa;
+                $lastPos = 0;
+                $key = 1;
+                while (($lastPos = strpos($html, $needle, $lastPos))!== false) {
+                    $textFrom = strpos($html, $from, $lastPos);
+                    $textTo = strpos($html, $to, $lastPos);
+                    $text = html_entity_decode(substr($html, $textFrom + strlen($from) + 1, $textTo - $textFrom - strlen($from) - 2));
+                    $minhChung = $this->minhChungModel->where('ten', $text)->first();
+                    $existMC = array_filter(
+                        $hopMCs,
+                        function ($e) use (&$text) {
+                            return $e->text == $text;
+                        }
+                    );
+                    if (!empty($existMC) && count($existMC) > 0) {
+                        // Do nothing
+                    } else {
+                        $maHMC = 'H'.$tieuChuan->stt.'.'.sprintf("%02d", $tieuChuan->stt).'.'.sprintf("%02d", $tieuChi->stt).'.'.sprintf("%02d", $key);
+                        $key++;
+                        $hopMCs[] = (object) [
+                            'text' => $text,
+                            'minhChung_id' => $minhChung->id,
+                            'tenMinhChung' => $minhChung->ten,
+                            'ngayKS' => $minhChung->ngayKhaoSat,
+                            'ngayBH' => $minhChung->ngayBanHanh,
+                            'noiBH' => $minhChung->noiBanHanh,
+                            'donVi' => $minhChung->donVi->ten,
+                            'tieuChuan_id' => $tieuChuan->id,
+                            'tieuChi_id' => $tieuChi->id,
+                            'baoCao_id' => $baoCao->id,
+                            'nganh_id' => $nganh->nganh_id,
+                            'dotDanhGia_id' => $nganh->dotDanhGia_id,
+                            'maHMC' => $maHMC
+                        ];
+                    }
+                    $lastPos = $lastPos + strlen($needle);
+                }
+            }
+        }
+        return view('pages.tiendobaocao.word-dsmc', compact('nganh', 'tieuChuans', 'hopMCs'));
+    }
+
     public function publish($id) {
         $nganh = DotDanhGia::orderBy('namHoc')
                         ->join('nganh_dot_danh_gias', 'nganh_dot_danh_gias.dotDanhGia_id', '=', 'dot_danh_gias.id')

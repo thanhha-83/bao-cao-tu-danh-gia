@@ -10,7 +10,7 @@
             </div>
             <div class="modal-body">Chọn "Đăng xuất" bên dưới nếu bạn thật sự muốn kết thúc phiên làm việc hiện tại.</div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
                 <a class="btn btn-primary" href="{{ route('logout') }}"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     {{ __('Đăng xuất') }}

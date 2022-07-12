@@ -43,7 +43,7 @@ $action = (object) [
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($nganhs as $key => $nganh)
+                        @foreach ($nganhs as $keyNganh => $nganh)
                         @php
                             $canExport = true;
                             $isPublished = false;
@@ -64,27 +64,29 @@ $action = (object) [
                                 }
                             }
                         @endphp
-                        <tr data-toggle="collapse" data-target="#nganh-{{$nganh->id}}{{$key}}" class="accordion-toggle">
-                            <td>{{ $key + 1 }}</td>
+                        <tr data-toggle="collapse" data-target="#nganh-{{$nganh->id}}{{$keyNganh}}" class="accordion-toggle">
+                            <td>{{ $keyNganh + 1 }}</td>
                             <td>{{ $nganh->ten }}</td>
                             <td>{{ $nganh->namHoc }}</td>
                             <td>
                                 @if ($canExport)
-                                <a href="{{ route('tiendobaocao.word-all', ['id' => $nganh->id]) }}" class="btn btn-primary">Xuất báo cáo</a>
+                                <a href="{{ route('tiendobaocao.word-all', ['id' => $nganh->id]) }}" class="btn btn-primary btn-in-toggle">Xuất báo cáo</a>
+                                <a href="{{ route('tiendobaocao.word-dsmc', ['id' => $nganh->id]) }}" class="btn btn-primary btn-in-toggle">Xuất DSMC</a>
                                 @else
                                 <a href="{{ route('tiendobaocao.word-all', ['id' => $nganh->id]) }}" class="btn btn-secondary disabled">Xuất báo cáo</a>
+                                <a href="{{ route('tiendobaocao.word-dsmc', ['id' => $nganh->id]) }}" class="btn btn-secondary disabled">Xuất DSMC</a>
                                 @endif
                                 @if ($isPublished)
-                                <a href="{{ route('tiendobaocao.unpublish', ['id' => $nganh->id]) }}" class="btn btn-success">Huỷ công khai</a>
+                                <a href="{{ route('tiendobaocao.unpublish', ['id' => $nganh->id]) }}" class="btn btn-success btn-in-toggle">Huỷ công khai</a>
                                 @else
-                                <a href="{{ route('tiendobaocao.publish', ['id' => $nganh->id]) }}" class="btn btn-success">Công khai</a>
+                                <a href="{{ route('tiendobaocao.publish', ['id' => $nganh->id]) }}" class="btn btn-success btn-in-toggle">Công khai</a>
                                 @endif
                             </td>
                             <td><button class="btn btn-default btn-xs"><i class="fas fa-plus"></i></button></td>
                         </tr>
                         <tr>
                             <td colspan="12" class="hiddenRow">
-                                <div class="accordian-body collapse" id="nganh-{{$nganh->id}}{{$key}}">
+                                <div class="accordian-body collapse" id="nganh-{{$nganh->id}}{{$keyNganh}}">
                                     <table class="table table-bordered bg-light" width="100%" cellspacing="0">
                                         <thead>
                                             <tr class="info">
@@ -178,4 +180,12 @@ $action = (object) [
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $('.btn-in-toggle').on('click', (e) => {
+            e.stopPropagation();
+        })
+    </script>
 @endsection

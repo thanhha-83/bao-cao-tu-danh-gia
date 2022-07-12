@@ -1,16 +1,15 @@
 @php
+$date = new \DateTime('now');
+$tenNganh = implode('', array_map(function($v) { return $v[0]; }, explode(' ', ucwords($nganh->ten))));
+$fileName = 'BaoCaoTDG' . '_' . $tenNganh . '_' . $date->format('d-m-Y-h-i-s');
 header('Content-Type: application/vnd.msword');
-header('Content-Disposition: attachment; filename="baocao.doc"');
+header('Content-Disposition: attachment; filename="'.$fileName.'.doc"');
 header('Cache-Control: private, max-age=0, must-revalidate');
 @endphp
 
 <head>
     <title>Export HTML to WORD</title>
     <style>
-        @page {
-            size: A4 landscape;
-            margin: 1.25cm 2cm 1.5cm 2cm;
-        }
 
         body {
             text-align: justify;

@@ -17,6 +17,7 @@ class CreateVaiTroHTQuyenHTSTable extends Migration
             $table->id();
             $table->integer('vaiTroHT_id');
             $table->integer('quyenHT_id');
+            $table->integer('nganh_id')->nullable();
             $table->timestamps();
         });
     }

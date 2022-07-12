@@ -18,6 +18,7 @@ class CreateNhomNguoiDungsTable extends Migration
             $table->integer('nhom_id');
             $table->integer('nguoiDung_id');
             $table->integer('vaiTro_id')->default(1);
+            $table->integer('nganh_id');
             $table->timestamps();
         });
     }

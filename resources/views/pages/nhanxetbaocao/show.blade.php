@@ -133,9 +133,9 @@ $action = (object) [
                                             <div v-if="message.child_binh_luan.length">
                                                 <div v-for="childMessage in message.child_binh_luan">
                                                     <div class="media mt-4">
-                                                        <a class="pr-3" href="#"><img
+                                                        <span class="pr-3"><img
                                                                 class="rounded-circle border border-primary" alt="avatar"
-                                                                v-bind:src="childMessage.nguoi_dung.hinhAnh" /></a>
+                                                                v-bind:src="childMessage.nguoi_dung.hinhAnh" /></span>
                                                         <div class="media-body">
                                                             <div class="row">
                                                                 <div class="col-12 d-flex">
