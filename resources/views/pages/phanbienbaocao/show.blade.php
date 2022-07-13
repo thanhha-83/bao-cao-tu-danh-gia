@@ -85,6 +85,9 @@ $action = (object) [
     </div>
     {{-- Chat --}}
     <div class="app-chat-realtime card shadow mx-1">
+        <div class="d-none" id="bao-cao-id">{{ $baoCao->id }}</div>
+        <div class="d-none" id="user-id">{{ auth()->id() }}</div>
+        <span class="sr-only" v-if="activeDelete"></span>
         <div class="card-body p-5">
             <div class="row">
                 <div class="col-md-12">
@@ -107,7 +110,19 @@ $action = (object) [
                                                             data-placement="top" :title="message.timeNum">
                                                             (@{{ message.time }})</small></h6>
                                                 </div>
-                                                <div class="col-4">
+                                                <div class="col-4 d-flex justify-content-end">
+                                                    <div class="pull-right reply text-right" v-if="message.nguoiDung_id == {{ auth()->id() }}">
+                                                        <button @click="showEditInput(message.id, message.noiDung)"
+                                                            class="btn-sua btn-link text-success bg-transparent border-0"><span><i
+                                                                    class="fa fa-pen"></i>
+                                                                Sửa</span></button>
+                                                    </div>
+                                                    <div class="pull-right reply text-right" v-if="message.nguoiDung_id == {{ auth()->id() }}">
+                                                        <button @click="showModelDelete(message.id)"
+                                                            class="btn-xoa btn-link text-danger bg-transparent border-0"><span><i
+                                                                    class="fa fa-times"></i>
+                                                                Xóa</span></button>
+                                                    </div>
                                                     <div class="pull-right reply text-right">
                                                         <button @click="showReplyInput(message.id)"
                                                             class="btn-phanhoi btn-link bg-transparent border-0"><span><i
@@ -116,8 +131,19 @@ $action = (object) [
                                                     </div>
                                                 </div>
                                             </div>
-                                            <span>
+                                            <span :class="message.id != activeEdit ? activeClass : 'd-none'">
                                                 @{{ message.noiDung }}
+                                            </span>
+                                            <span :class="message.id == activeEdit ? activeClass : 'd-none'">
+                                                <div class="input-group mb-3">
+                                                    <input v-model="tempMessage" @keyup.enter="sendEditMessage" class="form-control">
+                                                    <div class="input-group-append">
+                                                        <button @click="sendEditMessage" class="btn btn-primary">Lưu</button>
+                                                    </div>
+                                                    <div class="input-group-append">
+                                                        <button @click="showEditInput(message.id, message.noiDung)" class="btn btn-secondary">Hủy</button>
+                                                    </div>
+                                                </div>
                                             </span>
                                             <div class="mt-4"
                                                 :class="message.id == active ? activeClass : 'd-none'">
@@ -133,21 +159,46 @@ $action = (object) [
                                             <div v-if="message.child_binh_luan.length">
                                                 <div v-for="childMessage in message.child_binh_luan">
                                                     <div class="media mt-4">
-                                                        <a class="pr-3" href="#"><img
+                                                        <span class="pr-3"><img
                                                                 class="rounded-circle border border-primary" alt="avatar"
-                                                                v-bind:src="childMessage.nguoi_dung.hinhAnh" /></a>
+                                                                v-bind:src="childMessage.nguoi_dung.hinhAnh" /></span>
                                                         <div class="media-body">
                                                             <div class="row">
-                                                                <div class="col-12 d-flex">
+                                                                <div class="col-8 d-flex">
                                                                     <h6><strong>@{{ childMessage.nguoi_dung.hoTen }}</strong><small>
                                                                             (@{{ childMessage.nguoi_dung.chucVu }})</small><small
                                                                             data-toggle="tooltip" data-placement="top"
                                                                             :title="childMessage.timeNum">
                                                                             (@{{ childMessage.time }})</small></h6>
                                                                 </div>
+                                                                <div class="col-4 d-flex justify-content-end">
+                                                                    <div class="pull-right reply text-right" v-if="childMessage.nguoiDung_id == {{ auth()->id() }}">
+                                                                        <button @click="showEditInput(childMessage.id, childMessage.noiDung)"
+                                                                            class="btn-sua btn-link text-success bg-transparent border-0"><span><i
+                                                                                    class="fa fa-pen"></i>
+                                                                                Sửa</span></button>
+                                                                    </div>
+                                                                    <div class="pull-right reply text-right" v-if="childMessage.nguoiDung_id == {{ auth()->id() }}">
+                                                                        <button @click="showModelDelete(childMessage.id)"
+                                                                            class="btn-xoa btn-link text-danger bg-transparent border-0"><span><i
+                                                                                    class="fa fa-times"></i>
+                                                                                Xóa</span></button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <span>
+                                                            <span :class="childMessage.id != activeEdit ? activeClass : 'd-none'">
                                                                 @{{ childMessage.noiDung }}
+                                                            </span>
+                                                            <span :class="childMessage.id == activeEdit ? activeClass : 'd-none'">
+                                                                <div class="input-group mb-3">
+                                                                    <input v-model="tempMessage" @keyup.enter="sendEditMessage" class="form-control">
+                                                                    <div class="input-group-append">
+                                                                        <button @click="sendEditMessage" class="btn btn-primary">Lưu</button>
+                                                                    </div>
+                                                                    <div class="input-group-append">
+                                                                        <button @click="showEditInput(childMessage.id, childMessage.noiDung)" class="btn btn-secondary">Hủy</button>
+                                                                    </div>
+                                                                </div>
                                                             </span>
                                                         </div>
                                                     </div>
@@ -169,6 +220,27 @@ $action = (object) [
         <div class="card-footer px-5 py-4 text-right">
             <input @focus="active = null" v-model="message" @keyup.enter="sendMessage" class="form-control mb-4">
             <button @click="sendMessage" href="#" class="btn btn-primary">Gửi bình luận</button>
+        </div>
+        <button type="button" class="btn-show-modal-del btn btn-primary d-none" data-toggle="modal" data-target="#deleteBinhLuan">
+            <span class="sr-only">Show modal</span>
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="deleteBinhLuan" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Xác nhận xóa bình luận</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Bạn chắc chắn xóa bình luận này?</div>
+                    <div class="modal-footer">
+                        <button @click="deleteMessage" class="btn btn-primary" type="button" data-dismiss="modal">Xác nhận</button>
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <button type="button" class="btn-show-modal btn btn-primary d-none" data-toggle="modal" data-target="#deleteCatModal">
@@ -194,6 +266,26 @@ $action = (object) [
             </div>
         </div>
     </div>
+
+    <button type="button" class="btn-show-modal btn btn-primary d-none" data-toggle="modal" data-target="#deleteBinhLuan">
+        <span class="sr-only">Show modal</span>
+    </button>
+    <!-- Modal -->
+    <div class="modal fade" id="deleteBinhLuan" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Xác nhận xóa bình luận</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -211,109 +303,5 @@ $action = (object) [
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="js/handleDelete.js"></script>
     <script src="js/handleScrollToMinhChung.js"></script>
-    <script>
-        $(document).ready(function() {
-            const _token = $('meta[name="csrf-token"]').attr('content');
-            const initMessages = getInitMessages();
-
-            function getInitMessages() {
-                var remote;
-                $.ajax({
-                    type: "POST",
-                    url: '/binhluan/show',
-                    async: false,
-                    data: {
-                        id: {{ $baoCao->id }},
-                        _token
-                    },
-                    success: (data) => {
-                        remote = data;
-                    },
-                });
-                remote.forEach((item) => {
-                    item = formatDate(item);
-                    item.child_binh_luan.forEach((childItem) => {
-                        childItem = formatDate(childItem);
-                    })
-                })
-                return remote;
-            }
-            new Vue({
-                el: ".app-chat-realtime",
-                data() {
-                    return {
-                        id: {{ auth()->id() }},
-                        message: "",
-                        replyMessage: "",
-                        users: [],
-                        messages: initMessages,
-                        room: "",
-                        activeClass: 'd-block',
-                        active: null
-                    }
-                },
-                methods: {
-                    sendMessage() {
-                        axios.post('/binhluan/store', {
-                            message: this.message,
-                            baoCao_id: {{ $baoCao->id }}
-                        })
-                        this.message = ""
-                    },
-                    sendReplyMessage() {
-                        axios.post('/binhluan/storeReply', {
-                            message: this.replyMessage,
-                            baoCao_id: {{ $baoCao->id }},
-                            parent_id: this.active
-                        })
-                        this.replyMessage = ""
-                    },
-                    showReplyInput(i) {
-                        if (this.active === i) {
-                            this.active = null;
-                        } else {
-                            this.active = i;
-                        }
-                    }
-                },
-                mounted() {
-                    const echo = new Echo({
-                        broadcaster: "socket.io",
-                        host: window.location.hostname + ':6001',
-                    })
-                    echo.join('room.' + {{ $baoCao->id }})
-                        .listen('MessageSent', (event) => {
-                            event.binhLuan = formatDate(event.binhLuan);
-                            if (event.action === 'isReply') {
-                                this.messages.forEach((message, index) => {
-                                    if (event.binhLuan.parent_id === message.id) {
-                                        message.child_binh_luan.push(event.binhLuan);
-                                    }
-                                });
-                            } else {
-                                this.messages.push(event.binhLuan);
-                            }
-                        });
-                },
-            })
-
-            function eventTooltip() {
-                $('[data-toggle="tooltip"]').tooltip()
-            }
-            eventTooltip()
-
-            function formatDate(item) {
-                const dates = new Date(item.created_at);
-                const year = (dates.getYear() + 1900).toString();
-                const month = '0' + (dates.getMonth() + 1).toString();
-                const date = dates.getDate().toString();
-                const hours = dates.getHours().toString();
-                const minutes = dates.getMinutes().toString();
-                const dateString = year + month + date + hours + minutes;
-                item.time = moment(dateString, "YYYYMMDDHm").fromNow();
-                item.timeNum = moment(dates).format('LLL');
-                return item;
-            }
-        })
-    </script>
+    <script src="js/handleChatRealtime.js"></script>
 @endsection

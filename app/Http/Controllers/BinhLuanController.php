@@ -54,4 +54,24 @@ class BinhLuanController extends Controller
         broadcast(new MessageSent($binhLuan, $request->baoCao_id, 'isReply'));
         return response()->json($binhLuan, 200);
     }
+
+    public function updateMessage(Request $request)
+    {
+        $binhLuan = $this->binhLuanModel->find($request->binhLuan_id);
+        $binhLuan->update([
+            'noiDung' => $request->message,
+        ]);
+        $binhLuan->nguoi_dung = $binhLuan->nguoiDung;
+        broadcast(new MessageSent($binhLuan, $request->baoCao_id, 'isUpdate'));
+        return response()->json($binhLuan, 200);
+    }
+
+    public function deleteMessage(Request $request)
+    {
+        $binhLuan = $this->binhLuanModel->find($request->binhLuan_id);
+        $this->binhLuanModel->where('parent_id', $binhLuan->id)->forceDelete();
+        broadcast(new MessageSent($binhLuan, $request->baoCao_id, 'isDelete'));
+        $binhLuan->forceDelete();
+        return response()->json('success',200);
+    }
 }

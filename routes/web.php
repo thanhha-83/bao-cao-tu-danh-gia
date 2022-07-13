@@ -214,6 +214,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/show', [BinhLuanController::class, 'show'])->name('binhluan.show');
         Route::post('/store', [BinhLuanController::class, 'store'])->name('binhluan.store');
         Route::post('/storeReply', [BinhLuanController::class, 'storeReply'])->name('binhluan.store-reply');
+        Route::post('/updateMessage', [BinhLuanController::class, 'updateMessage'])->name('binhluan.update-message');
+        Route::post('/deleteMessage', [BinhLuanController::class, 'deleteMessage'])->name('binhluan.delete-message');
     });
 
     Route::prefix('minhchung')->group(function () {
