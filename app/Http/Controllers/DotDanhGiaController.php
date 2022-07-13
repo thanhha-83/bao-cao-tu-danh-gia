@@ -226,7 +226,7 @@ class DotDanhGiaController extends Controller
             $nganhIds = !empty($request->nganh) ? $request->nganh : [];
             $dotDanhGia->nganh()->sync($nganhIds);
             $giaiDoans = $this->giaiDoanModel->where('dotDanhGia_id', $id)->get();
-            HandleUpdateHasMany::handleUpdateGiaiDoan($giaiDoans, $id, $request, $this->giaiDoanModel);
+            \App\Services\HandleUpdateHasMany::handleUpdateGiaiDoan($giaiDoans, $id, $request, $this->giaiDoanModel);
             DB::commit();
             return redirect()->route('dotdanhgia.show', ['id' => $id])->with('message', 'Sửa thành công!');
         } catch (\Exception $e) {
