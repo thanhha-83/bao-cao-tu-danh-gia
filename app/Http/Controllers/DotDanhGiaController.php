@@ -13,7 +13,6 @@ use App\Models\BaoCao;
 use App\Models\TieuChuan;
 use App\Models\MinhChung;
 use App\Models\TieuChi;
-use App\Services\HandleUpdateHasMany;
 
 class DotDanhGiaController extends Controller
 {
@@ -226,7 +225,7 @@ class DotDanhGiaController extends Controller
             $nganhIds = !empty($request->nganh) ? $request->nganh : [];
             $dotDanhGia->nganh()->sync($nganhIds);
             $giaiDoans = $this->giaiDoanModel->where('dotDanhGia_id', $id)->get();
-            \App\Services\HandleUpdateHasMany::handleUpdateGiaiDoan($giaiDoans, $id, $request, $this->giaiDoanModel);
+            \app\Services\HandleUpdateHasMany::handleUpdateGiaiDoan($giaiDoans, $id, $request, $this->giaiDoanModel);
             DB::commit();
             return redirect()->route('dotdanhgia.show', ['id' => $id])->with('message', 'Sửa thành công!');
         } catch (\Exception $e) {
