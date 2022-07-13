@@ -10,7 +10,7 @@ use App\Models\TuKhoa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Services\HandleUpdateHasMany;
+use App\Services\HandleUpdateHaveMany;
 
 class TieuChiController extends Controller
 {
@@ -138,10 +138,10 @@ class TieuChiController extends Controller
                 'tieuChuan_id' => $request->tieuChuan_id,
             ]);
             $yeuCaus = $this->yeuCauModel->where('tieuChi_id', $id)->get();
-            HandleUpdateHasMany::handleUpdateYeuCau($yeuCaus, $id, $request, $this->yeuCauModel);
+            HandleUpdateHaveMany::handleUpdateYeuCau($yeuCaus, $id, $request, $this->yeuCauModel);
 
             $mocChuans = $this->mocChuanModel->where('tieuChi_id', $id)->get();
-            HandleUpdateHasMany::handleUpdateMocChuan($mocChuans, $id, $request, $this->mocChuanModel);
+            HandleUpdateHaveMany::handleUpdateMocChuan($mocChuans, $id, $request, $this->mocChuanModel);
             $tuKhoaIds = [];
             if (!empty($request->tuKhoa)) {
                 foreach ($request->tuKhoa as $item) {

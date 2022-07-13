@@ -4,6 +4,7 @@ namespace App\Services;
 
 class HandleUpdateHasMany {
 
+
     public static function handleUpdateYeuCau($yeuCaus, $tieuChiId, $request, $yeuCauModel)
     {
         if (empty($request->yeuCau)) {

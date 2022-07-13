@@ -15,7 +15,7 @@ use App\Models\TieuChuan;
 use App\Models\User;
 use App\Models\VaiTro;
 use Illuminate\Http\Request;
-use App\Services\HandleUpdate3Many;
+use App\Services\HandleUpdateThreeMany;
 
 class NhomNguoiDungController extends Controller
 {
@@ -93,7 +93,7 @@ class NhomNguoiDungController extends Controller
                 ];
                 array_push($quyenBaoCaos, $obj);
             }
-            HandleUpdate3Many::handleUpdateNhomNguoiDung($nguoiDungQuyens, $quyenBaoCaos, $this->nguoiDungQuyenModel, $id);
+            HandleUpdateThreeMany::handleUpdateNhomNguoiDung($nguoiDungQuyens, $quyenBaoCaos, $this->nguoiDungQuyenModel, $id);
         } else {
             foreach ($nguoiDungQuyens as $nguoiDungQuyen) {
                 $nguoiDungQuyen->forceDelete();

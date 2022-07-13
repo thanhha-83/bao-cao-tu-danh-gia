@@ -13,7 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Services\HandleUpdate3Many;
+use App\Services\HandleUpdateThreeMany;
 
 class NhomController extends Controller
 {
@@ -158,7 +158,7 @@ class NhomController extends Controller
                     ];
                     array_push($quyenTieuChuans, $obj);
                 }
-                HandleUpdate3Many::handleUpdateNhomQuyen($nhomQuyens, $quyenTieuChuans, $this->nhomQuyenModel, $nhom->id);
+                HandleUpdateThreeMany::handleUpdateNhomQuyen($nhomQuyens, $quyenTieuChuans, $this->nhomQuyenModel, $nhom->id);
             } else {
                 foreach ($nhomQuyens as $nhomQuyen) {
                     $nhomQuyen->forceDelete();

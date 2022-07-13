@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-class HandleUpdate3Many {
+class HandleUpdateThreeMany {
+
 
     public static function handleUpdateNhomQuyen($nhomQuyens, $quyenTieuChuans, $nhomQuyenModel, $nhom_id)
     {
