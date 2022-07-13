@@ -7,7 +7,7 @@ use App\Models\Nhom;
 use App\Models\NhomNguoiDung;
 use App\Models\NhomQuyen;
 use App\Models\TieuChuan;
-use App\models\NguoiDungQuyen;
+use App\Models\NguoiDungQuyen;
 
 class BaoCaoPermission {
     private $tieuChuanModel;
