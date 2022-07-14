@@ -180,11 +180,6 @@ return [
         */
         Kyslik\ColumnSortable\ColumnSortableServiceProvider::class,
 
-        /*
-        * User Define...
-        */
-        App\Filters\HighLightKeyword::class,
-
     ],
 
     /*
