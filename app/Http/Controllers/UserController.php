@@ -25,33 +25,63 @@ class UserController extends Controller
 
     protected function callValidate(Request $request, $id = null)
     {
-        $request->validate([
-            'hoTen' => 'required',
-            'ngaySinh' => 'required',
-            'chucVu' => 'required',
-            'email' => 'required|email|unique:users' . ',email,' . $id,
-            'sdt' => 'required|min:10|numeric|unique:users' . ',sdt,' . $id,
-            'password' => 'required|min:6',
-            'password_confirmation' => 'required|same:password',
-            'donVi_id' => 'numeric|min:1',
-        ], [
-            'hoTen.required' => 'Bạn chưa nhập họ tên',
-            'ngaySinh.required' => 'Bạn chưa nhập ngày sinh',
-            'chucVu.required' => 'Bạn chưa nhập chức vụ',
-            'email.required' => 'Bạn chưa nhập email',
-            'email.email' => 'Bạn chưa nhập đúng định dạng email',
-            'email.unique' => 'Email đã tồn tại',
-            'sdt.required' => 'Bạn chưa nhập số điện thoại',
-            'sdt.min' => 'Bạn chưa nhập đúng định dạng số điện thoại',
-            'sdt.numeric' => 'Bạn chưa nhập đúng định dạng số điện thoại',
-            'sdt.unique' => 'Số điện thoại đã tồn tại',
-            'password.required' => 'Bạn chưa nhập mật khẩu',
-            'password.min' => 'Mật khẩu phải có ít nhất 6 kí tự',
-            'password_confirmation.required' => 'Bạn chưa nhập lại mật khẩu',
-            'password_confirmation.same' => 'Mật khẩu nhập lại không khớp',
-            'donVi_id.numeric' => 'Bạn chưa chọn đơn vị',
-            'donVi_id.min' => 'Bạn chưa chọn đơn vị',
-        ]);
+        if ($id) {
+            $request->validate([
+                'hoTen' => 'required',
+                'ngaySinh' => 'required',
+                'chucVu' => 'required',
+                'email' => 'required|email|unique:users' . ',email,' . $id,
+                'sdt' => 'required|min:10|numeric|unique:users' . ',sdt,' . $id,
+                'password' => 'required|min:6',
+                'password_confirmation' => 'required|same:password',
+                'donVi_id' => 'numeric|min:1',
+            ], [
+                'hoTen.required' => 'Bạn chưa nhập họ tên',
+                'ngaySinh.required' => 'Bạn chưa nhập ngày sinh',
+                'chucVu.required' => 'Bạn chưa nhập chức vụ',
+                'email.required' => 'Bạn chưa nhập email',
+                'email.email' => 'Bạn chưa nhập đúng định dạng email',
+                'email.unique' => 'Email đã tồn tại',
+                'sdt.required' => 'Bạn chưa nhập số điện thoại',
+                'sdt.min' => 'Bạn chưa nhập đúng định dạng số điện thoại',
+                'sdt.numeric' => 'Bạn chưa nhập đúng định dạng số điện thoại',
+                'sdt.unique' => 'Số điện thoại đã tồn tại',
+                'password.required' => 'Bạn chưa nhập mật khẩu',
+                'password.min' => 'Mật khẩu phải có ít nhất 6 kí tự',
+                'password_confirmation.required' => 'Bạn chưa nhập lại mật khẩu',
+                'password_confirmation.same' => 'Mật khẩu nhập lại không khớp',
+                'donVi_id.numeric' => 'Bạn chưa chọn đơn vị',
+                'donVi_id.min' => 'Bạn chưa chọn đơn vị',
+            ]);
+        } else {
+            $request->validate([
+                'hoTen' => 'required',
+                'ngaySinh' => 'required',
+                'chucVu' => 'required',
+                'email' => 'required|email|unique:users',
+                'sdt' => 'required|min:10|numeric|unique:users',
+                'password' => 'required|min:6',
+                'password_confirmation' => 'required|same:password',
+                'donVi_id' => 'numeric|min:1',
+            ], [
+                'hoTen.required' => 'Bạn chưa nhập họ tên',
+                'ngaySinh.required' => 'Bạn chưa nhập ngày sinh',
+                'chucVu.required' => 'Bạn chưa nhập chức vụ',
+                'email.required' => 'Bạn chưa nhập email',
+                'email.email' => 'Bạn chưa nhập đúng định dạng email',
+                'email.unique' => 'Email đã tồn tại',
+                'sdt.required' => 'Bạn chưa nhập số điện thoại',
+                'sdt.min' => 'Bạn chưa nhập đúng định dạng số điện thoại',
+                'sdt.numeric' => 'Bạn chưa nhập đúng định dạng số điện thoại',
+                'sdt.unique' => 'Số điện thoại đã tồn tại',
+                'password.required' => 'Bạn chưa nhập mật khẩu',
+                'password.min' => 'Mật khẩu phải có ít nhất 6 kí tự',
+                'password_confirmation.required' => 'Bạn chưa nhập lại mật khẩu',
+                'password_confirmation.same' => 'Mật khẩu nhập lại không khớp',
+                'donVi_id.numeric' => 'Bạn chưa chọn đơn vị',
+                'donVi_id.min' => 'Bạn chưa chọn đơn vị',
+            ]);
+        }
     }
 
     protected function callValidateEdit(Request $request, $id = null)

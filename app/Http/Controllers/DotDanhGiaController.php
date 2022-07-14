@@ -38,12 +38,21 @@ class DotDanhGiaController extends Controller
 
     protected function callValidate(Request $request, $id = null)
     {
-        $request->validate([
-            'ten' => 'required|unique:dot_danh_gias' . ',ten,' . $id,
-        ], [
-            'ten.required' => 'Bạn chưa nhập tên đợt đánh giá',
-            'ten.unique' => 'Tên đợt đánh giá đã tồn tại',
-        ]);
+        if ($id) {
+            $request->validate([
+                'ten' => 'required|unique:dot_danh_gias' . ',ten,' . $id,
+            ], [
+                'ten.required' => 'Bạn chưa nhập tên đợt đánh giá',
+                'ten.unique' => 'Tên đợt đánh giá đã tồn tại',
+            ]);
+        } else {
+            $request->validate([
+                'ten' => 'required|unique:dot_danh_gias',
+            ], [
+                'ten.required' => 'Bạn chưa nhập tên đợt đánh giá',
+                'ten.unique' => 'Tên đợt đánh giá đã tồn tại',
+            ]);
+        }
     }
 
     public function index()

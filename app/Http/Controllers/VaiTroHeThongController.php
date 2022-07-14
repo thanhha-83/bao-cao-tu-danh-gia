@@ -27,12 +27,21 @@ class VaiTroHeThongController extends Controller
 
     protected function callValidate(Request $request, $id = null)
     {
-        $request->validate([
-            'ten' => 'required|unique:vai_tro_h_t_s' . ',ten,' . $id,
-        ], [
-            'ten.required' => 'Bạn chưa nhập tên vai trò',
-            'ten.unique' => 'Tên vai trò đã tồn tại',
-        ]);
+        if ($id) {
+            $request->validate([
+                'ten' => 'required|unique:vai_tro_h_t_s' . ',ten,' . $id,
+            ], [
+                'ten.required' => 'Bạn chưa nhập tên vai trò',
+                'ten.unique' => 'Tên vai trò đã tồn tại',
+            ]);
+        } else {
+            $request->validate([
+                'ten' => 'required|unique:vai_tro_h_t_s',
+            ], [
+                'ten.required' => 'Bạn chưa nhập tên vai trò',
+                'ten.unique' => 'Tên vai trò đã tồn tại',
+            ]);
+        }
     }
 
     public function index()

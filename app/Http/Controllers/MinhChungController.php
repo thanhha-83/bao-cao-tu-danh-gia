@@ -19,7 +19,7 @@ class MinhChungController extends Controller
 
     protected function callValidate(Request $request, $id = null)
     {
-        if ($request->isMCGop == 'on' || $id != null) {
+        if ($request->isMCGop == 'on' || $id) {
             $request->validate([
                 'ten' => 'required|unique:minh_chungs' . ',ten,' . $id,
                 'donVi_id' => 'numeric|min:1'
@@ -31,7 +31,7 @@ class MinhChungController extends Controller
             ]);
         } else {
             $request->validate([
-                'ten' => 'required|unique:minh_chungs' . ',ten,' . $id,
+                'ten' => 'required|unique:minh_chungs',
                 'fileMinhChung' => 'required',
                 'donVi_id' => 'numeric|min:1'
             ], [

@@ -31,17 +31,31 @@ class TieuChiController extends Controller
 
     protected function callValidate(Request $request, $id = null)
     {
-        $request->validate([
-            'stt' => 'required',
-            'ten' => 'required|unique:tieu_chis' . ',ten,' . $id,
-            'tieuChuan_id' => 'numeric|min:1'
-        ], [
-            'stt.required' => 'Bạn chưa nhập số thứ tự tiêu chí',
-            'ten.required' => 'Bạn chưa nhập tên tiêu chí',
-            'ten.unique' => 'Tên tiêu chí đã tồn tại',
-            'tieuChuan_id.min' => 'Bạn chưa chọn tiêu chuẩn',
-            'tieuChuan_id.numeric' => 'Bạn chưa chọn tiêu chuẩn',
-        ]);
+        ìf ($id) {
+            $request->validate([
+                'stt' => 'required',
+                'ten' => 'required|unique:tieu_chis' . ',ten,' . $id,
+                'tieuChuan_id' => 'numeric|min:1'
+            ], [
+                'stt.required' => 'Bạn chưa nhập số thứ tự tiêu chí',
+                'ten.required' => 'Bạn chưa nhập tên tiêu chí',
+                'ten.unique' => 'Tên tiêu chí đã tồn tại',
+                'tieuChuan_id.min' => 'Bạn chưa chọn tiêu chuẩn',
+                'tieuChuan_id.numeric' => 'Bạn chưa chọn tiêu chuẩn',
+            ]);
+        } else {
+            $request->validate([
+                'stt' => 'required',
+                'ten' => 'required|unique:tieu_chis',
+                'tieuChuan_id' => 'numeric|min:1'
+            ], [
+                'stt.required' => 'Bạn chưa nhập số thứ tự tiêu chí',
+                'ten.required' => 'Bạn chưa nhập tên tiêu chí',
+                'ten.unique' => 'Tên tiêu chí đã tồn tại',
+                'tieuChuan_id.min' => 'Bạn chưa chọn tiêu chuẩn',
+                'tieuChuan_id.numeric' => 'Bạn chưa chọn tiêu chuẩn',
+            ]);
+        }
     }
 
     public function index(Request $request)

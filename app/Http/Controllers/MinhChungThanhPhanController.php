@@ -18,7 +18,7 @@ class MinhChungThanhPhanController extends Controller
     protected function callValidate(Request $request, $id = null)
     {
         $request->validate([
-            'ten' => 'required|unique:minh_chungs' . ',ten,' . $id,
+            'ten' => 'required|unique:minh_chungs',
             'fileMinhChung' => 'required',
         ], [
             'ten.required' => 'Bạn chưa nhập tên minh chứng thành phần',

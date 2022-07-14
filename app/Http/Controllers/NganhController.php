@@ -18,15 +18,28 @@ class NganhController extends Controller
 
     protected function callValidate(Request $request, $id = null)
     {
-        $request->validate([
-            'ten' => 'required|unique:nganhs' . ',ten,' . $id,
-            'donVi_id' => 'numeric|min:1'
-        ], [
-            'ten.required' => 'Bạn chưa nhập tên ngành',
-            'ten.unique' => 'Tên ngành đã tồn tại',
-            'donVi_id.min' => 'Bạn chưa chọn đơn vị',
-            'donVi_id.numeric' => 'Bạn chưa chọn đơn vị',
-        ]);
+        if ($id) {
+            $request->validate([
+                'ten' => 'required|unique:nganhs' . ',ten,' . $id,
+                'donVi_id' => 'numeric|min:1'
+            ], [
+                'ten.required' => 'Bạn chưa nhập tên ngành',
+                'ten.unique' => 'Tên ngành đã tồn tại',
+                'donVi_id.min' => 'Bạn chưa chọn đơn vị',
+                'donVi_id.numeric' => 'Bạn chưa chọn đơn vị',
+            ]);
+        } else {
+            $request->validate([
+                'ten' => 'required|unique:nganhs',
+                'donVi_id' => 'numeric|min:1'
+            ], [
+                'ten.required' => 'Bạn chưa nhập tên ngành',
+                'ten.unique' => 'Tên ngành đã tồn tại',
+                'donVi_id.min' => 'Bạn chưa chọn đơn vị',
+                'donVi_id.numeric' => 'Bạn chưa chọn đơn vị',
+            ]);
+        }
+
     }
 
     public function index()

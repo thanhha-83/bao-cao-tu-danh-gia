@@ -15,15 +15,28 @@ class TieuChuanController extends Controller
 
     protected function callValidate(Request $request, $id = null)
     {
-        $request->validate([
-            'stt' => 'required|unique:tieu_chuans' . ',stt,' . $id,
-            'ten' => 'required|unique:tieu_chuans' . ',ten,' . $id,
-        ], [
-            'stt.required' => 'Bạn chưa nhập số thứ tự tiêu chuẩn',
-            'stt.unique' => 'Số thứ tự tiêu chuẩn đã tồn tại',
-            'ten.required' => 'Bạn chưa nhập tên tiêu chuẩn',
-            'ten.unique' => 'Tên tiêu chuẩn đã tồn tại',
-        ]);
+        if ($id) {
+            $request->validate([
+                'stt' => 'required|unique:tieu_chuans' . ',stt,' . $id,
+                'ten' => 'required|unique:tieu_chuans' . ',ten,' . $id,
+            ], [
+                'stt.required' => 'Bạn chưa nhập số thứ tự tiêu chuẩn',
+                'stt.unique' => 'Số thứ tự tiêu chuẩn đã tồn tại',
+                'ten.required' => 'Bạn chưa nhập tên tiêu chuẩn',
+                'ten.unique' => 'Tên tiêu chuẩn đã tồn tại',
+            ]);
+        } else {
+            $request->validate([
+                'stt' => 'required|unique:tieu_chuans',
+                'ten' => 'required|unique:tieu_chuans',
+            ], [
+                'stt.required' => 'Bạn chưa nhập số thứ tự tiêu chuẩn',
+                'stt.unique' => 'Số thứ tự tiêu chuẩn đã tồn tại',
+                'ten.required' => 'Bạn chưa nhập tên tiêu chuẩn',
+                'ten.unique' => 'Tên tiêu chuẩn đã tồn tại',
+            ]);
+        }
+
     }
 
     public function index()
