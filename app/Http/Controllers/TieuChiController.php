@@ -31,7 +31,7 @@ class TieuChiController extends Controller
 
     protected function callValidate(Request $request, $id = null)
     {
-        ìf ($id) {
+        if ($id) {
             $request->validate([
                 'stt' => 'required',
                 'ten' => 'required|unique:tieu_chis' . ',ten,' . $id,

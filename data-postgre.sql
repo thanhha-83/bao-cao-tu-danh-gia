@@ -631,3 +631,34 @@ INSERT INTO "vai_tro_h_t_s" ("id", "ten", "slug", "created_at", "updated_at", "d
 (1, 'Quản trị hệ thống', 'quan-tri-he-thong', '2022-05-31 23:41:04', '2022-05-31 23:41:04', NULL),
 (2, 'Người dùng', 'nguoi-dung', '2022-05-31 23:55:32', '2022-05-31 23:55:32', NULL),
 (4, 'Trưởng khoa CNTT', 'truong-khoa-cntt', '2022-06-07 00:45:46', '2022-06-07 00:45:46', NULL);
+
+SELECT setval(pg_get_serial_sequence('bao_caos', 'id'), coalesce(max(id)+1, 1), false) FROM bao_caos;
+SELECT setval(pg_get_serial_sequence('bao_cao_sao_luus', 'id'), coalesce(max(id)+1, 1), false) FROM bao_cao_sao_luus;
+SELECT setval(pg_get_serial_sequence('bao_cao_minh_chungs', 'id'), coalesce(max(id)+1, 1), false) FROM bao_cao_minh_chungs;
+SELECT setval(pg_get_serial_sequence('binh_luans', 'id'), coalesce(max(id)+1, 1), false) FROM binh_luans;
+SELECT setval(pg_get_serial_sequence('chi_tiet_minh_chungs', 'id'), coalesce(max(id)+1, 1), false) FROM chi_tiet_minh_chungs;
+SELECT setval(pg_get_serial_sequence('don_vis', 'id'), coalesce(max(id)+1, 1), false) FROM don_vis;
+SELECT setval(pg_get_serial_sequence('dot_danh_gias', 'id'), coalesce(max(id)+1, 1), false) FROM dot_danh_gias;
+SELECT setval(pg_get_serial_sequence('giai_doans', 'id'), coalesce(max(id)+1, 1), false) FROM giai_doans;
+SELECT setval(pg_get_serial_sequence('hoat_dongs', 'id'), coalesce(max(id)+1, 1), false) FROM hoat_dongs;
+SELECT setval(pg_get_serial_sequence('minh_chungs', 'id'), coalesce(max(id)+1, 1), false) FROM minh_chungs;
+SELECT setval(pg_get_serial_sequence('moc_chuans', 'id'), coalesce(max(id)+1, 1), false) FROM moc_chuans;
+SELECT setval(pg_get_serial_sequence('nganhs', 'id'), coalesce(max(id)+1, 1), false) FROM nganhs;
+SELECT setval(pg_get_serial_sequence('nganh_dot_danh_gias', 'id'), coalesce(max(id)+1, 1), false) FROM nganh_dot_danh_gias;
+SELECT setval(pg_get_serial_sequence('nguoi_dung_quyens', 'id'), coalesce(max(id)+1, 1), false) FROM nguoi_dung_quyens;
+SELECT setval(pg_get_serial_sequence('nguoi_dung_vai_tro_h_t_s', 'id'), coalesce(max(id)+1, 1), false) FROM nguoi_dung_vai_tro_h_t_s;
+SELECT setval(pg_get_serial_sequence('nhoms', 'id'), coalesce(max(id)+1, 1), false) FROM nhoms;
+SELECT setval(pg_get_serial_sequence('nhom_nguoi_dungs', 'id'), coalesce(max(id)+1, 1), false) FROM nhom_nguoi_dungs;
+SELECT setval(pg_get_serial_sequence('nhom_quyens', 'id'), coalesce(max(id)+1, 1), false) FROM nhom_quyens;
+SELECT setval(pg_get_serial_sequence('quyen_h_t_s', 'id'), coalesce(max(id)+1, 1), false) FROM quyen_h_t_s;
+SELECT setval(pg_get_serial_sequence('quyen_nguoi_dungs', 'id'), coalesce(max(id)+1, 1), false) FROM quyen_nguoi_dungs;
+SELECT setval(pg_get_serial_sequence('quyen_nhoms', 'id'), coalesce(max(id)+1, 1), false) FROM quyen_nhoms;
+SELECT setval(pg_get_serial_sequence('tieu_chi_tu_khoas', 'id'), coalesce(max(id)+1, 1), false) FROM tieu_chi_tu_khoas;
+SELECT setval(pg_get_serial_sequence('tieu_chis', 'id'), coalesce(max(id)+1, 1), false) FROM tieu_chis;
+SELECT setval(pg_get_serial_sequence('tieu_chuans', 'id'), coalesce(max(id)+1, 1), false) FROM tieu_chuans;
+SELECT setval(pg_get_serial_sequence('tu_khoas', 'id'), coalesce(max(id)+1, 1), false) FROM tu_khoas;
+SELECT setval(pg_get_serial_sequence('users', 'id'), coalesce(max(id)+1, 1), false) FROM users;
+SELECT setval(pg_get_serial_sequence('vai_tros', 'id'), coalesce(max(id)+1, 1), false) FROM vai_tros;
+SELECT setval(pg_get_serial_sequence('vai_tro_h_t_quyen_h_t_s', 'id'), coalesce(max(id)+1, 1), false) FROM vai_tro_h_t_quyen_h_t_s;
+SELECT setval(pg_get_serial_sequence('vai_tro_h_t_s', 'id'), coalesce(max(id)+1, 1), false) FROM vai_tro_h_t_s;
+SELECT setval(pg_get_serial_sequence('yeu_caus', 'id'), coalesce(max(id)+1, 1), false) FROM yeu_caus;
