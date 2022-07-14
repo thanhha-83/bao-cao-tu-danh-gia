@@ -16,10 +16,10 @@ class DonViController extends Controller
     protected function callValidate(Request $request, $id = null)
     {
         $request->validate([
-            'ten' => 'required|unique:don_vis' . ',ten,' . $id,
+            "ten" => "required|unique:don_vis" . ",ten," . $id,
         ], [
-            'ten.required' => 'Bạn chưa nhập tên đơn vị',
-            'ten.unique' => 'Tên đơn vị đã tồn tại',
+            "ten.required" => "Bạn chưa nhập tên đơn vị",
+            "ten.unique" => "Tên đơn vị đã tồn tại",
         ]);
     }
 
