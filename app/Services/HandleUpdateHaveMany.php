@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-class HandleUpdateHasMany {
+class HandleUpdateHaveMany {
 
 
     public static function handleUpdateYeuCau($yeuCaus, $tieuChiId, $request, $yeuCauModel)
