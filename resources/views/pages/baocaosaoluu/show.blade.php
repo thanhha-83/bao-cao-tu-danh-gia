@@ -71,8 +71,8 @@ $action = (object) [
             </div>
             <div class="card-footer p-3">
                 <div class="text-right">
-                    <a href="{{ route('baocaosaoluu.compare', ['id' => $baoCaoSL->id]) }}" class="btn btn-secondary">So
-                        sánh</a>
+                    <a href="{{ route('baocao.compare', ['id' => $baoCaoSL->baoCao_id, 'subid' => $baoCaoSL->id]) }}"
+                        class="btn btn-secondary">So sánh</a>
                     <a href="#" class="btn btn-success btn-restore-backup" data-url="{{ route('baocaosaoluu.restore') }}"
                         data-id="{{ $baoCaoSL->id }}"
                         data-redirect="{{ route('baocao.show', ['id' => $baoCaoSL->baoCao_id]) }}">Phục hồi</a>

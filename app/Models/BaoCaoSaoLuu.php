@@ -14,4 +14,23 @@ class BaoCaoSaoLuu extends Model
     {
         return $this->belongsTo(BaoCao::class, 'baoCao_id');
     }
+    public function tieuChi()
+    {
+        return $this->belongsTo(TieuChi::class, 'tieuChi_id');
+    }
+
+    public function tieuChuan()
+    {
+        return $this->belongsTo(TieuChuan::class, 'tieuChuan_id');
+    }
+
+    public function nganh()
+    {
+        return $this->belongsTo(Nganh::class, 'nganh_id');
+    }
+
+    public function dotDanhGia()
+    {
+        return $this->belongsTo(DotDanhGia::class, 'dotDanhGia_id');
+    }
 }
