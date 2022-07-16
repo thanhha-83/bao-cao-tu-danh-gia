@@ -1,4 +1,4 @@
-var dialogConfig = {
+const dialogConfig = {
     title: "Chèn minh chứng",
     url: "iframe",
     buttons: [
@@ -15,9 +15,9 @@ var dialogConfig = {
             text: "Hủy",
         },
     ],
-    width: 600,
-    height: 300,
-    onAction: function (instance, trigger) {
+    width: 1000,
+    height: 500,
+    onAction: function (instance, _trigger) {
         instance.sendMessage({
             mceAction: "customInsertAndClose",
         });
