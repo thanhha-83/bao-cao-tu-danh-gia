@@ -138,6 +138,14 @@ class BaoCaoController extends Controller
         return view('pages.baocao.show', compact('baoCao'));
     }
 
+    public function compare($id, $subid)
+    {
+        $baoCaoSL = $this->baoCaoSLModel->find($subid);
+        $baoCao = $this->baoCaoModel->find($id);
+        return view('pages.baocao.compare', compact('baoCao', 'baoCaoSL'));
+    }
+
+
     public function edit($id)
     {
         $baoCao = $this->baoCaoModel->find($id);

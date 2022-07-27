@@ -91,7 +91,7 @@ $action = (object) [
         @endif
     </div>
     {{-- Backup --}}
-    @if (count($baoCao->baoCaoSL) > 0)
+    @if (count($baoCao->baoCaoSL) > 0 && $baoCao->trangThai == 0)
     <div class="card shadow mb-4 mx-1">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <h5 class="m-0">DANH SÁCH SAO LƯU</h5>
@@ -114,7 +114,7 @@ $action = (object) [
                                 <td>
                                     <a href="{{ route('baocaosaoluu.show', ['id' => $item->id]) }}"
                                         class="btn btn-primary">Xem chi tiết</a>
-                                    <a href="{{ route('baocaosaoluu.compare', ['id' => $item->id]) }}"
+                                    <a href="{{ route('baocao.compare', ['id' => $baoCao->id, 'subid' => $item->id]) }}"
                                             class="btn btn-secondary">So sánh</a>
                                             <a href="#" class="btn btn-success btn-restore-backup" data-url="{{ route('baocaosaoluu.restore') }}"
                                             data-id="{{ $item->id }}"

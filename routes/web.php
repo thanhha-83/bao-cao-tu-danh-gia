@@ -167,6 +167,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/backup/{id}', [BaoCaoController::class, 'backup'])->name('baocao.backup')->middleware('can:baocao-sua,id');
         Route::post('/handle-select-nganh', [BaoCaoController::class, 'handleSelectNganh'])->name('baocao.handle-select-nganh');
         Route::post('/handle-select-tieuchuan', [BaoCaoController::class, 'handleSelectTieuChuan'])->name('baocao.handle-select-tieuchuan');
+        Route::get('/compare/{id}/{subid}', [BaoCaoController::class, 'compare'])->name('baocao.compare')->middleware('can:baocao-sua,id');
     });
 
     Route::prefix('nhanxetbaocao')->group(function () {
